@@ -2,7 +2,8 @@ body {
             
             max-width: 1000px;
             margin: auto;
-            border: 2px solid black;
+
+            outline:1px solid black;
             margin-top: 0;
             
             
@@ -17,17 +18,17 @@ body {
         }
 
 
-
         #top-bar-blue {
             
             background-color: #a1eafb;
-            height: 150px;
+            height: 200px;
             text-align: center;
             width:1000px;
-            float:; /* remove for issues */
+            float:left; /* remove for issues */
             padding-top:1.px;
             
         }
+
         
         #cloud-one {
             
@@ -44,15 +45,16 @@ body {
             float:right;
             position: relative;
             left:-100px;
-            top:-40;
+            top:-60;
             opacity: 0.5;
             
         }
 
 .topnav {
     
-    position: absolute;
-    width: 855px;
+    top:-45px;
+    position: relative;
+    width: 90%;
     overflow: hidden;
     background-color: grey;
 /*    padding-left: ;*/
@@ -81,7 +83,13 @@ body {
   color: white;
 }
     
+#name-font {
 
+        padding-top: 20;
+        border: 0;
+        outline: 0;
+    
+}
         
         
         h1 {
@@ -189,13 +197,18 @@ body {
             font-family: cursive;
             color: darkslateblue;
             font-size: 30px;
-/*            position: relative;*/
-            padding-top: 50px;
             line-height: 1%;   
             text-align: center;
             bottom:30px;
-            top:100px;
+            margin-top:-50px;
             padding-bottom: 10px;
+    
+}
+
+.about-handle {
+    
+    margin-left: 50px;
+    margin-right: 50px;
     
 }
 
