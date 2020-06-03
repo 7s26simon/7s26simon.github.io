@@ -51,6 +51,9 @@
             
         </div>
         
+        
+<div id="marg-asthetic">
+        
         <h2>1. Enumeration</h2>
         
         <p>Legacy was my first HackTheBox …box. It’s a super easy one to get you into the swing of things. This will be a short writeup on what I did to pown it.<br><br>I ran a basic nmap scan (sV = service version(s)):</p>
@@ -78,6 +81,9 @@
     Set RHOSTS 10.10.10.4
 
     Run</b></pre>
+    
+
+<h2>3. Getting SYSTEM Access</h2>
         
         
     <p>So now, I was running as SYSTEM but I couldn’t run various commands e.g whoami.
@@ -93,7 +99,7 @@ So I decided to upload it from my local machine:</p>
         
         <pre><b>Upload /usr/share/windows-resources/binaries/whoami.exe</b></pre>
      
-    <p>I could now run the command(s) I wanted. And next up, was reading the flag:</p>
+    <p>I could now run the command(s) I wanted. I figured I should do this to feel "complete". Next up, was reading the flag:</p>
         
 
 <pre><b>Directory of C:\Documents and Settings\Administrator\Desktop
@@ -119,9 +125,12 @@ more root.txt
 <!-- b / pre in this order is valid. pre /b not valid html -->
 
 <p>And that was that. First box, done!</p>
+    
+
 
 <p><a href="#top">Go to top</a></p>
-
+</div>
+    
         <div id="social-media">
 
             <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
