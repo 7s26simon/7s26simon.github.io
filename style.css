@@ -8,19 +8,6 @@
                     
         }
 
-
-    #top-bar-blue {
-
-        background-color: #a1eafb;
-        height: 200px;
-        text-align: center;
-        width:1000px;
-        float:left; /* remove for issues */
-        padding-top:1.px;
-            
-        }
-
-        
         #cloud-one {
             
             float:left;
@@ -36,10 +23,24 @@
             float:right;
             position: relative;
             left:-100px;
-            top:-60;
+            bottom: 70px;
             opacity: 0.5;
             
         }
+
+
+    #top-bar-blue {
+
+        background-color: #a1eafb;
+        height: 200px;
+        text-align: center;
+        width:1000px;
+        float:left; /* remove for issues */
+        padding-top:1.px;
+            
+        }
+
+
 
 .topnav {
     
@@ -53,6 +54,13 @@
        
     
 }
+
+ul {
+text-align: initial !important;
+padding-left: 40%;
+padding-right: 20%;
+}
+
 
 .topnav a {
   float: left;
@@ -77,6 +85,7 @@
 #name-font {
 
         padding-top: 20;
+        top:-10px;
         border: 0;
         outline: 0;
     
@@ -95,13 +104,14 @@
         }
         
         h4 {
-            
-            padding: -50;
+            position: relative;
+            top:-20px;
             font-size: 13px;
-            line-height: 1%;
+            line-height: 2%;
             color: firebrick;
             text-decoration-color: firebrick;
-            font-family:monospace
+            font-family:monospace;
+            
                         
         }
         
@@ -150,6 +160,7 @@
             position: relative;
             margin-left: 45%;
             padding-top: 100px;
+            padding-bottom: 10px;
                
             
         } 
@@ -162,25 +173,7 @@
             
         }
         
-        #bottom-bar {
 
-        background-color: #7edb21;
-        height: 30px;
-        width:1000px;
-        text-align: center;
-        bottom:0;
-
-    }
-        
-        #footerTag {
-
-        font-family: cursive;
-        font-size: 12px;
-        padding-top: 10px;
-
-        }
-       
-    
 #about-me-section {
     
             font-family: cursive;
@@ -214,7 +207,33 @@ ul {
     
 }
 
+        #bottom-bar {
 
+
+        background-color: #7edb21;
+        height: 90px;
+        width:1000px;
+        text-align: center;
+        bottom:0;
+
+    }
+        
+        #footerTag {
+
+        font-family: cursive;
+        font-size: 12px;
+        padding-top: -10px;
+        padding-bottom: 2px;
+
+        }
+       
+    
+
+#validator {
+    
+    padding-top: 20px;
+    
+}
 
 
 
