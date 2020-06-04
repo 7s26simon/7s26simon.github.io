@@ -246,6 +246,13 @@
 
     }
 
+th, td {
+    
+    border: 1px solid black;
+    
+}
+
+
     #center-writeup-image {
 
         padding-left: 20%;

@@ -6,3 +6,12 @@
     margin-bottom: -50px;
     
 }
+
+.code-view {
+    
+    background-color: lightgrey;
+    width: 50%;
+    border: 1px black solid;
+    padding-left: 10px;
+    
+}

