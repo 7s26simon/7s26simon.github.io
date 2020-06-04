@@ -141,6 +141,15 @@
 
     } 
 
+    #logo-three {    
+
+        position: inherit;
+        margin-left: 190px;
+        margin-right:5px;
+        margin-top: 90px;
+        margin-bottom: 25px;
+    } 
+
 
     .logos-two {    
 
