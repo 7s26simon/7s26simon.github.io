@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../style.css">
+        <link rel="stylesheet" type="text/css" href="../style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/personal.html">Personal</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...Gh0stcat Exploit...</p>
+
+        </div>
+
+        <div id="center-thm-image">
+
+            <img src="images/ghostcat.png" alt="legacy">
+            
+        </div>
+        
+                    
+<div id="marg-asthetic">
+        
+        <h2>1. Enumeration</h2>
+        
+        <p>I just got done looking at Gh0stcat on Tryhack me. Let’s take a deeper dive into looking at the following topics over several different posts:</p>
+        
+    
+        <ul>
+            
+            <li>JSP</li>
+            <li>GPG / ASC files</li>
+            <li>SCP</li>
+            <li>Zip Exploit</li>
+            
+        </ul>
+        
+       
+     <h2>2. About Tomcat</h2>
+     
+     
+    <p>By default, Apache Tomcat listens on 3 ports, 8005, 8009 and 8080. A common misconfiguration is blocking port 8080 but leaving ports 8005 or 8009 open for public access. Port 8005 is less interesting and only allows shutting down the Tomcat server, while port 8009 hosts the exact same functionality as port 8080. The only difference being that port 8009 communicates with the Apache JServ Protocol while port 8080 uses HTTP.</p>
+        
+    <p>Having the Tomcat service exposed allows attackers to access the Tomcat Manager interface. Although often password protected, brute force attacks using default and common passwords have proven successful in the past. Once access to the manager interface has been achieved, compromising the server becomes trivial with the WAR file deployment functionality.</p>
+
+    <p>The Apache JServ Protocol (AJP) is essentially an optimized binary version of HTTP. This makes communication with the AJP port rather difficult using conventional tools. The simplest solution is to configure Apache as a local proxy, which performs transparent conversion of HTTP traffic to AJP format. Once configured, an attacker can use common tools such as Hydra and Metasploit to exploit the Tomcat server over AJP. <a href="https://ionize.com.au/exploiting-apache-tomcat-port-8009-using-apache-jserv-protocol/" target="_blank">(Source)</a>.</p>
+        
+    <p>The Gh0stCat vulnerability is a LFI, or local-file inclusion. This means that we can request a file that’s stored locally on the machine running:</p>
+    
+    <ul>
+       
+        <li>Tomcat 6 (no longer maintained)</li>
+        <li>Tomcat 7.x &lt; 7.0.100</li>
+        <li>Tomcat 8.x &lt; 8.5.51</li>
+        <li>Tomcat 9.x &lt; 9.0.31</li>
+    
+    </ul>
+    
+    <p>This is approximately 13 years worth of Tomcat installations. This is <b>huge</b>.<br></p>
+        
+    <h2>3. Gh0stcat Demo</h2>
+
+    <p>Here is my video, exploiting this vulnerability:</p>
+        
+     <iframe width="560" height="315" src="https://www.youtube.com/embed/ZN8TEWaUWQI" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    
+
+<p><a href="#top">Go to top</a></p>
+
+</div>
+    
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>

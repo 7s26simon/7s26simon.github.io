@@ -52,7 +52,7 @@
 
     }
 
-    ul {
+    #cen-list {
 
         text-align: initial !important;
         padding-left: 40%;
@@ -190,7 +190,7 @@
     }
 
     /* Sets the bullet points to inside position (next to ul) */
-    ul {
+    #ul-cen-list {
 
         text-align: center;
         list-style-position: inside;
