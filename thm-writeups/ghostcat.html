@@ -57,7 +57,7 @@
         
         <h2>1. Enumeration</h2>
         
-        <p>I just got done looking at Gh0stcat on Tryhack me. Let’s take a deeper dive into looking at the following topics over several different posts:</p>
+        <p>I just got done looking at Gh0stcat on Tryhack me. In future, we'll return to this and take a deeper dive into looking at the following topics over several different posts:</p>
         
     
         <ul>
@@ -73,7 +73,7 @@
      <h2>2. About Tomcat</h2>
      
      
-    <p>By default, Apache Tomcat listens on 3 ports, 8005, 8009 and 8080. A common misconfiguration is blocking port 8080 but leaving ports 8005 or 8009 open for public access. Port 8005 is less interesting and only allows shutting down the Tomcat server, while port 8009 hosts the exact same functionality as port 8080. The only difference being that port 8009 communicates with the Apache JServ Protocol while port 8080 uses HTTP.</p>
+    <p>For now, let's look at Tomcat. By default, Apache Tomcat listens on 3 ports, 8005, 8009 and 8080. A common misconfiguration is blocking port 8080 but leaving ports 8005 or 8009 open for public access. Port 8005 is less interesting and only allows shutting down the Tomcat server, while port 8009 hosts the exact same functionality as port 8080. The only difference being that port 8009 communicates with the Apache JServ Protocol while port 8080 uses HTTP.</p>
         
     <p>Having the Tomcat service exposed allows attackers to access the Tomcat Manager interface. Although often password protected, brute force attacks using default and common passwords have proven successful in the past. Once access to the manager interface has been achieved, compromising the server becomes trivial with the WAR file deployment functionality.</p>
 
