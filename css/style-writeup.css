@@ -1,0 +1,39 @@
+#center-thm-image {
+    
+    padding-left: 30%;
+    position: relative;
+    top:-50px;
+    margin-bottom: -50px;
+    
+}
+
+.code-view {
+    
+    background-color: lightgrey;
+    width: 50%;
+    border: 1px black solid;
+    padding-left: 10px;
+    
+}
+
+.code-view-two {
+    
+    background-color: lightgrey;
+    width: 98%;
+    border: 1px black solid;
+    padding-left: 10px;
+    
+}
+
+#marg-asthetic {
+    
+    margin-left: 40px;
+    
+}
+
+/*
+#marg-asthetic-two {
+    
+    margin-left: 100px;
+    
+}*/

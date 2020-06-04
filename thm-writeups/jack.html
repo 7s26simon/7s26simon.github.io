@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/personal.html">Personal</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+    
+        <div id="writeup-box-name">
+
+            <p>...Jack Walkthrough...</p>
+
+        </div>
+
+<div id="marg-asthetic">
+    
+    <div id="center-writeup-image">
+    
+        <img src="images/jack/jack.png" alt="jack" width="600">
+
+    </div>
+            
+    <h2>Enumeration</h2>
+    
+    <p>As if I’ve not subjected myself to enough recently (WAPT, HackTheBox, Vulnhub, TryHackMe) I figured I’d try my first “Hard” rated box on TryHackMe. Here goes…</p>
+
+    <p>Upon entering the IP into the browser, the blog was trying to load jack.thm. I set my /etc/hosts file to make jack.thm resolve to the IP address of the site, which meant I could now browse the site as intended.</p>
+    
+    <img src="images/jack/1.png" alt="tryhackme">
+    
+    <br>
+    <br>
+    
+    <p>I ran wpscan and pointed it at the target URL:</p>
+        
+<div class="code-view-two"><pre><b>
+
+    si@kali:~$ sudo wpscan –url 10.10.169.119
+
+    _______________________________________________________________
+    __ _______ _____
+    \ \ / / __ \ / ____|
+    \ \ /\ / /| |__) | (___ ___ __ _ _ __ ®
+    \ \/ \/ / | ___/ \___ \ / __|/ _` | ‘_ \
+    \ /\ / | | ____) | (__| (_| | | | |
+    \/ \/ |_| |_____/ \___|\__,_|_| |_|
+
+    WordPress Security Scanner by the WPScan Team
+    Version 3.7.11
+
+    @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+    _______________________________________________________________
+
+    [i] Updating the Database …
+    [i] Update completed.
+
+    [+] URL: http://10.10.169.119/ [10.10.169.119]
+    [+] Started: Tue May 19 19:24:41 2020
+
+    Interesting Finding(s):
+
+    [+] Headers
+    | Interesting Entry: Server: Apache/2.4.18 (Ubuntu)
+    | Found By: Headers (Passive Detection)
+    | Confidence: 100%
+
+    [+] http://10.10.169.119/robots.txt
+    | Interesting Entries:
+    | – /wp-admin/
+    | – /wp-admin/admin-ajax.php
+    | Found By: Robots Txt (Aggressive Detection)
+    | Confidence: 100%
+
+    [+] XML-RPC seems to be enabled: http://10.10.169.119/xmlrpc.php
+    | Found By: Direct Access (Aggressive Detection)
+    | Confidence: 100%
+    | References:
+    | – http://codex.wordpress.org/XML-RPC_Pingback_API
+    | – https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner
+    | – https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos
+    | – https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login
+    | – https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access
+
+    [+] http://10.10.169.119/readme.html
+    | Found By: Direct Access (Aggressive Detection)
+    | Confidence: 100%
+
+    [+] Upload directory has listing enabled: http://10.10.169.119/wp-content/uploads/
+    | Found By: Direct Access (Aggressive Detection)
+    | Confidence: 100%
+
+    [+] The external WP-Cron seems to be enabled: http://10.10.169.119/wp-cron.php
+    | Found By: Direct Access (Aggressive Detection)
+    | Confidence: 60%
+    | References:
+    | – https://www.iplocation.net/defend-wordpress-from-ddos
+    | – https://github.com/wpscanteam/wpscan/issues/1299
+
+    [+] WordPress version 5.3.2 identified (Insecure, released on 2019-12-18).
+    | Found By: Emoji Settings (Passive Detection)
+    | – http://10.10.169.119/, Match: ‘wp-includes\/js\/wp-emoji-release.min.js?ver=5.3.2’
+    | Confirmed By: Meta Generator (Passive Detection)
+    | – http://10.10.169.119/, Match: ‘WordPress 5.3.2’
+
+    [i] The main theme could not be detected.
+
+    [+] Enumerating All Plugins (via Passive Methods)
+
+    [i] No plugins Found.
+
+    [+] Enumerating Config Backups (via Passive and Aggressive Methods)
+    Checking Config Backups – Time: 00:00:00 (21 / 21) 100.00% Time: 00:00:00
+
+    [i] No Config Backups Found.
+
+    [!] No WPVulnDB API Token given, as a result vulnerability data has not been output.
+    [!] You can get a free API token with 50 daily requests by registering at https://wpvulndb.com/users/sign_up
+
+    [+] Finished: Tue May 19 19:24:44 2020
+    [+] Requests Done: 61
+    [+] Cached Requests: 5
+    [+] Data Sent: 11.897 KB
+    [+] Data Received: 14.793 MB
+    [+] Memory used: 155.461 MB
+    [+] Elapsed time: 00:00:02
+
+    </b></pre>
+</div>
+
+    <br>
+    
+    <p>Nothing much of use aside from that we’re looking at WordPress 5.3.2. I ran the scan again, this time looking for users:</p>
+
+<div class="code-view-two"><pre><b>
+
+    [+] Enumerating Users (via Passive and Aggressive Methods)
+    Brute Forcing Author IDs – Time: 00:00:00 (10 / 10) 100.00% Time: 00:00:00
+
+    [i] User(s) Identified:
+
+    [+] jack
+    | Found By: Wp Json Api (Aggressive Detection)
+    | – http://10.10.169.119/wp-json/wp/v2/users/?per_page=100&amp;page=1
+    | Confirmed By:
+    | Author Id Brute Forcing – Author Pattern (Aggressive Detection)
+    | Login Error Messages (Aggressive Detection)
+
+    [+] wendy
+    | Found By: Author Id Brute Forcing – Author Pattern (Aggressive Detection)
+    | Confirmed By: Login Error Messages (Aggressive Detection)
+
+    [+] danny
+    | Found By: Author Id Brute Forcing – Author Pattern (Aggressive Detection)
+    | Confirmed By: Login Error Messages (Aggressive Detection)
+
+    </b></pre>
+</div>
+    
+    <h2>Brute-force to Shell</h2>
+
+    <p>Now to brute-force wp-admin with the users found above.</p>
+
+<div class="code-view-two"><pre><b>
+    hydra -L jackUsers.txt -P rockyou.txt http://jack.thm http-post-form"/login.php:username=^USER^&amp;password=^PASS^&amp;submit=Submit:<br>Incorrect"
+    </b></pre>
+</div>
+
+    <p>I couldn’t seem to get hydra working. So next up, I tried wpscan’s brute-force feature:</p>
+
+    <img src="images/jack/jack-2.png" width="800" alt="tryhackme">
+
+    <p>Rockyou didn’t work. So I tried the top 1000 passwords (x3, 1000 per user). That didn’t work. Next up, I tried the fasttrack.txt list that’s found in the /usr/share/wordlists directory. This worked, but only for wendy’s account.</p>
+
+    <img src="images/jack/jack-3.png" alt="tryhackme">
+
+    <p>This allowed me to log into wp-admin (not into SSH, unfortunately).</p>
+    
+    <h2>Privilege Escalation</h2>
+
+    <img src="images/jack/jack-4.png" width="800" alt="tryhackme">
+
+    <p>At this point, I had to take a hint, because there were no plugins found via wpscan, and Wendy wasn’t an admin user, plus there wasn’t much to glean from the WordPress instance. http://jack.thm/wp-content/plugins/ was blank.</p>
+
+    <img src="images/jack/jack-5.png" alt="tryhackme">
+
+    <p>So the hint suggested tools weren’t the answer (explains why I was having issues!) and to look at “ure-other_roles”. After reading into it, it looks like this was a vulnerable plugin that wasn’t being detected.</p>
+
+    <p>From here I couldn’t get the metasploit module working for the life of me. I even found another person having the same issue here. Mine still refused to load, but it turns out adding a simple “ure_other_roles=administrator” parameter when updating your profile upgrades you to admin. Whoah.</p>
+
+    <p>From here, I uploaded a php shell and got the first flag. The reminder.txt file hints that there is a file permissions error somewhere, and possibly to do with the backups.</p>
+
+    <p>If you go to /var/backups, there’s an RSA file, which lets us log in as jack. So at this point we’ve essentially performed a horizontal privilege escalation. Jack is not the root user we want to escalate to.</p>
+
+    <img src="images/jack/jack-6.png" width="400" alt="tryhackme">
+
+    <p>Next up, I downloaded a privilege escalation script from my local Kali machine, over to jack’s tmp folder.</p>
+
+    <img src="images/jack/jack-7.png" width="800" alt="tryhackme">
+
+    <p>Our privesc checker came up blank, so I used pspy to look at running processes. This led me over to: /opt/statuscheck/checker.py</p>
+
+    <p>The file contained the following:</p>
+
+    <img src="images/jack/jack-8.png" width="600" alt="tryhackme">
+
+    <p>So now we’ve got a conundrum. The script is importing the python os module and the script itself is running as root. I should have put 2+2 together, but my brain was beginning to melt as it had taken me approx 3 hours to get to this point. I took a little break.</p>
+
+    <p>Now this is where things start getting complex. If we run cat/etc/group, we can see Jack is in the family group.</p>
+
+    <img src="images/jack/jack-9.png" alt="tryhackme">
+
+    <p>And if we look at os.py, we can see the family group can write to the file…. It’s all beginning to make sense now! Logic says that we’ve got permission to edit a file that’s being execute by root. We can use this to escalate our privileges.</p>
+
+    <img src="images/jack/jack-10.png" alt="tryhackme">
+
+    <p>However, I was stuck. At this point, I needed some pointers. I’d put a python reverse-shell in the os.py file but I couldn’t get it to execute. I tried plenty of methods, but ntohing was working. It turns out a box creator (optional) had rooted the box in the past and had and I skipped to where I was in the video. Ahhhhhhhh! Gotcha. Another d’oh moment. I’d left import os and os.dup in the script…. it doesn’t need it. It IS the os module…. #Fail.</p>
+
+    <p>Admittedly, without optional’s video, I’m not sure I’d have realized the mistake I was making for a LONG time, if at all. I removed the os calls from the script and set it to spawn a bash shell on my attacking IP/PORT.</p>
+
+    <img src="images/jack/jack-11.png" alt="tryhackme">
+
+    <p>I now waited for the reverse shell. Finally, it popped:</p>
+
+    <img src="images/jack/jack-12.png" alt="tryhackme">
+
+    <p>This was rated “hard” and it was. As close as I was to getting root without any major pointers, I definitely needed a push at the end. So, shout-out to optional for sharing his method of getting the rev-shell to execute.</p>
+
+<p>Thanks for reading!</p>
+    
+</div>
+
+
+<p><a href="#top">Go to top</a></p>
+
+    
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>
