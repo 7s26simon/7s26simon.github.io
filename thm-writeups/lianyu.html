@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/personal.html">Personal</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...Lian_Yu Writeup...</p>
+
+        </div>
+
+<div id="marg-asthetic">
+    
+    <div id="center-writeup-image">
+    
+        <img src="images/lian_yu/lian_yu.PNG" alt="lianyu" width="600">
+
+    </div>
+            
+    <h2>Enumeration</h2>
+    
+    <p>I browsed to the IP, and saw a rather nice looking ocean view! A default dirb search found nothing, nor did a Nikto search. An nmap scan had found port both 21 and 22 open - which would come in useful later on.</p> 
+    
+    <p>Next, I fired up GoBuster and used the medium wordlist that can be found in the /usr/share/wordlists/dirbuster folder. This resulted in a hit for /island:</p>
+    
+    <img src="images/lian_yu/1.png" alt="tryhackme">
+    
+    <p>Highlighting the page, or viewing the source code shows the next clue: <strong>vigilante</strong>. This looked like a username. But now, we need a password to go with it.</p>
+
+    <img src="images/lian_yu/2.png" alt="tryhackme">
+    
+    <h2>Brute-force to Shell</h2>
+
+    <p>I ran the following command:</p>
+
+    <div class="code-view-two">
+    
+        <p>gobuster dir -u 10.10.13.232/island -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt</p>
+        
+    </div>
+    
+    <p>This found a sub-directory named 2100. The source code suggested a .ticket file was available. I wont lie - I went down a few rabbit holes here, until I eventually figured the answer was in plain sight - .ticket was the extension we need.</p>
+    
+    <img src="images/lian_yu/3.png" alt="tryhackme">
+    
+    <p>I used another gobuster command to fuzz for the file we needed:</p>
+    
+    <div class="code-view-two">
+
+        <p>gobuster dir -u 10.10.13.232/island/2100 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x .ticket</p>
+        
+    </div>
+
+    <p>This led to the following intriguing file.</p>
+    
+    <img src="images/lian_yu/4.png" alt="tryhackme">
+    
+    <p>After some confusion, it turned out to be base58. Yes, you read that correctly. I wasn't expecting that.</p>
+
+    <p>So now, we've got a username, and password. I tried to log in via SSH, which didn't work. But what did work, was FTP.</p>
+
+    <p>Browsing the home directory confirmed two users: slade + vigilante. There were 3 files in the vigilante folder.</p>
+ 
+    <img src="images/lian_yu/6.png" alt="tryhackme">
+    
+    <p>Back to the drawing board. I went back to the vigilante folder and this time, displayed hidden files within filezilla. Do'h!!!</p>
+    
+    <img src="images/lian_yu/5.png" alt="tryhackme"> 
+    
+    <h2>Steganography</h2>
+    
+    <p>I downloaded all the files. The most obvious was the "Leave_me_alone.png" file. The magic header was wrong, and needed changing to that of a png file. This made the file viewable. The file displayed a "password" which would come in useful for the next step.</p>
+
+    <p>The next step took me a while to figure out and I needed to re-trace my steps. We had a password, but no username. Ah! We don't need one. We can use this password to extract the file(s) from aa.jpg.</p>
+
+    <p>Running:</p>
+    
+    <div class="code-view-two">
+        <p>steghide extract -sf aa.jpg</p>
+    </div>
+        
+    <p>and entering the password from the previous step revealed a file called ss.zip. I extracted the files and took a look inside. Now, we had a password, but no username:</p>
+    
+    <img src="images/lian_yu/7.png" alt="tryhackme"> 
+    
+    <p>I tried logging in as slade and vigilante - the former of the two worked:</p>     
+    
+    <p>user.txt is here, in slade's home directory.</p>
+    
+    <img src="images/lian_yu/8.png" alt="tryhackme">
+     
+    <h2>Getting root.txt</h2>
+    
+    <p>Now, I ran: "sudo -l"</p>
+    
+    <img src="images/lian_yu/9.png" alt="tryhackme">
+    
+    <p>Awesome! We can run /usr/bin/pkexec as root. But, what is pkexec? Who cares, off to gtfobins, right?!</p>  
+    
+    <img src="images/lian_yu/10.png" alt="tryhackme" width="800" border="1px"> 
+    
+    <p>Oh. Ok. Nevermind. Umm. What does pkexec do?</p>    
+
+    <img src="images/lian_yu/11.png" alt="tryhackme">
+    
+    <p>Oh really? Nice! I first looked at what the name of the flag was in /root , and then read the command. CTF complete! Or was it?</p>
+    
+    <img src="images/lian_yu/12.png" alt="tryhackme"> 
+    
+    <h2>Getting a Reverse-Shell</h2>
+    
+    <p>I decided it wasn't complete until I got my root shell:</p>
+    
+    <img src="images/lian_yu/13.png" alt="tryhackme"> 
+    
+    <p>I set up my listener and awaited my connection:</p>
+    
+    <img src="images/lian_yu/13.png" alt="tryhackme">    
+    
+    <p>And, we're root!</p>
+
+    <p>Key takeaway points from this box:</p>
+
+    <ul>
+        <li>Ensure you look at hidden files, even within FTP</li>
+        <li>Just because it isn't on gtfobins doesn't mean you can't exploit it in a similar fashion</li>
+        <li>Look at comments in webpages</li>
+        <li>Base64 is common, but don't forget other bases exist</li>
+    </ul>
+
+    <p>Really enjoyed the box. Thanks to the box-creator for this one!!</p>
+    
+    <p><a href="#top">Go to top</a></p>
+    
+</div>
+        
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+                <a href="https://validator.w3.org/check?uri=referer"><img
+                      src="http://www.w3.org/Icons/valid-xhtml10"
+                      alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+                <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>
