@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/personal.html">Personal</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...Geisha Writeup...</p>
+
+        </div>
+
+        <div id="center-writeup-image-two">
+
+            <img src="images/geisha/geisha.png" alt="vulnhub">
+            
+        </div>  
+        
+<div id="marg-asthetic">
+                       
+        <p>I decided to do this box for two reasons. One, it said it was beginner / intermediate and I was curious to see how intermediate it was. And two, it said there was a rabbit hole. I wanted to see if I'd get lost down it, or get root.I never went down it - so luckily, I got through the box in good time!</p>
+        
+        <h2>1. Enumeration / SSH Brute Force</h2>
+        
+        <p>First, I browsed to the IP (after running "sudo netdiscover" (grr, I wish more boot2root machines would display the IP when they start up). I could see the logo of the machine. Next up, I decided to use hydra to bruteforce SSH, as there wasn't much on the server.</p>
+    
+        <img src="images/geisha/1.PNG" alt="vulnhub">
+    
+        <h2>Reading root's flag.txt</h2>
+        
+        <p>Oncelogged in with the creds, I began hunting for SUID files:</p>
+    
+        <img src="images/geisha/2.PNG" alt="vulnhub">
+    
+        <p>base32 stood out like a sore thumb, so I decided to use GTFO bins to see what we could do with it.</p>
+    
+        <img src="images/geisha/3.PNG" alt="vulnhub">
+    
+        <p>It turns out that the file can perform a very clever little trick, which enables us to set a filepath and then run the base32 command on the file, then decode it.</p>
+    
+        <p>This is perfect - and obviously what the box designers want us to do. If we can grab a user's file, we can display it in our terminal.</p>
+    
+        <p>In fact, we could simply display the root flag at this point and call it a day:</p>
+    
+        <img src="images/geisha/flag.png" alt="vulnhub">
+    
+        <img src="images/geisha/troll.jpg" alt="vulnhub">
+    
+        <p>However, let's do this properly...</p>
+    
+        <h2>Privilege Escalation</h2>
+    
+        <p>I pulled root's id_rsa file:</p>
+    
+    
+        <img src="images/geisha/4.PNG" alt="vulnhub">
+    
+        <p>I then logged in, using root's rsa key, confirmed I was root, then grabbed the flag:</p>
+    
+        <img src="images/geisha/5.PNG" alt="vulnhub">
+    
+        
+<p>A rather fun little priv-esc. Thanks <a href="https://www.vulnhub.com/author/suncsr-team,696/" target="_blank">SunCSR Team</a> for the challenge! In the next one, we'll tackle "Katana_CTF", also by SunCSR Team.</p>
+    
+<p><a href="#top">Go to top</a></p></div>
+    
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>

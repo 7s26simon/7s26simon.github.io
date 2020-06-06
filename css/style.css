@@ -262,6 +262,15 @@ th, td {
 
     }
 
+#center-writeup-image-two {
+    
+        padding-left: 35%;
+        position: relative;
+        top: -40px;
+        margin-bottom: -30px;    
+    
+}
+
     #writeup-box-name {
 
         font-family: cursive;
