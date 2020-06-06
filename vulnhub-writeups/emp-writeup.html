@@ -48,7 +48,7 @@
 
         <div id="center-writeup-image">
 
-            <img src="/images/vulnhub/escalate_my_privileges/main.png" alt="vulnhub">
+            <img src="/vulnhub-writeups/images/escalate_my_privileges//main.png" alt="vulnhub">
             
         </div>  
         
@@ -62,7 +62,7 @@
     
         <p>I went to the phpbash.php file first, as this sounded the most interesting:</p>
         
-        <img src="/images/vulnhub/escalate_my_privileges/1.PNG" alt="vulnhub">
+        <img src="/vulnhub-writeups/images/escalate_my_privileges/1.PNG" alt="vulnhub">
     
         <p>It turns out that there's a nice web-based shell we can use. Nice and secure, huh?!</p>
     
@@ -73,29 +73,29 @@
     
         <p>As expected, I was running as apache. For some reason, every command I typed doubled-up, so id became iidd, but it still worked:</p>
         
-        <img src="/images/vulnhub/escalate_my_privileges/2.PNG" alt="vulnhub">
+        <img src="/vulnhub-writeups/images/escalate_my_privileges/2.PNG" alt="vulnhub">
     
         <p>From here, I went into the /home directory, and saw a user called "armour". In the armour directory, there was a file called "Credentials.txt". Inside it said: "md5(rootroot1)". </p>
     
-        <img src="/images/vulnhub/escalate_my_privileges/3.PNG" alt="vulnhub">
+        <img src="/vulnhub-writeups/images/escalate_my_privileges/3.PNG" alt="vulnhub">
         
         <p>Next I switched user to "armour" and used the md5 hash as the password. I was now "armour":</p>
     
-        <img src="/images/vulnhub/escalate_my_privileges/4.PNG" alt="vulnhub">
+        <img src="/vulnhub-writeups/images/escalate_my_privileges/4.PNG" alt="vulnhub">
     
         <h2>2. Privilege Escalation</h2>
 
         <p>I ran "sudo -l" and noticed that a few things seemed mis-configured!</p>
 
-        <img src="/images/vulnhub/escalate_my_privileges/5.PNG" alt="vulnhub">  
+        <img src="/vulnhub-writeups/images/escalate_my_privileges/5.PNG" alt="vulnhub">  
 
         <p>I ran: "sudo /bin/sh" and I was now root:</p> 
 
-        <img src="/images/vulnhub/escalate_my_privileges/6.PNG" alt="vulnhub">
+        <img src="/vulnhub-writeups/images/escalate_my_privileges/6.PNG" alt="vulnhub">
 
         <p>I looked to see whether the root user had a flag, and it did:</p>
 
-        <img src="/images/vulnhub/escalate_my_privileges/7.png" alt="vulnhub">
+        <img src="/vulnhub-writeups/images/escalate_my_privileges/7.png" alt="vulnhub">
     
 <p>And that was that. Nice basic box. Thanks <a href="https://twitter.com/@akankshavermasv" target="_blank">Akanksha</a> for the challenge!</p>
     
