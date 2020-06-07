@@ -50,9 +50,9 @@
                        
 <h2>What does HSTS do?</h2>
 
-<p>So first, let’s talk about what HSTS does. HSTS is a Security Policy that protects sites against protocol downgrade attacks <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">(Source)</a>. It does this by specifying a HTTP header, named “Strict-Transport-Security“. The header specifies an age in seconds. So an example header might look like this:</p>
+<p>So first, let’s talk about what HSTS does. HSTS is a Security Policy that protects sites against protocol downgrade attacks <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" _target="_blank">(Source)</a>. It does this by specifying a HTTP header, named “Strict-Transport-Security“. The header specifies an age in seconds. So an example header might look like this:</p>
 
-<p>Strict-Transport-Security: max-age=31536000 <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.md">(Source)</a>. Wikipedia says that “HSTS Policy specifies a period of time during which the user agent should only access the server in a secure fashion”. HSTS is only acknowledged when sent over HSTS and is ignored when sent over HTTP <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">(Source)</a>. Wait, what does this mean?</p>
+<p>Strict-Transport-Security: max-age=31536000 <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.md" _target="_blank">(Source)</a>. Wikipedia says that “HSTS Policy specifies a period of time during which the user agent should only access the server in a secure fashion”. HSTS is only acknowledged when sent over HSTS and is ignored when sent over HTTP <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" _target="_blank">(Source)</a>. Wait, what does this mean?</p>
 
 <p>So let’s say you go to a website: http://example.com – the site loads up insecurely – and if the “Strict-Transport-Security” header is set, it will be ignored by the browser. This is due to compatability reasons (essentially with non-HTTPS user-agents).</p>
 
@@ -78,7 +78,7 @@
 
 <img src="images/hsts/3.png" alt="hsts">
 
-<p>So as you can see above, a website i’ve visited is due to expire on Saturday 20th April, 2019 at 16:30:48 UTC. This brings a whole new debate on privacy – this is essentially recording sites you visit, although, it’s doing so for security. Important to note, Private Browsing does not write to this file. Also worth noting, Apache, Lighttpd, Nginx and IIS all allow for this directive to be set <a href="https://www.globalsign.com/en/blog/what-is-hsts-and-how-do-i-use-it/">(Source)</a>.</p>
+<p>So as you can see above, a website i’ve visited is due to expire on Saturday 20th April, 2019 at 16:30:48 UTC. This brings a whole new debate on privacy – this is essentially recording sites you visit, although, it’s doing so for security. Important to note, Private Browsing does not write to this file. Also worth noting, Apache, Lighttpd, Nginx and IIS all allow for this directive to be set <a href="https://www.globalsign.com/en/blog/what-is-hsts-and-how-do-i-use-it/" _target="_blank">(Source)</a>.</p>
 
 <p>I think that’s about as deep as we need to go on a Wednesday night at 11:22pm! Thanks for reading.</p>
     
