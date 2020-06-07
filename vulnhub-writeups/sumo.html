@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/quicklinks.html">Quick Links</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...Sumo Writeup...</p>
+
+        </div>
+
+        <div id="center-writeup-image">
+
+            <img src="/vulnhub-writeups/images/sumo/main.JPG" alt="vulnhub">
+            
+        </div>  
+        
+<div id="marg-asthetic">
+                       
+        <h2>1. Enumeration</h2>
+        
+        <p>Nmap didn't produce much of interest. Nor did dirbuster. I decided nikto would be the next best option, so I pointed it at the target:</p>
+    
+        <img src="/vulnhub-writeups/images/sumo/1.JPG" alt="vulnhub">
+    
+        <p>An uncommon-header was found, and with it finding a cg-bin path....could it be? Shellshock?</p>    
+    
+        <img src="/vulnhub-writeups/images/sumo/2.png" alt="vulnhub">
+    
+        <h2>Exploitation</h2>
+    
+        <p>You're damn right! Well, I was damn right. It was indeed, shellshock. I exploited it using curl and got a reverse shell:</p>    
+    
+        <img src="/vulnhub-writeups/images/sumo/3.JPG" alt="vulnhub" width="800">
+    
+        <p>Next up, I figured I'd look for a SUID exploit. They seem to be on pretty much every single CTF/vulnerable machine right now. Well, it didn't look like that was the case! Great! I looked at the kernel in use:</p>
+    
+        <img src="/vulnhub-writeups/images/sumo/4.JPG" alt="vulnhub">
+    
+        <p>As expected, it was vulnerable to privilege escalation using the perf_swevent_init local root exploit, which looked to be from 2014, just like shellshock.</p>    
+        
+        <img src="/vulnhub-writeups/images/sumo/5.JPG" alt="vulnhub" height="200" width="400">
+    
+        <h2>Privilege Escalation</h2>
+    
+        <p>I'll save you some time here - I couldn't get gcc working, nor could I seem to get a tty shell. I created an elf file which would connect back to my attacking VM.</p>    
+    
+        <img src="/vulnhub-writeups/images/sumo/6.JPG" alt="vulnhub" width="800">
+    
+        <p>I set up a handler on my attacking VM:</p>        
+    
+        <img src="/vulnhub-writeups/images/sumo/7.JPG" alt="vulnhub" height="300">
+    
+        <p>Now all I needed to do was run the elf file on the target:</p> 
+    
+        <img src="/vulnhub-writeups/images/sumo/8.JPG" alt="vulnhub" width="800">
+    
+        <p>This is where things got a bit complicated. The exploit STILL wouldn't run. I got an error message which complained about gcc. This may have been an unintentional issue with the VM, as some folks reported theirs worked ok. Either way, some kind chap over at Reddit shared the fix for gcc <a href="https://www.reddit.com/r/vulnhub/comments/gkym6f/sumo_ctf_walkthrough/">here</a>. The following will set the appropriate gcc path:</p>
+    
+        <div class="code-view-two"><pre><b>
+
+            export PATH=/usr/lib/gcc/x86_64-linux-gnu/4.6:$PATH
+
+        </b></pre></div>
+    
+        <p>Once the gcc path issue was resolved, the exploit would now run and we were now running as root:</p>
+        
+        <img src="/vulnhub-writeups/images/sumo/9.JPG" alt="vulnhub">
+    
+        <p>From here, I grabbed the root flag, and that, as they say, was that!</p>
+    
+        <img src="/vulnhub-writeups/images/sumo/10.JPG" alt="vulnhub">    
+        
+<p>Another fun VM by SunCSR - with a bit of a twist, rather than the usual suid. Thanks <a href="https://www.vulnhub.com/author/suncsr-team,696/" target="_blank">SunCSR Team</a> for the challenge!</p>
+    
+<p><a href="#top">Go to top</a></p></div>
+    
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>
