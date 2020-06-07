@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/personal.html">Personal</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...HSTS...</p>
+
+        </div>
+
+<div id="marg-asthetic">
+                       
+<h2>What does HSTS do?</h2>
+
+<p>So first, let’s talk about what HSTS does. HSTS is a Security Policy that protects sites against protocol downgrade attacks <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">(Source)</a>. It does this by specifying a HTTP header, named “Strict-Transport-Security“. The header specifies an age in seconds. So an example header might look like this:</p>
+
+<p>Strict-Transport-Security: max-age=31536000 <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.md">(Source)</a>. Wikipedia says that “HSTS Policy specifies a period of time during which the user agent should only access the server in a secure fashion”. HSTS is only acknowledged when sent over HSTS and is ignored when sent over HTTP <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">(Source)</a>. Wait, what does this mean?</p>
+
+<p>So let’s say you go to a website: http://example.com – the site loads up insecurely – and if the “Strict-Transport-Security” header is set, it will be ignored by the browser. This is due to compatability reasons (essentially with non-HTTPS user-agents).</p>
+
+<p>Now, if you are directed to https://example.com and the “Strict-Transport-Security” header is set to “max-age=31536000”, all future traffic that’s sent to example.com in an insecure manner will be upgraded and sent over https (for the next year).</p>
+
+<p>So you might be thinking: “Ok, but if you land on the website using HTTP, then surely you can still be subject to MiTM?” – yes, and that’s where HSTS pre-laoding comes in. Google Chrome, Firefox and other browsers have a pre-set list of HSTS sites.</p>
+
+<h2>Query a HSTS Domain in Chrome</h2>
+
+<p>In Chrome, going to: chrome://net-internals/#hsts will allow you to query whether a site is using HSTS. So for example, if you type in google.com into the query, you’ll be presented with the following:</p>
+    
+<img src="images/hsts/1.png" alt="hsts">
+
+<p>And then if we go to google[d]com using Google Chrome and check the network tab, we can see HSTS is in use (highlighted yellow):</p>
+    
+<img src="images/hsts/2.png" alt="hsts" width="800">
+
+<h2>What about Firefox?</h2>
+    
+<p>If you type the following in the address bar:  “about:support” (without quotes) , and down to “Profile Folder”, you can click “Open Folder”. A file called “SiteSecurityServiceState.txt” contains sites you’ve visited with HSTS ages listed.</p>
+
+<p>In my case, I had a site with the following HSTS timestamp: 1555777848138. This is a Unix timestamp, which means we can decode it.</p>
+
+<img src="images/hsts/3.png" alt="hsts">
+
+<p>So as you can see above, a website i’ve visited is due to expire on Saturday 20th April, 2019 at 16:30:48 UTC. This brings a whole new debate on privacy – this is essentially recording sites you visit, although, it’s doing so for security. Important to note, Private Browsing does not write to this file. Also worth noting, Apache, Lighttpd, Nginx and IIS all allow for this directive to be set <a href="https://www.globalsign.com/en/blog/what-is-hsts-and-how-do-i-use-it/">(Source)</a>.</p>
+
+<p>I think that’s about as deep as we need to go on a Wednesday night at 11:22pm! Thanks for reading.</p>
+    
+        
+    
+<p><a href="#top">Go to top</a></p></div>
+    
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>

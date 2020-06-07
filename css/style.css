@@ -246,6 +246,15 @@
 
     }
 
+#list-of-writeups-gensec {
+    
+        padding: 30px 10px 20px 0;
+        text-align: center;
+        margin-left: 30%;
+    
+}
+
+
 th, td {
     
     border: 1px solid black;
