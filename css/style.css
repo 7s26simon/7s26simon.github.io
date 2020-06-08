@@ -93,7 +93,6 @@
 
     }
 
-
     h1 {
 
         font-family: 'Sacramento', cursive;
@@ -316,5 +315,19 @@ th, td {
     
     margin-left: 40px;
     width:auto;
+    
+}
+
+#badge-thm {
+    
+    position: relative;
+    margin-left: 39%;
+    
+}
+
+#badge-htb {
+    
+    position: relative;
+    margin-left: 40%;
     
 }
