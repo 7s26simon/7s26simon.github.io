@@ -320,6 +320,7 @@ th, td {
 
 #badge-thm {
     
+    float: inherit;
     position: relative;
     margin-left: 39%;
     
@@ -327,6 +328,7 @@ th, td {
 
 #badge-htb {
     
+    float: inherit;
     position: relative;
     margin-left: 40%;
     
