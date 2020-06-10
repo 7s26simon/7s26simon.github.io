@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/quicklinks.html">Quick Links</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...Year of The Rabbit Writeup...</p>
+
+        </div>
+
+<div id="marg-asthetic">
+    
+    <div id="center-writeup-image">
+    
+        <img src="images/year_of_the_rabbit/yotr.png" alt="lianyu" width="100">
+        <img src="images/year_of_the_rabbit/yotr.png" alt="lianyu" width="100">
+        <img src="images/year_of_the_rabbit/yotr.png" alt="lianyu" width="100">
+        <img src="images/year_of_the_rabbit/yotr.png" alt="lianyu" width="100">
+        <img src="images/year_of_the_rabbit/yotr.png" alt="lianyu" width="100">
+
+    </div>
+    
+            
+    <h2>Enumeration</h2>
+    
+    <p>I started with nikto, nmap and dirb. Nmap found ftp/ssh/http and dirb found an /assets folder. I figured I had enough to begin, so I got going.</p> 
+    
+    <p>There were two files in the assets folder. A link to a rickroll video, and a style.css file. I looked at the style.css and found it to contain a link to a php file, hinting that it contained a flag.</p>
+    
+    <img src="images/year_of_the_rabbit/css.JPG" alt="tryhackme" height="300">
+    
+    <p>When browsing to the super secret flag, it suggested that javascript should be turned off:</p>
+    
+    <img src="images/year_of_the_rabbit/3.JPG" alt="tryhackme" height="300">
+    
+    <p>After turning off JS, I refreshed the page:</p>
+        
+    <img src="images/year_of_the_rabbit/turnoffjs.JPG" alt="tryhackme" height="300">
+    
+    <p>I did as it asked and kept my volume up. Approx 1 min into the video, it said I was looking in the wrong place and that I should use *burp sound*</p>
+    
+    <img src="images/year_of_the_rabbit/rickrolled.JPG" alt="tryhackme" height="300">
+
+    
+    <p>I figured up burpsuite and brwosed back to the previous directory. I then browsed forward again (with JS back on) and noticed there was a callout to a secret directory that had not been displayed anywhere so far.</p>
+
+    <img src="images/year_of_the_rabbit/4.JPG" alt="tryhackme" height="300">
+    
+    <p>That was all the enumeration needed in order to start making some serious progress.</p>
+    
+    <h2>Getting user</h2>
+
+    <p>I browsed to the hidden directory and saw a PNG file titled "Hot_Babe.png". The file didn't have anything written onto the image itself...</p>
+    
+    <img src="images/year_of_the_rabbit/6.JPG" alt="tryhackme" height="300">
+    
+    <p>However, running "strings" on the file produced some very interesting results:</p>
+
+    <img src="images/year_of_the_rabbit/7_strings_ftp.JPG" alt="tryhackme" height="300">
+    
+    <p>The ftp user was "ftpuser" (do'h, should have guessed). But the password was one of the ones listed in the file. I created a file containing all of the passwords and ran it through hydra:</p>
+    
+    <img src="images/year_of_the_rabbit/8.JPG" alt="tryhackme" height="300">
+    
+    <p>Next up, I looked into FTP, listed the files and pulled them to my local attacker machine:</p>
+    
+    <img src="images/year_of_the_rabbit/9_ftp.JPG" alt="tryhackme" height="300">
+
+    <p>This led to the following encoded text file:</p>
+    
+    <img src="images/year_of_the_rabbit/10_get_file.JPG" alt="tryhackme" height="300">
+    
+    <p>This was brainf*ck encoded JS (that's legitimately what it's called. I know...ghastly!)</p>
+    
+    <img src="images/year_of_the_rabbit/11_creds.JPG" alt="tryhackme" height="300"> 
+    
+    <p>I used the above creds to log in via SSH.</p>
+
+    <img src="images/year_of_the_rabbit/12_eli_login.JPG" alt="tryhackme" height="300">
+        
+    <p>As above, I was logged in as eli and the login message suggested that there was a "s3cr3t" hiding place. I was unable to read the user.txt file in gwendoline's home directory, so I used the locate command to quickly find where it was on the file system:</p>
+    
+    <img src="images/year_of_the_rabbit/13_user_txt.JPG" alt="tryhackme" height="150">
+    
+    <img src="images/year_of_the_rabbit/14_locate.JPG" alt="tryhackme" height="150">    
+    
+    <p>Reading the secret message displayed another password. This was the password for gwendoline.</p>
+    
+    <img src="images/year_of_the_rabbit/15_gwen_creds.JPG" alt="tryhackme" height="150"> 
+    
+    <p>Now, logged in as gwendoline, I looked at what she could run without a password:</p>
+    
+    <img src="images/year_of_the_rabbit/16_su_gwen.JPG" alt="tryhackme" height="150">
+     
+    <h2>Getting root</h2>
+    
+    <p>The (ALL, !root) NOPASSWD: /usr/bin/vi looked very suspect. I decided to focus on this.</p>
+    
+    <p>I checked what version of sudo was running and it was 1.8.10, which meant it was vulnerable to <a href="https://www.exploit-db.com/exploits/47502" target="_blank">CVE-2019-14287</a></p>
+        
+    <img src="images/year_of_the_rabbit/18_priv_esc.JPG" alt="tryhackme" height="250">
+    
+    <p>I ran the command as -u#-1 (aka root) and managed to get a root shell, using:<br><br>:set shell=/bin/sh<br>
+:shell <br><br>once inside vi. I was now root and could read the flag in /root. Excellent machine! Really got me thinking.</p>    
+    
+    <p><a href="#top">Go to top</a></p>
+    
+</div>
+        
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+                <a href="https://validator.w3.org/check?uri=referer"><img
+                      src="http://www.w3.org/Icons/valid-xhtml10"
+                      alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+                <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>
