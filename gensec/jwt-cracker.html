@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/quicklinks.html">Quick Links</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...JWT is Cracking! or is it the other way around?...</p>
+            
+            <img src="images/jwtcrack/jwtio.JPG">
+
+        </div>
+
+<div id="marg-asthetic">
+                       
+<h2>Steps to Install JWT-Crack</h2>
+
+<p>git clone https://github.com/lmammino/jwt-cracker.git</p>
+    
+<p>sudo npm install --global jwt-cracker</p>
+    
+<h2>How to Use JWT-Crack</h2>
+    
+<p>Below is an example of how to use the program. Essentially, we take our full JWT token, append the characters we wish to brute force with (in this case, the lower-case alphabet), and followed by how many characters we want to try brute forcing.</p>
+    
+    <p>The formula is:</p> <div class="code-view"><p><span style=color:red>jwt-cracker </span> <span style=color:green>&lt;token&gt;</span> <span style=color:firebrick>&#91;alphabet&#93;</span> <span style=color:darkviolet>&#91;max-length&#93;</span></p></div>
+        
+<p>So a real world example would look like this:</p>
+
+<div class="code-view-two">
+    <p><span style=color:red>jwt-cracker </span><span style=color:green>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IjdzMjZza<br>W1vbiIsImFkbWluIjp0cnVlLCJqdGkiOiJiNjZlZTYyYS04YzdjLTQ3OGMtOTY3ZS1kMzFkNGEyNTM1YTkiLC<br>JpYXQiOjE1OTIwNzA4OTYsImV4cCI6MTU5MjA3NDUzNH0.puJckeBQUyf3CmWommtau6ZXyMg88aDoGhd_<br>K1TXI44 </span><span style=color:firebrick>abcdefghijklmnopqrstuvwxyz</span> <span style="color: darkviolet">4</span>
+</p>
+</div>
+    
+<p>So how do we know if it has been cracked? It'll tell you! Beware, if it's a strong password in any way (e.g alphanumeric) this may take a seriously long time.</p>
+
+<img src="./images/jwtcrack/1.png" alt="jwt">
+
+<p>If you copy and use my provided JWT, you'll find it's cracked very quickly as it's just 4 characters. Here's a slightly more difficult one for you to try and crack:</p>
+
+<h2>Your Challenge...Crack this:</h2>
+    
+<p>I have been kind and provided you a with reduced character set to speed it up.</p>
+
+<div class="code-view-two">
+    <p>eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IjdzMjZzaW1v<br>biIsImFkbWluIjp0cnVlLCJqdGkiOiI3NzQ3NmE4ZS04MGFkLTQyYWUtYmZhOS03ZDA4NzZlNjQ4MWYiLCJpYXQi<br>OjE1OTIwNzIyODgsImV4cCI6MTU5MjA3NjA0Nn0.8-chE8fFKsI181IcVmrxxRmw3NAxy3fj63hlM90L0fo 
+    </p>
+    
+    <p>Character set: aechklrdwps</p>
+    
+    <p>Characters in password: 6</p>
+    
+</div>
+
+     <p>Challenge inspired by <a href="https://tryhackme.com/room/zthobscurewebvulns" target="_blank">TryHackMe</a></p>
+    
+<p><a href="#top">Go to top</a></p></div>
+    
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>
