@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/quicklinks.html">Quick Links</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...Servmon Writeup...</p>
+
+        </div>
+
+        <div id="center-writeup-image">
+
+            <img src="/htb-writeups/images/servmon/main.jpg" alt="hackthebox">
+            
+        </div>  
+        
+<div id="marg-asthetic">
+        
+        <h2>1. Enumeration</h2>
+    
+        <p>A basic Nmap scan showed a few ports which may be of interest. Before diving into any more complex Nmap commands, I decided to enumerate some more.</p>
+
+        <img src="/htb-writeups/images/servmon/1.png" alt="hackthebox">
+    
+        <p>I began by looking whether the FTP was set up to allow anonymous access. It was, as presented in the screenshot below:</p>        
+    
+        <img src="/htb-writeups/images/servmon/2.png" alt="hackthebox">
+    
+        <p>From here, I was able to take a peek in the FTP directories. I spotted two users, Nadine and Nathan, along with some txt files, which disclosed that a password may be hidden somewhere. Browsing to the web application displayed a logo with the text "NVMS-1000", which after some research, just so happened to be vulnerable to directory traversal.</p>
+    
+    
+        <img src="/htb-writeups/images/servmon/3.png" alt="hackthebox">
+    
+        <p>I continued to enumerate and decided that all I really had at this point was:
+           
+        Anonymous FTP access
+        Two usernames
+        Suggestions that Nathan had been provided a list of passwords (that he hadn't yet deleted)</p>
+    
+        <h2>2. Getting User</h2>
+        
+    
+        <img src="/htb-writeups/images/servmon/4.png" alt="hackthebox">
+    
+        <p>After enlisting the help of BurpSuite, I was able to view a series of passwords. It wasn't clear which password would work with what account, so I decided to do a bit of brute-forcing on the SSH port we'd discovered in the beginning.</p>
+    
+        <img src="/htb-writeups/images/servmon/5.png" alt="hackthebox" width="750">
+    
+        <p>I now had the credentials needed to log in. (At this point, I had USER privileges.) I was now able to look around the Windows-based filesystem. I came across an interesting directory in C:\Program Files, named NSClient++. Upon doing some OSINT, it looked like this too, was vulnerable.</p>
+    
+        <img src="/htb-writeups/images/servmon/6.png" alt="hackthebox" width="750">
+    
+        <p>Spotting a nsclient.ini file, I looked inside and was presented with a plaintext password, and an "allowed hosts" option filled out with 127.0.0.1.</p>
+    
+        <img src="/htb-writeups/images/servmon/7.png" alt="hackthebox" width="750">
+    
+    
+        <p>This meant that in order to log in with the credentials, we needed to be running as though we're coming from localhost. No problem! This one is a little complicated (and rather technical), so let's break it down.
+        
+            -C is used for compression
+            -L is used to "Specify that connections given to the TCP port or unix socket on the local (client) host are to be forwarded to the given host and port, or unix socket on the remote side".</p>
+    
+        <img src="/htb-writeups/images/servmon/8.png" alt="hackthebox">
+    
+        <p>So essentially, what we're actually doing here, is opening up a socket on our side (8443), and using our SSH (port 22) to forward our connection to 127.0.0.1:8443 over on the remote side. To the remote side, a process is then created. It looks like our SSH session is talking to the web server (and....it is), but we've essentially tricked our way in. This is a nice video to explain in a little more detail what we've just done.</p>
+    
+            
+        <p>Anyway, let's finish rooting this machine! So, I logged in:</p>  
+    
+        <img src="/htb-writeups/images/servmon/9.png" alt="hackthebox">
+    
+        <h2>3. Privilege Escalation</h2>
+    
+        <p>Here's where your brain will explode (mine did, too). We now browse to https://localhost:8443. I know some reading this wont appreciate the beauty in this. But after I rooted the box, I literally spent 20-30 mins talking to an admin about how incredible this was. Look at what we're even doing here! We're using an SSH port-forwarding tunnel to force our traffic to be routed through port 22 - and our browser is rendering the response. Honestly - the creator of this box...kudos to you, Sir. This is absolute, genius.</p>
+    
+        <p>It suddenly dawned on me that I needed to upload two files, as described here in the PoC. I created a bat file and uploaded nc.exe and the bat file to C:\Temp</p>
+    
+        <p>From here, I went to:
+        "scripts > default > add new > basic (command)" and entered the location of my evil.bat file.</p>
+    
+        <img src="/htb-writeups/images/servmon/10.png" alt="hackthebox">
+  
+        <img src="/htb-writeups/images/servmon/11.png" alt="hackthebox" width="750">
+
+        <p>Now, I just had to run the file. So I prepared my local netcat listener and headed over to the console, and ran the alias/name of the script (default).</p>
+
+        <img src="/htb-writeups/images/servmon/12.png" alt="hackthebox" width="750">
+    
+        <p>I simply hit run, and watched my listener display a reverse shell, with administrative privileges.</p>
+    
+        <img src="/htb-writeups/images/servmon/13.png" alt="hackthebox">
+    
+        <p>Anyone who was working on this on 12th April, 2020 will attest: it was rough. Many users were resetting the entire VM, so just when you'd uploaded your bat file, or worse, about to get your shell, the entire machine would go offline. Anyway, thanks HTB and the creator of this machine!</p>
+    
+    <p><a href="#top">Go to top</a></p>
+</div>
+    
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+
+        </div>
+        
+    </body>
+
+</html>
