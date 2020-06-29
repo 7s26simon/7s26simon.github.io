@@ -302,6 +302,13 @@ th, td {
 
     }
 
+p.shellbyte {
+    
+    color: red;
+    font-size: 15px;
+    
+}
+
 #mid-desc {
     
     text-align: center;
