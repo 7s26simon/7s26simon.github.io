@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+    
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+        
+        <title>7s26simon</title>
+        
+    </head>    
+    
+    <body>
+        
+        <div id="top"></div>
+        
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/quicklinks.html">Quick Links</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+        
+        <div id="writeup-box-name">
+
+            <p>...Vegeta Writeup...</p>
+
+        </div>
+
+        <div id="center-writeup-image">
+
+            <img src="/vulnhub-writeups/images/vegeta/Vegeta-header.png" alt="vulnhub">
+            
+        </div>  
+        
+<div id="marg-asthetic">
+    
+        <p>Sometimes it's nice to go back to basics - there's always skills that you need to brush up on, and keep in your mind for CTF's. So I don't mind doing beginner challenges - no egos here!</p>
+                       
+        <h2>1. Enumeration</h2>
+        
+        <p>Nmap picked up SSH and HTTP open. The box was listed as being a "complete" beginner machine, so I decided to stick with what I was given for now.</p>
+    
+        <img src="/vulnhub-writeups/images/vegeta/1.JPG" alt="vulnhub">
+    
+        <p>I browsed to the robots.txt file and found a /find_me directory. This usually indicates a few things: 1) we need to look at that directory as it might be our path forward, or 2) it indicates there may be more directories on the box and we need to use dirb. At this point, I did fire up dirb, and simulatenously browse to the /find_me directory</p>    
+    
+        <img src="/vulnhub-writeups/images/vegeta/2-robots.JPG" alt="vulnhub">
+    
+        <p>Getting to the /find_me directory displayed a find_me.html file which was hiding a comment at the very bottom of the page. I was convinced this was the route we needed to take. Little did I know, this was a huge rabbit hole (a bit mean for "total beginner" machine, but heh, it wasn't the worst rabbit hole I've ever had.</p> 
+    
+        <p>I decoded the base64 and got a png file which was a qr code. The QR code ultimately didn't seem to have any relevance to the box, and I couldn't use it to go further. 
+            
+        <img src="/vulnhub-writeups/images/vegeta/4-b64.JPG" alt="vulnhub">
+        
+        <h2>Getting User</h2>
+            
+        <p>I decided to enumerate some more. This was a "Dragonball-Z themed box". So I decided to return back to dirb and use a custom DBZ wordlist: &lt;ip&gt;/$$ </p>
+    
+        <p>Dirb got a hit, and as somewhat expected, it was indeed a DBZ-related directory name. I browsed to it and found a wav file. After listening to the file, it was immediately obvious to be morse code. I browsed to an online morse-code decoder and uploaded the file.</p>    
+        <img src="/vulnhub-writeups/images/vegeta/5-dir.JPG" alt="vulnhub" height="200" width="400">
+    
+        <p>I'll save you some time here - I couldn't get gcc working, nor could I seem to get a tty shell. I created an elf file which would connect back to my attacking VM.</p>    
+    
+        <img src="/vulnhub-writeups/images/vegeta/morseCode.png" alt="vulnhub" width="600">
+    
+        <h2>Getting root</h2>
+    
+        <p>Next, I began hunting for priv-esc opportunities. It turns out that this box had a really cool priv-esc that I've seen a few times in the past, but it always makes me smile. /etc/password was mis-configureed. I created a new password for a new root user, and performed an su, to get access to the new root account</p>        
+    
+        <img src="/vulnhub-writeups/images/vegeta/6-privEsc.JPG" alt="vulnhub" height="200" width="600">
+    
+        <p>Now, it was just a case of getting the flag.</p> 
+    
+        <img src="/vulnhub-writeups/images/vegeta/7-root.JPG" alt="vulnhub" width="500" height="500">
+
+        <p>A nice, basic but fun boot2root. Thanks <a href="https://www.vulnhub.com/author/hawks-team,706/" target="_blank">Hawks Team</a> for the challenge!</p>
+    
+<p><a href="#top">Go to top</a></p></div>
+    
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+        </div>
+        
+    </body>
+
+</html>
