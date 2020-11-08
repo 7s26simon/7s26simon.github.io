@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
     <head>
-    
+
         <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
-        
+
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
-        
+
         <title>7s26simon</title>
-        
-    </head>    
-    
+
+    </head>
+
     <body>
-        
+
         <div id="top"></div>
-        
+
        <div id="top-bar-blue">
 
             <h1 id="name-font">Simon McCabe</h1>
 
-            <h4>WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+            <h4>Pentest+. WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
 
             <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
 
-            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">  
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">
 
         </div>
 
@@ -39,7 +39,7 @@
           <a href="/About.html">About Me</a>
 
         </div>
-        
+
         <div id="writeup-box-name">
 
             <p>...Tabby Writeup...</p>
@@ -49,42 +49,42 @@
         <div id="center-writeup-image">
 
             <img src="/htb-writeups/images/tabby/tabby.jpg" alt="hackthebox" height="300">
-            
-        </div>  
-        
+
+        </div>
+
 <div id="marg-asthetic">
-        
+
         <h2>1. Enumeration</h2>
-    
+
         <p>I'll be honest. I was about to run some nmap scans, but I decided to load up the IP and see whether there was a webapp we were dealing with. It turns out there was. I began by looking at the source code and trying to figure out what to look at first. It didn't take long before something caught my eye.</p>
-    
+
         <p>It looked like most links were dead, aside from one which was pulling another file. </p>
 
         <img src="/htb-writeups/images/tabby/interesting.JPG" alt="hackthebox">
-    
-        <p>I continued to look around but with this staring at me, I decided it was too obvious to ignore, and it had to be worth a further look. I opened up Burpsuite and attempted to pull the /etc/passwd file</p>        
-    
+
+        <p>I continued to look around but with this staring at me, I decided it was too obvious to ignore, and it had to be worth a further look. I opened up Burpsuite and attempted to pull the /etc/passwd file</p>
+
         <img src="/htb-writeups/images/tabby/lfiEtcPasswd.JPG" alt="hackthebox" height="300">
-    
+
         <p>I opted to do a quick nmap scan just in case something interesting popped up. And it did - port 8080 was open. We'll come back to this later.</p>
-    
+
         <img src="/htb-writeups/images/tabby/nmap.JPG" alt="hackthebox" >
-    
+
         <p>This was starting to turn into the exploitation phase very quickly, so I figured this was enough enumeration (for now) and began looking at ways to get user.</p>
-    
-        
+
+
         <h2>2. Getting User</h2>
-    
+
         <p>So now, we had a LFI and we also had port 8080 open. Could the two be connected in any way?</p>
-    
+
         <img src="/htb-writeups/images/tabby/tomcatDiscovery.JPG" height="300" alt="hackthebox" >
-           
+
         <p>Browsing to port 8080 suggested Tomcat was in use. Not just any version, but Tomcat 9. Using the LFI, I was able to figure that the file we wanted was somewhere in the /usr/share folder. This took a LOT of trial and error.</p>
-    
+
         <img src="/htb-writeups/images/tabby/tomcatUsersfFile.JPG" height="300" alt="hackthebox" >
-    
+
         <p>The tomcat user file provided me with the tomcat username. Now, I just needed to get access to the manager directory. The following URL's are standard paths to Tomcat's manager:</p>
-    
+
         <table>
           <tr>
             <th>Manager Path</th>
@@ -103,65 +103,65 @@
             <td>http://localhost:8080/host-manager/html</td>
           </tr>
         </table>
-    
+
         <p>Unfortunately, only the host-manager was available. Although this wasn't such a bad thing, as it gave another avenue to try. Metasploit.</p>
-    
+
         <img src="/htb-writeups/images/tabby/metasploit.JPG" height="300" alt="hackthebox" >
-    
+
         <p>I set my options (and payload to option 14). I now had a shell, as tomcat.</p>
-    
+
         <img src="/htb-writeups/images/tabby/shell.JPG" height="300" alt="hackthebox" >
-    
+
         <p>I used "/bin/bash -i" to get a tty shell and started hunting around the file system. I came across an interesting looking backup.zip file.</p>
-    
+
         <img src="/htb-writeups/images/tabby/shell.JPG" height="300" alt="hackthebox" >
-    
+
         <p>I continued looking around, but decided this was <b>probably</b> where we were supposed to be looking. I used curl to pull the file to my local machine.</p>
-    
+
         <p>I noticed the file was password protected (when I tried to unzip it, it asked for a password). So the next step would be to try and crack it. I ran "zip2john" which is part of the John The Ripper toolset, and began cracking it using JTR.</p>
-    
+
         <img src="/htb-writeups/images/tabby/crackZip.JPG" height="200" width="600" alt="hackthebox" >
-    
+
         <p>Soon enough, I had a password and the contents of the zip file. I wasted probably 30 minutes before it dawned on me...the owner of the zip file was potentially using the same password in multiple places.</p>
-    
+
         <img src="/htb-writeups/images/tabby/suAsh.JPG" height="120" width="600" alt="hackthebox" >
-    
+
         <p>Excellent! We're now ash. I'm not sure exactly how I feel about the zip pass being ash's password, but meh... I'll take it.</p>
-    
+
         <h2>3. Privilege Escalation</h2>
-    
+
         <p>This section didn't take me too long, although it was a little bit painful, mostly due to other people working on the box at the same time as me.</p>
-    
+
         <p>Tryhackme had a box recently with an lxd exploit, and so as soon as I ran "id" as ash, and saw lxd, I figured that was the route I needed to take.</p>
-    
+
         <p>If you click <a href="https://www.exploit-db.com/exploits/46978" target="_blank">here</a> you'll see a fantastic little exploit which basically downloads alpine, builds it on the attacker machine, sends the image over to the victim machine, executes it as root and hey presto, you're root..</p>
-    
+
         <p>So I began by doing the following steps on my attacker machine:<br><br>
-            
+
         1) wget https://raw.githubusercontent.com/saghul/lxd-alpine-builder/master/build-alpine<br>
-        2) ./build-alpine       
-    
+        2) ./build-alpine
+
         </p>
-    
+
         <p>I then used "python -m SimpleHTTPServer 80" to start a webserver on my attacker VM and used wget on my victim to pull the tar.gz file over.</p>
-    
+
         <p> lxc image import $filename --alias alpine &amp;&amp; lxd init --auto<br>
         lxc init alpine privesc -c security.privileged=true<br>
         lxc config device add privesc giveMeRoot disk source=/ path=/mnt/root recursive=true<br>
         lxc start privesc</p>
-    
+
          <img src="/htb-writeups/images/tabby/root-owned.png" height="150" width="300" alt="hackthebox" >
 
         <p>To find the root flag, I had to use "find / -name root.txt" because I struggled to find it given the unusual circumstances it took to get root.</p>
-    
+
         <p>Either way, that's another HTB machine done, and it was somewhat enjoyable, aside from A) finding the initial tomcat user file and B) Ash's password being the same as the zip. I just want to tell Ash that this is a horrible practice and not to do it again!!</p>
 
         <p>Thanks for reading. See you in the next one.</p>
 
         <p><a href="#top">Go to top</a></p>
-    
+
 </div>
-    
+
         <div id="social-media">
 
             <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
@@ -171,7 +171,7 @@
             <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
 
             <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
-            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a> 
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a>
 
         </div>
 
@@ -189,7 +189,7 @@
 
 
         </div>
-        
+
     </body>
 
 </html>
