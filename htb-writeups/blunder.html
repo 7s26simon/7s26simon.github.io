@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+
+        <title>7s26simon</title>
+
+    </head>
+
+    <body>
+
+        <div id="top"></div>
+
+       <div id="top-bar-blue">
+
+            <h1 id="name-font">Simon McCabe</h1>
+
+            <h4>Pentest+. WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
+
+            <img id="cloud-one" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+            <img id="cloud-two" src="../images/cloud.png" height="50" width="100" alt="cloud">
+
+        </div>
+
+        <div class="topnav">
+
+          <a class="active" href="/index.html">Home</a>
+          <a href="/hackthebox.html">HackTheBox</a>
+          <a href="/tryhackme.html">TryHackMe</a>
+          <a href="/vulnhub.html">Vulnhub</a>
+          <a href="/general.html">General Security</a>
+          <a href="/quicklinks.html">Quick Links</a>
+          <a href="/About.html">About Me</a>
+
+        </div>
+
+        <div id="writeup-box-name">
+
+            <p>...Blunder Writeup...</p>
+
+        </div>
+
+        <div id="center-writeup-image">
+
+            <img src="/htb-writeups/images/blunder/Blunder.jpg" alt="hackthebox">
+
+        </div>
+
+<div id="marg-asthetic">
+
+        <h2>1. Enumeration</h2>
+
+        <p>Upon loading the IP, a blog appeared consisting of a series of blog posts. Looking around for version numbers and javascript files didn't reveal too much. Once again, the "easy" HTB rooms prove not to be as easy as other CTF's.</p>
+
+        <p>I looked at the HTB discord and saw a bunch of seriously angry people - people saying the path to user was crazy. I closed discord and continued on the hunt. What could be so crazy? It can't be that bad, can it? This was the same night the box got released. I stayed up until 3am to complete it. So, here goes.</p>
+
+        <img src="/htb-writeups/images/blunder/a.JPG" alt="hackthebox" height="400" width="900">
+
+        <p>I used dirb and found a path: "/admin". Loading this directory presented a login. Nice! This <strong>has</strong> to be our way in, afterall, there was little to nothing else  to try. But what is bludit? And is there a known CVE? What are the default creds?</p>
+
+        <img src="/htb-writeups/images/blunder/bludit.JPG" alt="hackthebox">
+
+        <p>As you can imagine - nothing worked. Not even <a href="https://rastating.github.io/bludit-brute-force-mitigation-bypass/" target="_blank">this.</a></p>
+
+        <h2>2. Try Harder</h2>
+
+        <p>At this point, I was clutching at straws. I couldn't seem to get hydra or burp to brute-force the login. So I decided to make a few alterations to the bludit script found in the previous step:</p>
+
+        <img src="/htb-writeups/images/blunder/1.1.PNG" alt="hackthebox">
+
+        <p>The wordlist was produced with 'cewl', which essentially crawls the site and creates a custom wordlist. If this failed, I'm not sure what I'd have tried next. I was <strong>really</strong> hoping this is what the box-creator had intended:</p>
+
+        <img src="/htb-writeups/images/blunder/1.PNG" alt="hackthebox">
+
+        <h2>3. Getting User</h2>
+
+        <p>And...it worked! I now had the username/password to log into the CMS.</p>
+
+
+        <img src="/htb-writeups/images/blunder/2.PNG" alt="hackthebox">
+
+        <p>During my initial hunt for bludit exploits, I'd found another which was a metasploit module, which would abuse the upload function and get a shell.</p>
+
+        <img src="/htb-writeups/images/blunder/3.PNG" alt="hackthebox">
+
+        <p>The user.txt file contained the user flag. Nice! Now for root.</p>
+
+        <h2>4. Getting (another) User</h2>
+
+        <img src="/htb-writeups/images/blunder/4.PNG" alt="hackthebox">
+
+        <p>From here, I entered a bludit directory and read the users.php file, which displayed the admin password,albeit, it was a hashed password.</p>
+
+        <img src="/htb-writeups/images/blunder/5.PNG" alt="hackthebox">
+
+        <p>I used an online cracker to get it:</p>
+
+        <img src="/htb-writeups/images/blunder/6.1.PNG" alt="hackthebox" width="700">
+
+        <p>Now, as the low-priv user, I ran sudo -l, and when prompted for the password, typed in the password I'd found in the users.php file:</p>
+
+        <img src="/htb-writeups/images/blunder/6.2.PNG" alt="hackthebox">
+
+        <h2>5. Getting Root</h2>
+
+        <p>As seen above, I could execute /bin/bash as anyone <strong>aside from</strong> root. I got a horizontal privilege escalation on the user, shaun. This was a rabbit hole and was not necessary (however, it was satisfying to pawn shaun too).</p>
+
+        <img src="/htb-writeups/images/blunder/6.PNG" alt="hackthebox">
+
+        <p>I switched back to "hugo" and began hunting around for something, anything I may be able to leverage to get root access.</p>
+
+        <img src="/htb-writeups/images/blunder/7.PNG" alt="hackthebox">
+
+        <p>Suddenly, it dawned on me. I needed to study the results of "sudo -l" some more. I'm not allowed to run directly as "root". But root runs as 0. What if I run as -u#-1 ? This was a well known vulnerability. You can read more about it <a href="https://threatpost.com/sudo-bug-root-access-linux/149169/">here</a>. Essentially, (CVE-2019-14287) allows an attacker to specify a value of "-1" or "4294967295", this gets (incorrectly) treated as 0 aka root. </p>
+
+        <img src="/htb-writeups/images/blunder/8.PNG" alt="hackthebox">
+
+        <p>Instantly, the command worked and I was now running as root.</p>
+
+        <img src="/htb-writeups/images/blunder/8.1.PNG" alt="hackthebox">
+
+        <h2>6. Getting Root's Flag</h2>
+
+        <p>Now, to get the flag:</p>
+
+        <img src="/htb-writeups/images/blunder/9.PNG" alt="hackthebox">
+
+
+        <p>And that was Blunder complete. It was now 3am. I went to sleep dreaming about 0's and -1's. </p>
+
+
+    <p><a href="#top">Go to top</a></p>
+</div>
+
+        <div id="social-media">
+
+            <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
+            <img src="../images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+
+            <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
+            <img src="../images/twitter.PNG" width="30" height="25" alt="twitter"></a>
+
+            <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
+            <img src="../images/youtube.PNG" width="30" height="25" alt="youtube"></a>
+
+        </div>
+
+        <div id="bottom-bar" >
+
+            <div id="validator">
+
+            <a href="https://validator.w3.org/check?uri=referer"><img
+                  src="http://www.w3.org/Icons/valid-xhtml10"
+                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+
+            <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
+
+            </div>
+
+
+        </div>
+
+    </body>
+
+</html>
