@@ -108,3 +108,4 @@ crate-sleeve-sxss,webverse-writeups,Crate & Sleeve (SXSS),2026-05-28,xss
 bill-s-steak-house-rce,webverse-writeups,Bill’s Steak House (RCE),2026-05-29,rce
 ottergram-priv-esc,bugforge-writeups,Ottergram (Priv-Esc),2026-05-30,access-control
 tamper-temple-official-writeup-hard,webverse-writeups,Tamper Temple (Official writeup) (hard),2026-06-01,access-control jwt info-disclosure
+expensiel,webverse-writeups,Expensiel,2026-06-13,nosql mass-assignment
