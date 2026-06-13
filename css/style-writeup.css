@@ -1,41 +1,113 @@
-#center-thm-image {
-    
-    padding-left: 30%;
-    position: relative;
-    top:-50px;
-    margin-bottom: -50px;
-    
-}
+/* =====================================================
+   Writeup page styles
+   ===================================================== */
 
-.code-view {
-    
-    background-color: lightgrey;
-    width: 50%;
-    border: 1px black solid;
-    padding-left: 10px;
-    
-}
-
-.code-view-two {
-    
-    background-color: lightgrey;
-    width: 98%;
-    border: 1px black solid;
-    padding-left: 10px;
-    
-}
-
-#marg-asthetic {
-    
-    margin-left: 40px;
-    
-}
-
-
+#marg-asthetic,
 #marg-asthetic-two {
-    
-    margin-left: 25%;
-    
+    max-width: 960px;
+    margin: 0 auto !important;
+    padding: 0 24px 60px;
+    width: auto !important;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.8;
 }
 
+#marg-asthetic p,
+#marg-asthetic-two p {
+    margin: 16px 0;
+}
 
+#marg-asthetic img,
+#marg-asthetic-two img,
+#center-writeup-image img,
+#center-writeup-image-two img {
+    max-width: 100%;
+    height: auto !important;
+    width: auto !important;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+    display: block;
+    margin: 24px auto;
+}
+
+#center-writeup-image,
+#center-writeup-image-two {
+    padding: 0 24px !important;
+    position: static !important;
+    top: auto !important;
+    margin: 0 auto 40px !important;
+    text-align: center;
+    max-width: 600px;
+}
+
+#center-writeup-image img,
+#center-writeup-image-two img {
+    max-height: 280px;
+    width: auto !important;
+}
+
+#center-thm-image {
+    padding: 0 !important;
+    position: static !important;
+    top: auto !important;
+    margin: 0 auto 40px !important;
+    text-align: center;
+    max-width: 600px;
+}
+
+#center-thm-image img {
+    max-height: 280px;
+    width: auto !important;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.code-view,
+.code-view-two {
+    display: block;
+    background: #05070d;
+    border: 1px solid var(--border-strong);
+    border-left: 3px solid var(--accent-green);
+    border-radius: 8px;
+    color: var(--accent-green);
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    padding: 16px 20px !important;
+    margin: 20px 0;
+    width: 100% !important;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#marg-asthetic strong,
+#marg-asthetic-two strong,
+.writeup-strong {
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+#marg-asthetic a,
+#marg-asthetic-two a {
+    color: var(--accent-cyan);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(0, 217, 255, 0.4);
+    padding-bottom: 1px;
+}
+
+#marg-asthetic a:hover,
+#marg-asthetic-two a:hover {
+    color: var(--accent-green);
+    border-bottom-color: var(--accent-green);
+}
+
+@media (max-width: 720px) {
+    #marg-asthetic,
+    #marg-asthetic-two {
+        padding: 0 16px 40px;
+        font-size: 0.95rem;
+    }
+}

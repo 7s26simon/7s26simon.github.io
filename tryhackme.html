@@ -1,127 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TryHackMe Writeups // 7s26simon</title>
 
-    <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
 
-        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Montserrat:wght@300&family=Sacramento&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
 
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+<body>
 
-        <title>7s26simon</title>
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
 
-    </head>
-
-    <body>
-
-       <div id="top-bar-blue">
-
-            <h1 id="name-font">Simon McCabe</h1>
-
-            <h4>Pentest+. WAPT. OSCP. OSWP. PGCert. BSc. Linux+. Security+.</h4>
-
-            <img id="cloud-one" src="images/cloud.png" height="50" width="100" alt="cloud">
-
-            <img id="cloud-two" src="images/cloud.png" height="50" width="100" alt="cloud">
-
-        </div>
-
-        <div class="topnav">
-
-          <a class="active" href="/index.html">Home</a>
-          <a href="/hackthebox.html">HackTheBox</a>
-          <a href="/tryhackme.html">TryHackMe</a>
-          <a href="/vulnhub.html">Vulnhub</a>
-          <a href="/general.html">General Security</a>
-          <a href="/quicklinks.html">Quick Links</a>
-          <a href="/About.html">About Me</a>
-
-        </div>
-
-            <div id="splash">
-
-                <div class="writeup-list">
-
-                    <p>...TryHackMe Writeups...</p>
-
-                </div>
-
+        <nav class="topnav">
+        <a href="index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="hackthebox.html">hackthebox</a>
+                <a class="active" href="tryhackme.html">tryhackme</a>
+                <a href="vulnhub.html">vulnhub</a>
+                <a href="bugforge.html">bugforge</a>
+                <a href="webverse.html">webverse</a>
             </div>
+        </div>
+        <a href="general.html">security blog</a>
+        <a href="quicklinks.html">quick links</a>
+        <a href="About.html">about</a>
+    </nav>
 
-        <table id="list-of-writeups" style="width:60%">
+    <main>
 
-              <tr>
-                <th>Room Name</th>
-                <th>Difficulty</th>
-                <th>Link</th>
-              </tr>
+        <div class="writeup-list">
+            <p>TryHackMe Writeups</p>
+        </div>
 
-              <tr>
-                <td>Gh0stcat</td>
-                <td>Easy</td>
-                <td><a href="thm-writeups/ghostcat.html">Gh0stcat Room</a></td>
-              </tr>
-
-              <tr>
-                <td>Alfred</td>
-                <td>Easy</td>
-                  <td><a href="thm-writeups/alfred.html">alfred-writeup</a>
-                </td>
-              </tr>
-
-              <tr>
-                <td>Jack</td>
-                <td>Hard</td>
-                <td><a href="thm-writeups/jack.html">jack-writeup</a></td>
-              </tr>
-
+        <table>
+            <thead>
+                <tr>
+                    <th>Room Name</th>
+                    <th>Difficulty</th>
+                    <th>Writeup</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Gh0stcat</td>
+                    <td>Easy</td>
+                    <td><a href="thm-writeups/ghostcat.html">read</a></td>
+                </tr>
+                <tr>
+                    <td>Alfred</td>
+                    <td>Easy</td>
+                    <td><a href="thm-writeups/alfred.html">read</a></td>
+                </tr>
+                <tr>
+                    <td>Jack</td>
+                    <td>Hard</td>
+                    <td><a href="thm-writeups/jack.html">read</a></td>
+                </tr>
                 <tr>
                     <td>Lian-Yu</td>
                     <td>Easy</td>
-                    <td><a href="thm-writeups/lianyu.html">lian_yu-writeup</a></td>
+                    <td><a href="thm-writeups/lianyu.html">read</a></td>
                 </tr>
-
                 <tr>
                     <td>Year of The Rabbit</td>
                     <td>Medium</td>
-                    <td><a href="thm-writeups/yotr.html">yotr-writeup</a></td>
+                    <td><a href="thm-writeups/yotr.html">read</a></td>
                 </tr>
-
                 <tr>
                     <td>Dave's Blog</td>
                     <td>Hard</td>
-                    <td><a href="thm-writeups/davesblog.html">DB-writeup</a></td>
+                    <td><a href="thm-writeups/davesblog.html">read</a></td>
                 </tr>
-
-
+            </tbody>
         </table>
 
-            <div id="social-media">
+    </main>
 
-                <a class="logoWidth" href="https://www.linkedin.com/in/simcc/" target="_blank">
-                <img src="images/linkedin.PNG" width="25" height="25" alt="linkedin"></a>
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="images/youtube.PNG" alt="YouTube"></a>
+    </section>
 
-                <a class="logoWidth" href="http://twitter.com/7s26simon" target="_blank">
-                <img src="images/twitter.PNG" width="30" height="25" alt="twitter"></a>
-
-                <a class="logoWidth" href="https://www.youtube.com/channel/UCp8Iiw5FjmwDXKLV91t-j3Q" target="_blank">
-                <img src="images/youtube.PNG" width="30" height="25" alt="youtube"></a>
-
-            </div>
-
-        <div id="bottom-bar" >
-
-            <div id="validator">
-
-              <a href="https://validator.w3.org/check?uri=referer"><img
-                  src="http://www.w3.org/Icons/valid-xhtml10"
-                  alt="Valid XHTML 1.0!" height="31" width="88" /></a>
-
-                <p id="footerTag">© 2020 Simon McCabe - 7s26simon.github.io</p>
-
-            </div>
-
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
         </div>
+    </footer>
 
-    </body>
-
+</body>
 </html>
