@@ -1,0 +1,124 @@
+filename,slug,title,date,suggested_dest,dest
+2025-12-27_MD2PDF---Writeup--TryHackMe--1f9342e0b042.html,md2pdf-writeup-tryhackme,MD2PDF - Writeup (TryHackMe),2025-12-27,thm-writeups,thm-writeups
+2025-12-29_Evil-GPT---Writeup--TryHackMe--3e4ff95ef19a.html,evil-gpt-writeup-tryhackme,Evil-GPT - Writeup (TryHackMe),2025-12-29,thm-writeups,thm-writeups
+2025-12-30_Surfer---Writeup--TryHackMe--aaa08f330786.html,surfer-writeup-tryhackme,Surfer - Writeup (TryHackMe),2025-12-30,thm-writeups,thm-writeups
+2026-01-05_The-Great-Disappearing-Act--TryHackMe-Writeup-e38d441e53ca.html,the-great-disappearing-act-tryhackme-writeup,The Great Disappearing Act -TryHackMe Writeup,2026-01-05,thm-writeups,thm-writeups
+2026-01-07_Tanuki--Writeup-d1e1d40f1339.html,tanuki-writeup,Tanuki -Writeup,2026-01-07,bugforge-writeups,bugforge-writeups
+2026-01-08_Sokudo-writeup--BugForge--03f1384a99f5.html,sokudo-writeup-03f1384a,Sokudo writeup,2026-01-08,bugforge-writeups,bugforge-writeups
+2026-01-09_Shady-Oaks-Financial--Bugforge--d5b07ca09eb9.html,shady-oaks-financial,Shady Oaks Financial,2026-01-09,bugforge-writeups,bugforge-writeups
+2026-01-10_Ottergram-Writeup--BugForge--7e048a3db854.html,ottergram-writeup-7e048a3d,Ottergram Writeup,2026-01-10,bugforge-writeups,bugforge-writeups
+2026-01-11_For-anyone-reading-this--the--Save-to-file--in-Caido-doesn-t-put--https-----after-the-host-header--b3f653f097f2.html,for-anyone-reading-this-the-save-to-file-in-caido-doesn-t-put-https-after-the-host-header,"For anyone reading this, the ""Save to file"" in Caido doesn't put ""https://"" after the host header.",2026-01-11,,
+2026-01-11_Furhire-Writeup--BugForge--83a1be8dee83.html,furhire-writeup,Furhire Writeup,2026-01-11,bugforge-writeups,bugforge-writeups
+2026-01-21_Tanuki-pt-2-Writeup--BugForge--9fb93d2474e4.html,tanuki-pt-2-writeup,Tanuki pt 2 Writeup,2026-01-21,bugforge-writeups,bugforge-writeups
+2026-01-25_CafeClub-Writeup--Bugforge--aca44b33bb58.html,cafeclub-writeup-aca44b33,CafeClub Writeup,2026-01-25,bugforge-writeups,bugforge-writeups
+2026-01-26_Cheesy-Does-It-writeup--Bugforge--46ced7ba0ad2.html,cheesy-does-it-writeup-46ced7ba,Cheesy Does It writeup,2026-01-26,bugforge-writeups,bugforge-writeups
+2026-01-27_Tanuki-writeup--BugForge--5a3d073c4c80.html,tanuki-writeup-5a3d073c,Tanuki writeup,2026-01-27,bugforge-writeups,bugforge-writeups
+2026-01-28_Copypasta-writeup--Bugforge--3f0fddabc9e1.html,copypasta-writeup-3f0fddab,Copypasta writeup,2026-01-28,bugforge-writeups,bugforge-writeups
+2026-01-29_Sokudo-writeup--Bugforge--c9413182ece8.html,sokudo-writeup-c9413182,Sokudo writeup,2026-01-29,bugforge-writeups,bugforge-writeups
+2026-01-31_Ottergram-writeup--Bugforge--1ecd388f94e6.html,ottergram-writeup-1ecd388f,Ottergram writeup,2026-01-31,bugforge-writeups,bugforge-writeups
+2026-02-01_CafeClub-writeup--Bugforge--afb70036c9af.html,cafeclub-writeup-afb70036,CafeClub writeup,2026-02-01,bugforge-writeups,bugforge-writeups
+2026-02-01_Galaxy-Dash--Medium-difficulty--writeup--BugForge--e19f60065216.html,galaxy-dash-medium-difficulty-writeup,Galaxy Dash (Medium difficulty) writeup,2026-02-01,bugforge-writeups,bugforge-writeups
+2026-02-02_Cheesy-Does-It-writeup--BugForge--70eca5f40dcf.html,cheesy-does-it-writeup-70eca5f4,Cheesy Does It writeup,2026-02-02,bugforge-writeups,bugforge-writeups
+2026-02-03_Tanuki-writeup--BugForge--8bc0c8d4e8ab.html,tanuki-writeup-8bc0c8d4,Tanuki writeup,2026-02-03,bugforge-writeups,bugforge-writeups
+2026-02-03_good-write-up-man--35f867bdadd7.html,good-write-up-man,good write-up man!,2026-02-03,,
+2026-02-04_CopyPasta-writeup--Bugforge--7776d9a77395.html,copypasta-writeup-7776d9a7,CopyPasta writeup,2026-02-04,bugforge-writeups,bugforge-writeups
+2026-02-05_Sokudo-writeup--Bugforge--0e2c54aae329.html,sokudo-writeup-0e2c54aa,Sokudo writeup,2026-02-05,bugforge-writeups,bugforge-writeups
+2026-02-05_it-s-all-good-man--1e8bf261ffee.html,it-s-all-good-man,it's all good man!,2026-02-05,,
+2026-02-07_Ottergram-writeup--Bugforge--2f1b56ada4f2.html,ottergram-writeup-2f1b56ad,Ottergram writeup,2026-02-07,bugforge-writeups,bugforge-writeups
+2026-02-08_Cafeclub-writeup--Bugforge--c0e8f42bd2f3.html,cafeclub-writeup-c0e8f42b,Cafeclub writeup,2026-02-08,bugforge-writeups,bugforge-writeups
+2026-02-09_Cheesy-Does-it-walkthrough--Bugforge--ba1ba25a0d14.html,cheesy-does-it-walkthrough,Cheesy Does it walkthrough,2026-02-09,bugforge-writeups,bugforge-writeups
+2026-02-10_Glad-you-like-them----D-af40f3b3705e.html,glad-you-like-them-d,Glad you like them! :-D,2026-02-10,,
+2026-02-10_Tanuki-writeup--Bugforge--a83b3d9fce8c.html,tanuki-writeup-a83b3d9f,Tanuki writeup,2026-02-10,bugforge-writeups,bugforge-writeups
+2026-02-10_mustacchio-writeup--TryHackMe--7d8351760914.html,mustacchio-writeup-tryhackme,mustacchio writeup (TryHackMe),2026-02-10,thm-writeups,thm-writeups
+2026-02-11_CopyPasta-writeup--Bugforge--74c3404567cf.html,copypasta-writeup-74c34045,CopyPasta writeup,2026-02-11,bugforge-writeups,bugforge-writeups
+2026-02-13_Shady-Oaks-Financial-writeup--Broken-auth---Bugforge--df4f3767f957.html,shady-oaks-financial-writeup-broken-auth,Shady Oaks Financial writeup (Broken auth),2026-02-13,bugforge-writeups,bugforge-writeups
+2026-02-14_MesaNet-writeup--hard--Bugforge---SQLi--b59bdb989213.html,mesanet-writeup-hard-sqli,MesaNet writeup (hard) (SQLi),2026-02-14,bugforge-writeups,bugforge-writeups
+2026-02-15_CafeClub-writeup--Business-Logic---Bugforge--cfcb2ad4bc23.html,cafeclub-writeup-business-logic,CafeClub writeup (Business Logic),2026-02-15,bugforge-writeups,bugforge-writeups
+2026-02-15_Ottergram-writeup--Broken-Auth---Bugforge--39d14d883a66.html,ottergram-writeup-broken-auth,Ottergram writeup (Broken Auth),2026-02-15,bugforge-writeups,bugforge-writeups
+2026-02-16_-dumb-the-database--you-mean--dump-the-database----91098e93ef81.html,dumb-the-database-you-mean-dump-the-database,"""dumb the database"" you mean ""dump the database"" ?",2026-02-16,,
+2026-02-16_Cheesy-Does-It--SQLi--writeup--Bugforge--9d841c69439e.html,cheesy-does-it-sqli-writeup,Cheesy Does It (SQLi) writeup,2026-02-16,bugforge-writeups,bugforge-writeups
+2026-02-16_CupidBot-writeup--TryHackMe--e7210b78a2f5.html,cupidbot-writeup-tryhackme,CupidBot writeup (TryHackMe),2026-02-16,thm-writeups,thm-writeups
+2026-02-16_Hidden-Deep-Into-my-Heart-writeup--TryHackMe--03a701e4ab6b.html,hidden-deep-into-my-heart-writeup-tryhackme,Hidden Deep Into my Heart writeup (TryHackMe),2026-02-16,thm-writeups,thm-writeups
+2026-02-17_Galaxy-Dash--XSS---Medium---Bugforge--dc1a104fab9c.html,galaxy-dash-xss-medium,Galaxy Dash (XSS) (Medium),2026-02-17,bugforge-writeups,bugforge-writeups
+2026-02-18_CopyPasta-writeup--BAC---Bugforge--bdf03ba7c16e.html,copypasta-writeup-bac-bdf03ba7,CopyPasta writeup (BAC),2026-02-18,bugforge-writeups,bugforge-writeups
+2026-02-19_Gift-List-writeup--IDOR---Bugforge--e429fbfe3c7e.html,gift-list-writeup-idor,Gift List writeup (IDOR),2026-02-19,bugforge-writeups,bugforge-writeups
+2026-02-21_Ottergram-writeup--LFI---Bugforge--1e4fa8795e24.html,ottergram-writeup-lfi,Ottergram writeup (LFI),2026-02-21,bugforge-writeups,bugforge-writeups
+2026-02-21_Shady-Oaks-Financial-writeup-Race-Condition---Bugforge--9567ad1251ed.html,shady-oaks-financial-writeup-race-condition,Shady Oaks Financial writeup(Race Condition),2026-02-21,bugforge-writeups,bugforge-writeups
+2026-02-22_Great-write-up--95f28ad49e9c.html,great-write-up,Great write up!,2026-02-22,,
+2026-02-22_How-I-Became-a-PAPA--Practical-AI-Pentest-Associate--by-TCM-b7a109da8e97.html,how-i-became-a-papa-practical-ai-pentest-associate-by-tcm,How I Became a PAPA (Practical AI Pentest Associate) by TCM,2026-02-22,,gensec
+2026-02-23_Cheesy-Does-it-writeup--Business-Logic-flaw--Bugforge--1fdcc7948875.html,cheesy-does-it-writeup-business-logic-flaw,Cheesy Does it writeup (Business Logic flaw),2026-02-23,bugforge-writeups,bugforge-writeups
+2026-02-23_Furhire-writeup--MFA-Bypass---Medium--Bugforge--76c31e33bd13.html,furhire-writeup-mfa-bypass-medium,Furhire writeup (MFA Bypass) (Medium),2026-02-23,bugforge-writeups,bugforge-writeups
+2026-02-26_Copypasta-writeup--BAC---Bugforge--376b901623f4.html,copypasta-writeup-bac-376b9016,Copypasta writeup (BAC),2026-02-26,bugforge-writeups,bugforge-writeups
+2026-02-26_Great-review--I-m-going-to-add-a-link-to-your-review-on-mine-if-that-s-good-with-you--7e56b768642e.html,great-review-i-m-going-to-add-a-link-to-your-review-on-mine-if-that-s-good-with-you,Great review! I'm going to add a link to your review on mine if that's good with you!,2026-02-26,,
+2026-02-26_Sokudo-writeup--API9-2023---Bugforge--0be4ed62761d.html,sokudo-writeup-api9-2023,Sokudo writeup (API9:2023),2026-02-26,bugforge-writeups,bugforge-writeups
+2026-02-26_Thanks-for-the-review--0716c8000636.html,thanks-for-the-review,Thanks for the review.,2026-02-26,,
+2026-02-28_Ottergram-writeup--BAC---Bugforge--a46c997a1068.html,ottergram-writeup-bac,Ottergram writeup (BAC),2026-02-28,bugforge-writeups,bugforge-writeups
+2026-02-28_Shady-Oaks-Financial-writeup--BFLA---Bugforge--d48f002446ba.html,shady-oaks-financial-writeup-bfla,Shady Oaks Financial writeup (BFLA),2026-02-28,bugforge-writeups,bugforge-writeups
+2026-03-02_CafeClub-writeup--LFI---Bugforge--63907e642e14.html,cafeclub-writeup-lfi,CafeClub writeup (LFI),2026-03-02,bugforge-writeups,bugforge-writeups
+2026-03-02_Galaxy-Dash-writeup--SQLi---Bugforge--08ddb098fbc1.html,galaxy-dash-writeup-sqli,Galaxy Dash writeup (SQLi),2026-03-02,bugforge-writeups,bugforge-writeups
+2026-03-04_Copypasta--SQLi---Bugforge--bfad05fae0a0.html,copypasta-sqli,Copypasta (SQLi),2026-03-04,bugforge-writeups,bugforge-writeups
+2026-03-04_Tanuki--SSRF---Bugforge--7ea950fa4485.html,tanuki-ssrf,Tanuki (SSRF),2026-03-04,bugforge-writeups,bugforge-writeups
+2026-03-07_Cheesy-Does-It-writeup--BLF---Bugforge--898ddd8e9f96.html,cheesy-does-it-writeup-blf,Cheesy Does It writeup (BLF),2026-03-07,bugforge-writeups,bugforge-writeups
+2026-03-07_ExpressWay-writeup--HackTheBox--8d1385c9bfce.html,expressway-writeup-hackthebox,ExpressWay writeup (HackTheBox),2026-03-07,htb-writeups,htb-writeups
+2026-03-09_Cheesy-Does-It--Business-Logic-Vuln---Bugforge--0008c34d12f5.html,cheesy-does-it-business-logic-vuln,Cheesy Does It (Business Logic Vuln),2026-03-09,bugforge-writeups,bugforge-writeups
+2026-03-14_Gift-Lab--BAC---Bugforge--3fa17774119a.html,gift-lab-bac-3fa17774,Gift Lab (BAC),2026-03-14,bugforge-writeups,bugforge-writeups
+2026-03-18_MesaNet--OTP-Bypass---Hard---Bugforge--4438695b5330.html,mesanet-otp-bypass-hard,MesaNet (OTP Bypass) (Hard),2026-03-18,bugforge-writeups,bugforge-writeups
+2026-03-21_Ottergram--websockets--Bugforge-6b20e5ab664c.html,ottergram-websockets,Ottergram (websockets),2026-03-21,bugforge-writeups,bugforge-writeups
+2026-03-22_Galaxy-Dash--BAC--Walkthrough--Bugforge--4323bd2d6fd7.html,galaxy-dash-bac-walkthrough,Galaxy Dash (BAC) Walkthrough,2026-03-22,bugforge-writeups,bugforge-writeups
+2026-03-28_Ottergram--XSS--Bugforge--Live-Stream--7983f06fdb6c.html,ottergram-xss-live-stream,Ottergram (XSS) (Live Stream),2026-03-28,bugforge-writeups,bugforge-writeups
+2026-04-01_CafeClub-writeup--IDOR--Bugforge-6d8bb8ac3088.html,cafeclub-writeup-idor,CafeClub writeup (IDOR),2026-04-01,bugforge-writeups,bugforge-writeups
+2026-04-03_Necromancers-Notebook--JWT---Bugforge--41d6754fb2ff.html,necromancers-notebook-jwt,Necromancers Notebook (JWT),2026-04-03,bugforge-writeups,bugforge-writeups
+2026-04-05_CafeClub--Business-Logic---Bugforge-io--7431d6537759.html,cafeclub-business-logic,CafeClub (Business Logic),2026-04-05,bugforge-writeups,bugforge-writeups
+2026-04-07_Tanuki--JWT---Bugforge-io--17d707edcc66.html,tanuki-jwt,Tanuki (JWT),2026-04-07,bugforge-writeups,bugforge-writeups
+2026-04-09_Gift-Lab--BAC--Bugforge-48f0318ba9ed.html,gift-lab-bac-48f0318b,Gift Lab (BAC),2026-04-09,bugforge-writeups,bugforge-writeups
+2026-04-10_Shady-Oaks-Financial--JWT--Bugforge-io-41b8c27acaa0.html,shady-oaks-financial-jwt,Shady Oaks Financial (JWT),2026-04-10,bugforge-writeups,bugforge-writeups
+2026-04-11_Tricky-Tunnels---WebVerse-497f9a9aae40.html,tricky-tunnels,Tricky Tunnels,2026-04-11,webverse-writeups,webverse-writeups
+2026-04-12_DocketHive---WebVerse-3522e5059b6b.html,dockethive,DocketHive,2026-04-12,webverse-writeups,webverse-writeups
+2026-04-13_Fixture---WebVerse--Medium--9d1e8adb4c1b.html,fixture-medium,Fixture (Medium),2026-04-13,webverse-writeups,webverse-writeups
+2026-04-16_Parcel--SQLi--WebVerse-Writeup-973170ad0161.html,parcel-sqli-writeup,Parcel (SQLi) Writeup,2026-04-16,webverse-writeups,webverse-writeups
+2026-04-16_Sokudo--GraphQL--Bugforge-c5dc9802c62b.html,sokudo-graphql,Sokudo (GraphQL),2026-04-16,bugforge-writeups,bugforge-writeups
+2026-04-17_Mirage--LFI--WebVerse-5057ddeae68f.html,mirage-lfi,Mirage (LFI),2026-04-17,webverse-writeups,webverse-writeups
+2026-04-18_Breach---WebVerse--GraphQL--a7c090c68bd1.html,breach-graphql,Breach (GraphQL),2026-04-18,webverse-writeups,webverse-writeups
+2026-04-18_Ottergram--BAC---VerbTamper--Bugforge-c324bf043d57.html,ottergram-bac-verbtamper,Ottergram (BAC) (VerbTamper),2026-04-18,bugforge-writeups,bugforge-writeups
+2026-04-19_Quarter-Shift--GraphQL---SSRF--WebVerse-99b7516526d1.html,quarter-shift-graphql-ssrf,Quarter Shift (GraphQL + SSRF),2026-04-19,webverse-writeups,webverse-writeups
+2026-04-21_Tanuki--BAC--Bugforge-io-7f4ba0ca6e51.html,tanuki-bac,Tanuki (BAC),2026-04-21,bugforge-writeups,bugforge-writeups
+2026-04-24_Method-based-access-control-can-be-circumvented---Portswigger-Academy-f2ee66217383.html,method-based-access-control-can-be-circumvented-portswigger-academy,Method-based access control can be circumvented - Portswigger Academy,2026-04-24,,gensec
+2026-04-25_Insecure-direct-object-references---Portswigger-Academy-Lab-e0292b70d1cc.html,insecure-direct-object-references-portswigger-academy-lab,Insecure direct object references — Portswigger Academy Lab,2026-04-25,,gensec
+2026-04-26_DiceForge--RCE--Bugforge-d89c0bb16437.html,diceforge-rce,DiceForge (RCE),2026-04-26,bugforge-writeups,bugforge-writeups
+2026-04-27_Cheesy-Does-It--JWT--Bugforge-io-61ac58da484c.html,cheesy-does-it-jwt,Cheesy Does It (JWT),2026-04-27,bugforge-writeups,bugforge-writeups
+2026-04-29_CopyPasta--BAC--Bugforge-io-73ba1e2ba189.html,copypasta-bac,CopyPasta (BAC),2026-04-29,bugforge-writeups,bugforge-writeups
+2026-05-02_OutBox--SSTI--WebVerse-6d54ab79440b.html,outbox-ssti,OutBox (SSTI),2026-05-02,webverse-writeups,webverse-writeups
+2026-05-03_Sprocket-Line--RXSS--WebVerse-3704b6d7b375.html,sprocket-line-rxss,Sprocket Line (RXSS),2026-05-03,webverse-writeups,webverse-writeups
+2026-05-04_DiceForge--Bypass-Paywall--Bugforge-io-7cd77b0664f2.html,diceforge-bypass-paywall,DiceForge (Bypass Paywall),2026-05-04,bugforge-writeups,bugforge-writeups
+2026-05-05_NewsForge--BFLA--WebVerse-a90b8da1e1b4.html,newsforge-bfla,NewsForge (BFLA),2026-05-05,webverse-writeups,webverse-writeups
+2026-05-09_Ottergram--GraphQL--Bugforge-io-fc82260095d7.html,ottergram-graphql,Ottergram (GraphQL),2026-05-09,bugforge-writeups,bugforge-writeups
+2026-05-09_Sunnyside-Daycare--SSTI--WebVerse-75da6fd4c48c.html,sunnyside-daycare-ssti,Sunnyside Daycare (SSTI),2026-05-09,webverse-writeups,webverse-writeups
+2026-05-10_Furhire--SSRF---Weekly--Bugforge-io-52661a162ac1.html,furhire-ssrf-weekly,Furhire (SSRF) (Weekly),2026-05-10,bugforge-writeups,bugforge-writeups
+2026-05-10_bookmarking--Will-read-this--I-love-digimon-too--5fdcbb7c7314.html,bookmarking-will-read-this-i-love-digimon-too,bookmarking. Will read this. I love digimon too.,2026-05-10,,
+2026-05-12_Phone-Vault--Official-writeup--WebVerse-a7e0fba9bffc.html,phone-vault-official-writeup,Phone Vault (Official writeup),2026-05-12,webverse-writeups,webverse-writeups
+2026-05-13_Mapleton--LFI-to-RCE--WebVerse-f9d297d5a37e.html,mapleton-lfi-to-rce,Mapleton (LFI to RCE),2026-05-13,webverse-writeups,webverse-writeups
+2026-05-15_Galaxy-Dash--IDOR--Bugforge-io-d712db97dc65.html,galaxy-dash-idor,Galaxy Dash (IDOR),2026-05-15,bugforge-writeups,bugforge-writeups
+2026-05-16_Joystick--Websockets--WebVerse-52f0674b677e.html,joystick-websockets,Joystick (Websockets),2026-05-16,webverse-writeups,webverse-writeups
+2026-05-16_My-security-labs--inc-links--2299e0b36354.html,my-security-labs-inc-links,My security labs (inc links),2026-05-16,,
+2026-05-17_Loop---Roam--git-exposure--WebVerse-3b20ea0b7413.html,loop-roam-git-exposure,Loop & Roam (git exposure),2026-05-17,webverse-writeups,webverse-writeups
+2026-05-17_The-Caretaker--Official-Writeup--WebVerse-f1a596dc83e2.html,the-caretaker-official-writeup,The Caretaker (Official Writeup),2026-05-17,webverse-writeups,webverse-writeups
+2026-05-18_Lazy-Human-Resources--Official-writeup---BAC--WebVerse-6802f2b7b18a.html,lazy-human-resources-official-writeup-bac,Lazy Human Resources (Official writeup) (BAC),2026-05-18,webverse-writeups,webverse-writeups
+2026-05-19_Snooker--Logic-flaw--WebVerse-708146890745.html,snooker-logic-flaw,Snooker (Logic flaw),2026-05-19,webverse-writeups,webverse-writeups
+2026-05-20_MedNode--SQLi--Bugforge-io-caa26009eaf4.html,mednode-sqli,MedNode (SQLi),2026-05-20,bugforge-writeups,bugforge-writeups
+2026-05-21_Vibed--SQLi--WebVerse-c22d86877ae0.html,vibed-sqli,Vibed (SQLi),2026-05-21,webverse-writeups,webverse-writeups
+2026-05-22_Brackish-Brewing-Co---with-VerbTamper-v1-8-1---WebVerse--330e033cdb08.html,brackish-brewing-co-with-verbtamper-v1-8-1,Brackish Brewing Co. (with VerbTamper v1.8.1),2026-05-22,webverse-writeups,webverse-writeups
+2026-05-22_FurHire--Broken-Auth---Weekly---BugForge-io--94254cf2229e.html,furhire-broken-auth-weekly,FurHire (Broken Auth) (Weekly),2026-05-22,bugforge-writeups,bugforge-writeups
+2026-05-25_Disgruntled-Employee--Official-Writeup--WebVerse-Pro-com-5663e741ae53.html,disgruntled-employee-official-writeup,Disgruntled Employee (Official Writeup),2026-05-25,webverse-writeups,webverse-writeups
+2026-05-25_Versed--SQLi--WebVerse-pro-com-c8a05c93ffb9.html,versed-sqli,Versed (SQLi),2026-05-25,webverse-writeups,webverse-writeups
+2026-05-26_Angry-Teacher--Official-Walkthrough--WebVerse-Pro-com-a3bc7f9afc74.html,angry-teacher-official-walkthrough,Angry Teacher (Official Walkthrough),2026-05-26,webverse-writeups,webverse-writeups
+2026-05-26_CafeClub--Broken-Business-Logic--Bugforge-io-3308c011d493.html,cafeclub-broken-business-logic,CafeClub (Broken Business Logic),2026-05-26,bugforge-writeups,bugforge-writeups
+2026-05-27_ReportVerse--Official-Writeup--WebVerse-pro-com-98f7162d61d4.html,reportverse-official-writeup,ReportVerse (Official Writeup),2026-05-27,webverse-writeups,webverse-writeups
+2026-05-28_Bomb-Threat--Official-Walkthrough--WebVerse-pro-com-bd623871d95d.html,bomb-threat-official-walkthrough,Bomb Threat (Official Walkthrough),2026-05-28,webverse-writeups,webverse-writeups
+2026-05-28_Crate---Sleeve--SXSS---WebVerse-pro-com--aecb21f91fcf.html,crate-sleeve-sxss,Crate & Sleeve (SXSS),2026-05-28,webverse-writeups,webverse-writeups
+2026-05-29_Bill-s-Steak-House--RCE---WebVerse-pro-com--d99c4ad8c50d.html,bill-s-steak-house-rce,Bill’s Steak House (RCE),2026-05-29,webverse-writeups,webverse-writeups
+2026-05-30_Ottergram--Priv-Esc--Bugforge-io-54c6f8a14e0b.html,ottergram-priv-esc,Ottergram (Priv-Esc),2026-05-30,bugforge-writeups,bugforge-writeups
+2026-06-01_Tamper-Temple--Official-writeup---hard---WebVerse-pro-com--9bab89cd5107.html,tamper-temple-official-writeup-hard,Tamper Temple (Official writeup) (hard),2026-06-01,webverse-writeups,webverse-writeups
+2026-06-02_Thanks-for-your-thoughts--e72d66e5c10b.html,thanks-for-your-thoughts,Thanks for your thoughts!,2026-06-02,,
+2026-06-06_CSP-is-a-seatbelt--not-a-force-field-734d20c250cf.html,csp-is-a-seatbelt-not-a-force-field,"CSP is a seatbelt, not a force field",2026-06-06,,
+2026-06-13_Research-and-Writeups-a34c5703402f.html,research-and-writeups,Research and Writeups,2026-06-13,,
+draft_Proto-14109f22c898.html,draft_proto,Proto,,,

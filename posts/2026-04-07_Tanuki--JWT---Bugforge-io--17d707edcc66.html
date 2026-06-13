@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Tanuki (JWT) (Bugforge.io)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Tanuki (JWT) (Bugforge.io)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Step 1: Register
+</section>
+<section data-field="body" class="e-content">
+<section name="c3ec" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="c2f8" id="c2f8" class="graf graf--h3 graf--leading graf--title">Tanuki (JWT) (Bugforge.io)</h3><figure name="2309" id="2309" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*-UpkUcRMqZigRCNtE_fnRA.png" data-width="499" data-height="333" src="https://cdn-images-1.medium.com/max/800/1*-UpkUcRMqZigRCNtE_fnRA.png"></figure><p name="e6f0" id="e6f0" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 1:</strong> Register</p><p name="807b" id="807b" class="graf graf--p graf-after--p">After you register you’ll see a response with a JWT. We can explore the token shortly.</p></div><div class="section-inner sectionLayout--outsetColumn"><figure name="b598" id="b598" class="graf graf--figure graf--layoutOutsetCenter graf-after--p"><img class="graf-image" data-image-id="1*PdbuLvyKlpikglU7kKYZaw.png" data-width="943" data-height="204" src="https://cdn-images-1.medium.com/max/1200/1*PdbuLvyKlpikglU7kKYZaw.png"></figure></div><div class="section-inner sectionLayout--insetColumn"><p name="5e89" id="5e89" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2:</strong> Role</p><p name="3272" id="3272" class="graf graf--p graf-after--p">You’ll see we were granted the role of ‘user’. This information is linked to the JWT, which we’ll see in step 3.</p></div><div class="section-inner sectionLayout--outsetColumn"><figure name="eb99" id="eb99" class="graf graf--figure graf--layoutOutsetCenter graf-after--p"><img class="graf-image" data-image-id="1*mcUjr4Bse7XfooHLpNEhTg.png" data-width="748" data-height="242" src="https://cdn-images-1.medium.com/max/1200/1*mcUjr4Bse7XfooHLpNEhTg.png"></figure></div><div class="section-inner sectionLayout--insetColumn"><p name="6d9f" id="6d9f" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3:</strong> Alg None attack</p><p name="5604" id="5604" class="graf graf--p graf-after--p">Change the type to ‘admin’ and in the bottom left, hit “attack” and select the non alg attack. You’ll see that the token has been updated to reflect the changes. The web application isn’t checking the signature and therefore you can alter it and send our malicious payload and it’ll be accepted. I selected an admin endpoint to validate if this would work:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="vbnet" name="ee88" id="ee88" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-keyword">GET</span> /api/admin/users HTTP/<span class="hljs-number">2</span><br /><span class="hljs-symbol">Host:</span> lab-<span class="hljs-number">1775597592409</span>-dfgm06.labs-app.bugforge.io<br /><span class="hljs-symbol">Authorization:</span> Bearer &lt;forged-token-goes-here&gt;</span></pre><p name="148f" id="148f" class="graf graf--p graf-after--pre">After sending, you’ll see the flag in the “full_name”:</p><figure name="93fd" id="93fd" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*7eZE6j76jeDY6KySIFxNEA.png" data-width="876" data-height="513" src="https://cdn-images-1.medium.com/max/800/1*7eZE6j76jeDY6KySIFxNEA.png"></figure><p name="081f" id="081f" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="603a" id="603a" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/17d707edcc66"><time class="dt-published" datetime="2026-04-07T22:05:30.851Z">April 7, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/tanuki-jwt-bugforge-io-17d707edcc66" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

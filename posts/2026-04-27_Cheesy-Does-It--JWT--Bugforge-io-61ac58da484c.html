@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Cheesy Does It (JWT) Bugforge.io</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Cheesy Does It (JWT) Bugforge.io</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+I got first blood on this one, which was cool!
+</section>
+<section data-field="body" class="e-content">
+<section name="3740" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="0b35" id="0b35" class="graf graf--h3 graf--leading graf--title">Cheesy Does It (JWT) Bugforge.io</h3><figure name="76e4" id="76e4" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*r1CO_2yfwY6FRPpSf42QDw.png" data-width="439" data-height="439" src="https://cdn-images-1.medium.com/max/800/1*r1CO_2yfwY6FRPpSf42QDw.png"></figure><p name="6602" id="6602" class="graf graf--p graf-after--figure">I got first blood on this one, which was cool!</p><figure name="f55c" id="f55c" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*tLGZ435IOMyD_XbNYk0_sA.png" data-width="458" data-height="122" src="https://cdn-images-1.medium.com/max/800/1*tLGZ435IOMyD_XbNYk0_sA.png"></figure><p name="e9e4" id="e9e4" class="graf graf--p graf-after--figure">But enough bragging! How do we do it? I began by registering for an account at Cheesy Does It, our favourite online pizza shop:</p></div><div class="section-inner sectionLayout--outsetColumn"><figure name="a292" id="a292" class="graf graf--figure graf--layoutOutsetCenter graf-after--p"><img class="graf-image" data-image-id="1*FizjtVgwB3SAHMy9JOaT_A.png" data-width="753" data-height="399" src="https://cdn-images-1.medium.com/max/1200/1*FizjtVgwB3SAHMy9JOaT_A.png"></figure></div><div class="section-inner sectionLayout--insetColumn"><p name="e962" id="e962" class="graf graf--p graf-after--figure">Burp history showed a JWT token after logging in, so I took a look at it:</p></div><div class="section-inner sectionLayout--outsetColumn"><figure name="3463" id="3463" class="graf graf--figure graf--layoutOutsetCenter graf-after--p"><img class="graf-image" data-image-id="1*tlpYbHtcCtfKV6jT31Kx1Q.png" data-width="557" data-height="284" src="https://cdn-images-1.medium.com/max/1200/1*tlpYbHtcCtfKV6jT31Kx1Q.png"></figure></div><div class="section-inner sectionLayout--insetColumn"><p name="686d" id="686d" class="graf graf--p graf-after--figure">I jumped on over to hashcat and ran it against the rockyou password list.</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="javascript" name="b5db" id="b5db" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">hashcat -a <span class="hljs-number">0</span> -m <span class="hljs-number">16500</span> &lt;token&gt; <span class="hljs-regexp">/usr/</span>share/wordlists/rockyou.<span class="hljs-property">txt</span></span></pre><p name="4f4e" id="4f4e" class="graf graf--p graf-after--pre"><code class="markup--code markup--p-code"><strong class="markup--strong markup--p-strong">-a 0</strong></code> means attack mode 0, which is a straight dictionary attack. It tries each word in the wordlist as-is, one by one.</p><p name="f8e0" id="f8e0" class="graf graf--p graf-after--p"><code class="markup--code markup--p-code"><strong class="markup--strong markup--p-strong">-m 16500</strong></code>means hash mode 16500, which is specifically JWT (JSON Web Token) with HS256/HS384/HS512.</p><p name="a3f4" id="a3f4" class="graf graf--p graf-after--p">token (kinda obvious what this one is!)</p><p name="78f8" id="78f8" class="graf graf--p graf-after--p">&lt;wordlist&gt; simply supply the wordlist of choice</p><figure name="6f9c" id="6f9c" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*jiwzklN5Pzo9PgZqCCEQ_g.png" data-width="575" data-height="349" src="https://cdn-images-1.medium.com/max/800/1*jiwzklN5Pzo9PgZqCCEQ_g.png"></figure><p name="577d" id="577d" class="graf graf--p graf-after--figure">Within seconds, the JWT was cracked:</p><figure name="b57e" id="b57e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*nF9FJKQ-7uOHtohU2CeHqQ.png" data-width="536" data-height="178" src="https://cdn-images-1.medium.com/max/800/1*nF9FJKQ-7uOHtohU2CeHqQ.png"></figure><p name="5c54" id="5c54" class="graf graf--p graf-after--figure">I now had the secret and could use it to craft a new JWT:</p></div><div class="section-inner sectionLayout--outsetColumn"><figure name="be68" id="be68" class="graf graf--figure graf--layoutOutsetCenter graf-after--p"><img class="graf-image" data-image-id="1*bmRU70uBImK7VO30LNf01g.png" data-width="548" data-height="254" src="https://cdn-images-1.medium.com/max/1200/1*bmRU70uBImK7VO30LNf01g.png"></figure></div><div class="section-inner sectionLayout--insetColumn"><p name="43ea" id="43ea" class="graf graf--p graf-after--figure">Now you have a choice. You can curl your way to the flag (/api/admin/users):</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="perl" name="9676" id="9676" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">curl -s -i <span class="hljs-string">&quot;https://lab-1777277321080-yo0ipw.labs-app.bugforge.io/api/admin/users&quot;</span><br />  -H <span class="hljs-string">&quot;Authorization: Bearer &lt;token-here&gt;&quot;</span> | <span class="hljs-keyword">grep</span> -i <span class="hljs-string">&quot;bug&quot;</span></span></pre><p name="b711" id="b711" class="graf graf--p graf-after--pre"><code class="markup--code markup--p-code"><strong class="markup--strong markup--p-strong">curl</strong></code> sends a request to the URL</p><p name="2f72" id="2f72" class="graf graf--p graf-after--p"><code class="markup--code markup--p-code"><strong class="markup--strong markup--p-strong">-s</strong></code> silent mode</p><p name="a003" id="a003" class="graf graf--p graf-after--p"><code class="markup--code markup--p-code"><strong class="markup--strong markup--p-strong">-i</strong></code> tells curl to include response headers in the output. Without this you&#39;d only see the response body and would miss the <code class="markup--code markup--p-code">X-Flag</code> header where the flag is displayed</p><p name="e4e0" id="e4e0" class="graf graf--p graf-after--p"><code class="markup--code markup--p-code"><strong class="markup--strong markup--p-strong">&quot;https://...&quot;</strong></code> the target URL (the admin users endpoint)</p><p name="c2bc" id="c2bc" class="graf graf--p graf-after--p"><code class="markup--code markup--p-code"><strong class="markup--strong markup--p-strong">-H &quot;Authorization: Bearer eyJ...&quot;</strong></code> adds the Authorization header with the forged JWT token. Note: The <code class="markup--code markup--p-code">-H</code> flag lets you set any custom header</p><p name="0c93" id="0c93" class="graf graf--p graf-after--p"><code class="markup--code markup--p-code"><strong class="markup--strong markup--p-strong">| grep -i &quot;bug&quot;</strong></code> pipes the output into grep, filtering for just the line containing bug. The <code class="markup--code markup--p-code">-i</code> makes it case-insensitive</p></div><div class="section-inner sectionLayout--outsetColumn"><figure name="6252" id="6252" class="graf graf--figure graf--layoutOutsetCenter graf-after--p"><img class="graf-image" data-image-id="1*ZUP8otCjIBkFXjgejlh0Tg.png" data-width="780" data-height="235" src="https://cdn-images-1.medium.com/max/1200/1*ZUP8otCjIBkFXjgejlh0Tg.png"></figure></div><div class="section-inner sectionLayout--insetColumn"><p name="e240" id="e240" class="graf graf--p graf-after--figure">Or use BurpSuite, the choice is yours:</p><figure name="7948" id="7948" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*nP4jR7-vAVi06VE1SCglkQ.png" data-width="775" data-height="283" src="https://cdn-images-1.medium.com/max/800/1*nP4jR7-vAVi06VE1SCglkQ.png"></figure><p name="2620" id="2620" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="bbcb" id="bbcb" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/61ac58da484c"><time class="dt-published" datetime="2026-04-27T08:51:39.339Z">April 27, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/cheesy-does-it-jwt-bugforge-io-61ac58da484c" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

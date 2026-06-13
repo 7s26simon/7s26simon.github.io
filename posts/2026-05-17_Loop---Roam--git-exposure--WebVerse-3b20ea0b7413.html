@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Loop &amp; Roam (git exposure) WebVerse</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Loop &amp; Roam (git exposure) WebVerse</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Lab can be found at: https://webverselabs-pro.com/
+</section>
+<section data-field="body" class="e-content">
+<section name="a4ae" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="9a0c" id="9a0c" class="graf graf--h3 graf--leading graf--title">Loop &amp; Roam (git exposure) WebVerse</h3><p name="aab4" id="aab4" class="graf graf--p graf-after--h3">Lab can be found at: <a href="https://webverselabs-pro.com/" data-href="https://webverselabs-pro.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://webverselabs-pro.com/</a></p><figure name="edec" id="edec" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ZA_Ilm4j7wdz4_zb56Ouuw.png" data-width="450" data-height="450" src="https://cdn-images-1.medium.com/max/800/1*ZA_Ilm4j7wdz4_zb56Ouuw.png"></figure><p name="1535" id="1535" class="graf graf--p graf-after--figure">We load the challenge and we’re greeted with a website that is promoting bands, tours, new music releases:</p><figure name="caae" id="caae" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*YqgJhiRdNfCdzi1QjBZe4A.png" data-width="1752" data-height="970" src="https://cdn-images-1.medium.com/max/800/1*YqgJhiRdNfCdzi1QjBZe4A.png"></figure><p name="761a" id="761a" class="graf graf--p graf-after--figure">The lab says there was an accidental .git push and we can see .git is indeed exposing critical files, including all source code, deleted source code, secrets and more:</p><figure name="e55d" id="e55d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*7Jfnq8wNwY_2bYXL-sck6w.png" data-width="1592" data-height="758" src="https://cdn-images-1.medium.com/max/800/1*7Jfnq8wNwY_2bYXL-sck6w.png"></figure><p name="85ac" id="85ac" class="graf graf--p graf-after--figure">I downloaded and set up git-dumper to reconstruct the files so we can look at commit history:</p><p name="056a" id="056a" class="graf graf--p graf-after--p">(the .gitgot directory is where I was storing the data)</p><figure name="0512" id="0512" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*BcHMPNEmEShajjB1H7KcdA.png" data-width="1478" data-height="370" src="https://cdn-images-1.medium.com/max/800/1*BcHMPNEmEShajjB1H7KcdA.png"></figure><p name="0561" id="0561" class="graf graf--p graf-after--figure">From here, I ran the following command to look for any flags, secrets and of course, WebVerse flags within the data:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="bash" name="4664" id="4664" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">git <span class="hljs-built_in">log</span> -p --all | grep -iE <span class="hljs-string">&quot;(flag|secret|WEBVERSE)&quot;</span> | <span class="hljs-built_in">head</span> -50</span></pre><figure name="ed3a" id="ed3a" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*otRgxN_gr6CcTTmjE0CVwg.png" data-width="1410" data-height="322" src="https://cdn-images-1.medium.com/max/800/1*otRgxN_gr6CcTTmjE0CVwg.png"></figure><p name="5405" id="5405" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="0f83" id="0f83" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/3b20ea0b7413"><time class="dt-published" datetime="2026-05-17T19:16:17.564Z">May 17, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/loop-roam-git-exposure-webverse-3b20ea0b7413" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

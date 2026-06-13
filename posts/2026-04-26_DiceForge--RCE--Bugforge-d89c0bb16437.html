@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>DiceForge (RCE) Bugforge</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">DiceForge (RCE) Bugforge</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+A new playground appeared. DiceForge! Let’s give it a go!
+</section>
+<section data-field="body" class="e-content">
+<section name="c5dc" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="8257" id="8257" class="graf graf--h3 graf--leading graf--title">DiceForge (RCE) Bugforge</h3><p name="4cad" id="4cad" class="graf graf--p graf-after--h3">A new playground appeared. DiceForge! Let’s give it a go!</p><figure name="0e19" id="0e19" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*gjZpMBTA761iGMjpnMs8oQ.png" data-width="497" data-height="500" src="https://cdn-images-1.medium.com/max/800/1*gjZpMBTA761iGMjpnMs8oQ.png"></figure><p name="2bed" id="2bed" class="graf graf--p graf-after--figure">I loaded up the page and was greeted with a dice selection and a tray at the bottom which would let me drag the dice into:</p><figure name="b1ea" id="b1ea" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*TCB_29XK7w0-XU6Yy3H2Xw.png" data-width="2110" data-height="1260" src="https://cdn-images-1.medium.com/max/800/1*TCB_29XK7w0-XU6Yy3H2Xw.png"></figure><p name="8aba" id="8aba" class="graf graf--p graf-after--figure">I draged 1d10 and 1d12 into the tray and hit “Roll”:</p><figure name="ecb2" id="ecb2" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*nj3dt8ivJbq9kAzhLpqj4w.png" data-width="900" data-height="782" src="https://cdn-images-1.medium.com/max/800/1*nj3dt8ivJbq9kAzhLpqj4w.png"></figure><p name="0d76" id="0d76" class="graf graf--p graf-after--figure">Results appeared showing a total of 18. Basically, the dice were being added up and calculated. I was thinking, maybe some kind of XSS? But I continued to look at the requests being made.</p><figure name="64f4" id="64f4" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*-646fz33ZeLqTHob8-3U7w.png" data-width="1190" data-height="694" src="https://cdn-images-1.medium.com/max/800/1*-646fz33ZeLqTHob8-3U7w.png"></figure><p name="c5ca" id="c5ca" class="graf graf--p graf-after--figure">I deleted the word none, tried an empty rollOption. Nothing. No real difference. The response loaded up. I figured that this meant it expected and needed the word “none” otherwise it wouldn’t give us any output.</p><figure name="6be0" id="6be0" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*tRby6XTX1wqKClALdVoWbA.png" data-width="1502" data-height="916" src="https://cdn-images-1.medium.com/max/800/1*tRby6XTX1wqKClALdVoWbA.png"></figure><p name="e344" id="e344" class="graf graf--p graf-after--figure">I added the unix id command separated by a semi-colon. In unix, the ; symbol in a command means “execute this command, then the next one”.</p><p name="b16e" id="b16e" class="graf graf--p graf-after--p">So my logic was: if it expects none, we can satisfy that, then afterwards, we can maybe run our own command and it may run anyway. Spoiler? It did:</p><figure name="3181" id="3181" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*0EIKIArFv70jZ3CEspmCKA.png" data-width="1640" data-height="992" src="https://cdn-images-1.medium.com/max/800/1*0EIKIArFv70jZ3CEspmCKA.png"></figure><p name="d9c7" id="d9c7" class="graf graf--p graf-after--figure">From here, I ran a few commands before finding one that led to the flag:</p><figure name="bf65" id="bf65" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*S9sxlV5vhcULvx5Nk83c0A.png" data-width="1654" data-height="912" src="https://cdn-images-1.medium.com/max/800/1*S9sxlV5vhcULvx5Nk83c0A.png"></figure><p name="6591" id="6591" class="graf graf--p graf-after--figure">Working command:</p><figure name="eccf" id="eccf" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*T-1pTt3Tj_af2_GXP1QKNg.png" data-width="1648" data-height="922" src="https://cdn-images-1.medium.com/max/800/1*T-1pTt3Tj_af2_GXP1QKNg.png"></figure><p name="e6e9" id="e6e9" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="1d12" id="1d12" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/d89c0bb16437"><time class="dt-published" datetime="2026-04-26T17:13:53.712Z">April 26, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/diceforge-rce-bugforge-d89c0bb16437" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

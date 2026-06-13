@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Sokudo writeup (API9:2023) (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Sokudo writeup (API9:2023) (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Step 1: Register and use jsreconbuddy
+</section>
+<section data-field="body" class="e-content">
+<section name="ea8a" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="5626" id="5626" class="graf graf--h3 graf--leading graf--title">Sokudo writeup (API9:2023) (Bugforge)</h3><figure name="bb12" id="bb12" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*M7JCKBFfGE-qbmAY9ECz9g.png" data-width="250" data-height="374" src="https://cdn-images-1.medium.com/max/800/1*M7JCKBFfGE-qbmAY9ECz9g.png"></figure><p name="0c35" id="0c35" class="graf graf--p graf-after--figure">Step 1: Register and use jsreconbuddy</p><p name="d180" id="d180" class="graf graf--p graf-after--p">Register as we usually do:</p><figure name="6ab6" id="6ab6" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*oJNG24N-Cbhq2-5An-wPLA.png" data-width="618" data-height="447" src="https://cdn-images-1.medium.com/max/800/1*oJNG24N-Cbhq2-5An-wPLA.png"></figure><p name="b961" id="b961" class="graf graf--p graf-after--figure">Now once you’re logged in: use jsreconbuddy (browse ext) to hunt down /v2/admin/flag</p><p name="f2a5" id="f2a5" class="graf graf--p graf-after--p">JS Recon Buddy is an extension that helps you to find endpoints that you otherwise may not know exist:</p><figure name="8173" id="8173" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ebNa9pB7ybuVUOQ2QycLkg.png" data-width="687" data-height="467" src="https://cdn-images-1.medium.com/max/800/1*ebNa9pB7ybuVUOQ2QycLkg.png"></figure><p name="b8de" id="b8de" class="graf graf--p graf-after--figure">Once the extension is installed, run it in the browser (enable it by selection the button so that it turns green) and hit “Analyze Full Page”:</p><figure name="7fc6" id="7fc6" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*uJfd1QJ9AC6k2SvC4_4dfA.png" data-width="379" data-height="206" src="https://cdn-images-1.medium.com/max/800/1*uJfd1QJ9AC6k2SvC4_4dfA.png"></figure><p name="8864" id="8864" class="graf graf--p graf-after--figure">That’s when you’ll find that /v2/admin/flag exists:</p><figure name="9c83" id="9c83" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Yn_9TlUDG84OHXKI4doTAw.png" data-width="593" data-height="444" src="https://cdn-images-1.medium.com/max/800/1*Yn_9TlUDG84OHXKI4doTAw.png"></figure><p name="8383" id="8383" class="graf graf--p graf-after--figure">Step 2: Access token required</p><p name="cb35" id="cb35" class="graf graf--p graf-after--p">Ok, lets grab a token:</p><figure name="7eb9" id="7eb9" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Bi3e6M83s-hG5vc5Z6EXzA.png" data-width="645" data-height="239" src="https://cdn-images-1.medium.com/max/800/1*Bi3e6M83s-hG5vc5Z6EXzA.png"></figure><p name="e799" id="e799" class="graf graf--p graf-after--figure">Now it says it needs admin access. Hmm.</p><figure name="d459" id="d459" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*iZ3BbVRZ4I9XzMf3gtuQjw.png" data-width="722" data-height="302" src="https://cdn-images-1.medium.com/max/800/1*iZ3BbVRZ4I9XzMf3gtuQjw.png"></figure><p name="89af" id="89af" class="graf graf--p graf-after--figure">Step 3: /v1/ ?</p><p name="4b7e" id="4b7e" class="graf graf--p graf-after--p">Browsing to /v1/admin/flag gave the same issue. So I decided to see if I could forge a jwt:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="typescript" name="7d7f" id="7d7f" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.<span class="hljs-property">eyJpZCI6MSwidXNlcm5hbWUiOiJzcGVlZHR5cGVyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzcyMTM1NjUyfQ</span>.<span class="hljs-property">l7L3gQoROQ4wPPDWpKED0zkT7p2mxo</span>-j_S_bINUE8_g</span></pre><p name="cb99" id="cb99" class="graf graf--p graf-after--pre">Decoded:</p><ul class="postList"><li name="b995" id="b995" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Header:</strong> <code class="markup--code markup--li-code">{&quot;alg&quot;:&quot;HS256&quot;,&quot;typ&quot;:&quot;JWT&quot;}</code></li><li name="de25" id="de25" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Payload:</strong> <code class="markup--code markup--li-code">{&quot;id&quot;:1,&quot;username&quot;:&quot;speedtyper&quot;,&quot;role&quot;:&quot;admin&quot;,&quot;iat&quot;:1772135652}</code></li><li name="397d" id="397d" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Signature:</strong> was signed with an empty string<strong class="markup--strong markup--li-strong"> (</strong><code class="markup--code markup--li-code">&quot;&quot;)</code> as the HMAC-SHA256 secret</li></ul><p name="bafd" id="bafd" class="graf graf--p graf-after--li">Why speedtyper? Because speedtyper and learner were showing up in /v2/stats/leaderboard. My id was 4, so I crafted the above JWT as id 1 = speedtyper and this used was indeed admin.</p><blockquote name="b1c7" id="b1c7" class="graf graf--blockquote graf-after--p">[{“username”:”7s26simon”,”best_wpm”:57.35115431348724,”total_sessions”:1,”avg_wpm”:57.35115431348724},{“username”:”speedtyper”,”best_wpm”:0,”total_sessions”:0,”avg_wpm”:0},{“username”:”learner”,”best_wpm”:0,”total_sessions”:0,”avg_wpm”:0}]</blockquote><p name="7073" id="7073" class="graf graf--p graf-after--blockquote">Now we can use this token to get the flag:</p><figure name="a3f4" id="a3f4" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*UQ-WZ0bTcTnG-Qr5v341vA.png" data-width="718" data-height="239" src="https://cdn-images-1.medium.com/max/800/1*UQ-WZ0bTcTnG-Qr5v341vA.png"></figure><p name="a7b4" id="a7b4" class="graf graf--p graf-after--figure">Thanks for reading!</p><p name="c36b" id="c36b" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/0be4ed62761d"><time class="dt-published" datetime="2026-02-26T20:27:08.837Z">February 26, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/sokudo-writeup-api9-2023-bugforge-0be4ed62761d" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

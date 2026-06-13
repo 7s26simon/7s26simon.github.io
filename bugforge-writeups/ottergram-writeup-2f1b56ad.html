@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Ottergram writeup // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/ottergram-writeup-bugforge-2f1b56ada4f2 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Ottergram writeup</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/ottergram-writeup-2f1b56ad/1*s1pDn0Dft0pDq17eq2clzQ.png"/></figure><p>I’ll post 2 methods for this as there are two similar but slightly different ways to solve this.</p><h2>Method one (harder)</h2><p><strong>Step 1:</strong> Register</p><p>Register on the login page and log in as the user you just created.</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*RtJEEuC87oQ6ShAVR543fA.png"/></figure><p><strong>Step 2:</strong> Upload</p><p>I uploaded a picture and noticed that there was no delete button after the upload.</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*sQslwigPjIcZjMErQfAkFQ.png"/></figure><p>This got me thinking, ok, I wonder if we can delete from the API instead? I ran js-recon-buddy. One of the endpoints it found was /api/admin/posts.</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*VD6p9McwsJaXw9RHvnGErQ.png"/></figure><p>I opened up the js file here: <em>hxxps://lab-1770452964620-spj7bg.labs-app.bugforge.io/static/js/main.49fc4dc1.js</em> and began looking for anything relating to “delete”. I found a line that mentioned /api/admin/posts/ and “Post deleted successfully”. Ok, so maybe an admin can delete a picture?</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*LQ7rqS5k0X-J0uJAHAPfBg.png"/></figure><p>I first tried on my own account. Nope. We couldn’t. I thought this might be a dead end.</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*dF5f-RZY-K6XDeYYe1bOwA.png"/></figure><p><strong>Step 3:</strong> Admin only feature?</p><p>Thoughts at this point: if this was an admin only feature, is it checking to see if only admin can delete? Let’s find out. In firefox, using the network tab, select an appropriate request and change the URL to include /api/admin/posts and after seeing the js, I felt fairly certain that we can append a 1 to that.</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*yGCBiM5yS8doqRPz9wpBAg.png"/></figure><p>Ensure the method is set to DELETE and hit send. The picture IS deleted. We get the “Post deleted successfully” message we saw earlier in the js file and the flag shows in the Response:</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*jIQsVtNq4B5Z9lTB_Wbugw.png"/></figure><p>So, what was the issue here? Well, the front-end wasn’t showing a delete button, but the api was capable of deleting uploaded files. The real problem was that no authentication was taking place. A standard user can delete an admin’s uploads without any checks to see if the user should be able to delete the upload.</p><p>This is a broken access control issue where an admin endpoint fails to verify the user’s role before performing the action, which resulted in the picture being deleted and us given the flag.</p><h2>Method two (easier)</h2><p>The challenge gave us the admin credentials. So we could log in as “admin” and “admin123” for the password. Notice with the admin profile, if we ‘flag’ a photo for admin review, we can review it.</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*pvs9exjIIFO_pn6VQTRD2w.png"/></figure><p>If you select the spanner icon in the bottom right, you’ll see this page:</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*UnCupCHmo51oGTB9HpHTxA.png"/></figure><p>If you intercept the request to “Delete Post”, you’ll see this:</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*0q7rUbqb68YNpXN58G04xw.png"/></figure><p>So send this request above to repeater, and then register a new account (below) which will provide you a new token. Take the new bearer token and copy it into your repeater tab.</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*MwxFcPotDsnxTq8e-PgHmA.png"/></figure><p>Once the new token is in your repeater tab, it should still be pointing at the /api/admin/posts/1 (change to /2) and send it for the flag.</p><figure><img src="images/ottergram-writeup-2f1b56ad/1*A6GqkTYv1nQJ0fKziS55bw.png"/></figure><p>Thanks for reading!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>DocketHive // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/dockethive-webverse-3522e5059b6b -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a class="active" href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>DocketHive</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/dockethive/1*vUipBQdhNtFllgSh2-D-SQ.png"/></figure><p>WebVerse is a new platform by Leighlin Ramsay and you can access it here: <a href="https://www.webverselabs-pro.com">https://www.webverselabs-pro.com</a></p><p>Additional note: I was VERY happy to complete this one. At the time of writing, this lab had no writeup, no hints and no one had solved it, so I was the first. It was a journey. Here goes!</p><p>I registered and logged in to DocketHive, not really knowing what to expect. I hadn’t read much of the lab description, and wanted to dive straight in.</p><figure><img src="images/dockethive/1*86iONS-FxN8zcORAANkm6A.png"/></figure><p>The app was a events page which let users purchase tickets for events. In the screenshot below you can see a workshop seat was $25.00 to buy.</p><figure><img src="images/dockethive/1*U4ODRzJ1fVWg9ZKQyt6s-Q.png"/></figure><p>I will spare you the rabbit holes, but I spent a LONG while looking around the app before realising that after we register for an event, we can download a receipt of our purchase and order details. There’s a GET request that’s performed and it has a parameter that would make most pentesters smile. In the response, I got an error: “Invalid file path”:</p><figure><img src="images/dockethive/1*Md3VPJuPIBYQE2wv7h8fhQ.png"/></figure><p>I couldn’t get the flag <em>that</em> easy. So now, I intentionally tried to cause an error of some description. I needed the app to give me <em>something</em>, <em>anything</em> to work with. Lo and behold: “ls”. I got a response telling me that it failed to read a file in /var/www/html/. Great. Now I knew exactly where I was.</p><figure><img src="images/dockethive/1*cZ3xi37X-XAztOTouvQTWQ.png"/></figure><p>So now, I pulled the download.php file that was mentioned in the previous step. Php is server-side code and we really, really shouldn’t be able to read it like this. But, in this case, due to the vulnerability, we can perform LFI and pull the file.</p><p>The response was just what the dr ordered. The short version is that the php was allowing us to pull any file we wanted from the web directory, or from the filesystem itself.</p><figure><img src="images/dockethive/1*ozyqYeJWqOJjDWfpcGrKKg.png"/></figure><p>We should spend a minute to delve into this:</p><pre class="code-view-two">&lt;?php
+// Serves receipt PDFs and other event-related downloads
+// Used by the order confirmation and ticket pages
+
+if (!isset($_GET['file'])) {
+    header('HTTP/1.0 400 Bad Request');
+    exit('Missing file parameter');
+}
+
+$file = $_GET['file'];
+
+// Reject obviously malformed filenames
+if (strpos($file, '../') !== false
+    || strpos($file, '..\') !== false
+    || isset($file[0]) &amp;&amp; $file[0] === '/'
+    || stripos($file, 'file://') === 0) {
+    header('HTTP/1.0 400 Bad Request');
+    exit('Invalid file path.');
+}
+
+$path = __DIR__ . '/uploads/' . $file;
+
+if (file_exists($path)) {
+    $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+    if ($ext === 'pdf') {
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . basename($path) . '"');
+    }
+
+    readfile($path);
+} else {
+    readfile($file);
+}</pre><p>The final few lines are the main issue (and trust me, there are a few issues). The else statement basically reads any file that isn’t found in the /uploads/ folder.</p><p>But to make matters even worse, dot dot slash (../) traversals are blocked….but poorly. Absolute paths can still be accessed.</p><pre class="code-view-two">readfile($file); // This line allows absolute paths to work - 7s26simon</pre><p>The script creates <code>$path</code> by prefixing your input with the local directory (<code>__DIR__ . '/uploads/' . $file</code>).</p><p>If you provide an absolute path like <code>/etc/passwd</code>, the script looks for <code>.../uploads//etc/passwd</code>. That file doesn't exist, so <code>file_exists($path)</code> returns false.</p><p>Because it returned false, the script enters the <code>else</code> block. Inside that block, it then runs <code>readfile($file)</code>. Here, <code>$file</code> is still exactly what the user typed, for example: <code>/etc/passwd</code>.</p><p>For whatever reason, I began looking elsewhere in the app to see if there was anything else vulnerable. I went to register at an event and check the GET request for any potential IDORs or information disclosure type vulnerabilities.</p><figure><img src="images/dockethive/1*HBMQ6OuB_qTN_jbmo5d2DA.png"/></figure><p>I also took a look at the receipts in the browser to see if these could be IDOR’d:</p><figure><img src="images/dockethive/1*8y6Vklyd_osuNX5gBdqn_A.png"/></figure><p>I began trying to pull receipts from the app to see if I could access other people’s receipts:</p><figure><img src="images/dockethive/1*5UgeiX-WS1juVyp9N5vJdw.png"/></figure><p>After having no success, I decided to use a php:// wrapper to base64 encode files and return them back to me, providing I gave an absolute path. I began by getting /etc/passwd:</p><figure><img src="images/dockethive/1*o2fWtHXVw79dGIiTaahGAw.png"/></figure><p>Next, I looked in the src folder for config.php and saw a “WAITLIST_CLAIM_SECRET” along with an “APP_SECRET”:</p><figure><img src="images/dockethive/1*WNIfr0q6H5by7BvExbUVAg.png"/></figure><p>Next, I downloaded the dockethive.db file (I got this from /var/db/dockethive) as we can see in the previous screenshot.</p><figure><img src="images/dockethive/1*y9DkToY3f8O3LBwPCC6MwA.png"/></figure><p>I downloaded the file, converted it from base64 and opened it with sqlite3. I listed the tables with .tables and began using various SQL queries to try and dump information:</p><figure><img src="images/dockethive/1*4HlKgp2w-kKXfDY9BhoFSQ.png"/></figure><p>I didn’t see any flag in here, so I began running an intruder attack on the file to look for any numbered PDF files:</p><figure><img src="images/dockethive/1*zspEb2zqbAwSph9DBL0adw.png"/></figure><p>After a long while, I went back to /etc/passwd (several screenshots above) and looked at the /root/ and /eric/ users. It turns out I’d gone down a rabbit hole of looking in the database and the flag was in eric’s directory:</p><figure><img src="images/dockethive/1*IrP8y8kr0KT8BLtXX_hiOA.png"/></figure><p>All in all, this was a fantastic lab. I over complicated it somewhat, but either way, it was fun.</p><p>Thanks for following along!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

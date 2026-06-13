@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>FurHire (Broken Auth) (Weekly) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/furhire-broken-auth-weekly-bugforge-io-94254cf2229e -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>FurHire (Broken Auth) (Weekly)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><p>Lab can be found at: <a href="https://bugforge.io">https://bugforge.io</a></p><figure><img src="images/furhire-broken-auth-weekly/1*ONrUZdhiHflA9rYBbMRR0Q.png"/></figure><p>7am. Tired. Barely any sleep. But hey, this needed solving because in 48 hours, a new weekly lab is (or <em>was </em>if you’re reading this after the fact) due out.</p><p>When I’ve tackled FurHire in the past, it usually helps to create two accounts. So, I did:</p><figure><img src="images/furhire-broken-auth-weekly/1*yNGQEWRilqGtJYq3ZSaLFQ.png"/></figure><p>I thought I saw something upon registration which turned out to be the key to solving the lab (I just didn’t recognise it yet). I sent the GET /api/jobs requests from both accounts to comparer and spotted the refresh_token was eerily similar. In fact, only the final 3 characters were different:</p><figure><img src="images/furhire-broken-auth-weekly/1*VovNrrLMQP7USmkuSCOosw.png"/></figure><p>I continued poking around the app, but came back to the refresh_token. I began looking in javascript files for “refresh_token” but found nothing. Feeling a little defeated, I removed the “_token” part and began simply searching for “refresh”. Ok, a hit:</p><figure><img src="images/furhire-broken-auth-weekly/1*to3sudJxbriTY1X0KOx3mA.png"/></figure><p>I will never pretend to be a javascript expert, but my untrained eye told me that it was refreshing the token upon expiry, as a POST request and to do so, it was using /api/refresh.</p><p>I grabbed the code and threw it into google gemini for a better reading:</p><figure><img src="images/furhire-broken-auth-weekly/1*_84venH5fQrJ0QMfeptXzQ.png"/></figure><p>Ok, but if we do a POST request and say we’re “admin”, maybe it will take our word for it and give us a refresh_token?</p><p>WAIT A MINUTE ….! Burpsuite told me that the expiration time of the JWT was 5 minutes. What if? The refresh_token is generating a new JWT?</p><figure><img src="images/furhire-broken-auth-weekly/1*HJtpyLY3jDz74sd9BFCgxA.png"/></figure><p>If the theory was right, I was expecting an automatic call to /api/refresh at 7:05:02am, right as the JWT expires. It did. I could see in dev tools a POST request had been made to the /api/refresh endpoint and my JWT changed.</p><figure><img src="images/furhire-broken-auth-weekly/1*paimB4rvlP2qWIqnuO-WNw.png"/></figure><p>I jumped over into Caido because I was going to use the automate function to iterate through all of the refresh_tokens (17,000+ permutations) and see if any would generate the admin JWT:</p><figure><img src="images/furhire-broken-auth-weekly/1*DTJ9YFv4QogkCV-9hJEgfA.png"/></figure><p>I sent an empty POST req to see what error it would generate and sure enough, it asked for the username as expected:</p><figure><img src="images/furhire-broken-auth-weekly/1*HSG6HiC2p4lQt5q3Ey7C8w.png"/></figure><p>I added a json body with the username set to password and hit send. “Invalid or expired refresh token”. Perfect.</p><figure><img src="images/furhire-broken-auth-weekly/1*-4UaOeM1JBQx83F7Ufvr7A.png"/></figure><p>I sent it over to automate and set my a-z simple list on the final 3 characters in the refresh_token:</p><figure><img src="images/furhire-broken-auth-weekly/1*EuXq3Lz1M6fuhIQGydhM1Q.png"/></figure><p>Then I set it off:</p><figure><img src="images/furhire-broken-auth-weekly/1*H7GzV9o2mBesi-A_2-cmXQ.png"/></figure><p>After a minute or two, I got a hit:</p><figure><img src="images/furhire-broken-auth-weekly/1*HSPl9_jJn3gSVOpA0Ha2zQ.png"/></figure><p>I took the valid JWT and browsed to the admin panel for the flag:</p><figure><img src="images/furhire-broken-auth-weekly/1*PraR1zq6heHEqDBEAK6pLQ.png"/></figure><p>Thanks for following along!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

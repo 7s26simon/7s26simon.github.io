@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>CafeClub (Business Logic) (Bugforge.io)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">CafeClub (Business Logic) (Bugforge.io)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Video walkthrough:
+</section>
+<section data-field="body" class="e-content">
+<section name="0421" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="cda7" id="cda7" class="graf graf--h3 graf--leading graf--title">CafeClub (Business Logic) (Bugforge.io)</h3><figure name="94c0" id="94c0" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*PS_jl4D3dK3VR7bJnzugMA.png" data-width="2496" data-height="1664" src="https://cdn-images-1.medium.com/max/800/1*PS_jl4D3dK3VR7bJnzugMA.png"></figure><p name="99e7" id="99e7" class="graf graf--p graf-after--figure">Video walkthrough:</p><figure name="fbc1" id="fbc1" class="graf graf--figure graf--iframe graf-after--p"><iframe src="https://www.youtube.com/embed/-PP7eRKLfek?feature=oembed" width="640" height="480" frameborder="0" scrolling="no"></iframe></figure><p name="201f" id="201f" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 1:</strong> Register and checkout an item</p><p name="ee03" id="ee03" class="graf graf--p graf-after--p">After registering, check out any item (whilst proxying traffic)</p><figure name="27cc" id="27cc" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Imcs3WsYjU5UJay0obTzdQ.png" data-width="697" data-height="227" src="https://cdn-images-1.medium.com/max/800/1*Imcs3WsYjU5UJay0obTzdQ.png"></figure><p name="b91a" id="b91a" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2:</strong> look for /api/checkout</p><p name="4a8e" id="4a8e" class="graf graf--p graf-after--p">In your history, you’ll see a POST req being made to /api/checkout - send this to repeater as this is the request we’re interested in.</p><figure name="e979" id="e979" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*6HXWj5P2pu6dswhDhfgoxg.png" data-width="351" data-height="283" src="https://cdn-images-1.medium.com/max/800/1*6HXWj5P2pu6dswhDhfgoxg.png"></figure><p name="017d" id="017d" class="graf graf--p graf-after--figure">Scroll to the bottom of the request and remove the credit card number, card expiry and cvc number lines from the json body:</p><figure name="8636" id="8636" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*j9T_O0xl4KvdvQlLccbPvw.png" data-width="409" data-height="154" src="https://cdn-images-1.medium.com/max/800/1*j9T_O0xl4KvdvQlLccbPvw.png"></figure><p name="ef6b" id="ef6b" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3:</strong> Change the “type” of checkout</p><p name="3514" id="3514" class="graf graf--p graf-after--p">We’re checking out online which requries a credit card. But an in person checkout would be at the till (which could use cash). So, change the word “online” to “till” and send the request.</p><p name="17a7" id="17a7" class="graf graf--p graf-after--p">You’ll see the flag appear in the response (ensure you’ve got an item in the cart before sending this request)</p><figure name="0a58" id="0a58" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*le9mW4XGafRT-xgsfC5YEA.png" data-width="697" data-height="347" src="https://cdn-images-1.medium.com/max/800/1*le9mW4XGafRT-xgsfC5YEA.png"></figure><p name="8fbc" id="8fbc" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="da06" id="da06" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/7431d6537759"><time class="dt-published" datetime="2026-04-05T09:18:43.631Z">April 5, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/cafeclub-business-logic-bugforge-io-7431d6537759" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

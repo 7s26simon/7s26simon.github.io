@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Copypasta (SQLi) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/copypasta-sqli-bugforge-bfad05fae0a0 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Copypasta (SQLi)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/copypasta-sqli/1*esaP0HbK9FTz-CrLPEszZA.png"/></figure><p>Step 1: Register</p><p>Register and head over to “Public” and find a public snippet to work with.</p><figure><img src="images/copypasta-sqli/1*h69H-g1JIhKkA2j64V3_mQ.png"/></figure><p>Select “Share” and take the resulting snippet URL:</p><figure><img src="images/copypasta-sqli/1*k9yDknHaNeRVmDp_TOeaHQ.png"/></figure><p>Step 2: Test for SQLi</p><p>Append an apostrophe and the snippet will not be found:</p><figure><img src="images/copypasta-sqli/1*Yq73TBeR9ep9H-fpFwfD2Q.png"/></figure><p>Remove the apostrophe and the snippet will be found:</p><figure><img src="images/copypasta-sqli/1*jxx2Sk_Oq0UTLc1_bYWUcg.png"/></figure><p>From here, I continued in Firefox with the hackbar tool. I tried a ‘or 1=1’ — payload and the page loaded. I was certain we’re dealing with SQLi.</p><figure><img src="images/copypasta-sqli/1*4LAUj9Vqkw0C5KiOkoj7qA.png"/></figure><p>I added a number of columns (tried 8, then 7 but that didn’t work. 6, however, did):</p><figure><img src="images/copypasta-sqli/1*xNX4zhq17g8sv0hlYSLDmA.png"/></figure><p>I hit execute and was given the column names: id, title, code, language, description and username:</p><figure><img src="images/copypasta-sqli/1*AoyOYJL80wXdHT-v3MUfBg.png"/></figure><p>Ok now, why did I use ‘x’ after /share/ ? The reason is because it doesn’t exist. If we use it, you’ll see that we still return data but not the data we want because the query hits the valid share string. So, let’s replace it again with x’ or etc etc</p><figure><img src="images/copypasta-sqli/1*tdb6ojVBrG0JT_ih_wnqXA.png"/></figure><p>The following payload grabbed the data we wanted from the users table and specifically the admin user, before placing it into column 2 and 3. In column 3, we see the flag:</p><figure><img src="images/copypasta-sqli/1*zVwDx29Vfxly2KkrIYDlow.png"/></figure><p>Thanks for reading!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

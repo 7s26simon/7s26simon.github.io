@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Tanuki (JWT) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/tanuki-jwt-bugforge-io-17d707edcc66 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Tanuki (JWT)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/tanuki-jwt/1*-UpkUcRMqZigRCNtE_fnRA.png"/></figure><p><strong>Step 1:</strong> Register</p><p>After you register you’ll see a response with a JWT. We can explore the token shortly.</p><figure><img src="images/tanuki-jwt/1*PdbuLvyKlpikglU7kKYZaw.png"/></figure><p><strong>Step 2:</strong> Role</p><p>You’ll see we were granted the role of ‘user’. This information is linked to the JWT, which we’ll see in step 3.</p><figure><img src="images/tanuki-jwt/1*mcUjr4Bse7XfooHLpNEhTg.png"/></figure><p><strong>Step 3:</strong> Alg None attack</p><p>Change the type to ‘admin’ and in the bottom left, hit “attack” and select the non alg attack. You’ll see that the token has been updated to reflect the changes. The web application isn’t checking the signature and therefore you can alter it and send our malicious payload and it’ll be accepted. I selected an admin endpoint to validate if this would work:</p><pre class="code-view-two">GET /api/admin/users HTTP/2
+Host: lab-1775597592409-dfgm06.labs-app.bugforge.io
+Authorization: Bearer &lt;forged-token-goes-here&gt;</pre><p>After sending, you’ll see the flag in the “full_name”:</p><figure><img src="images/tanuki-jwt/1*7eZE6j76jeDY6KySIFxNEA.png"/></figure><p>Thanks for following along!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

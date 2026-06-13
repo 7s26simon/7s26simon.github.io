@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Ottergram writeup (BAC) (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Ottergram writeup (BAC) (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Step 1: Register and comment
+</section>
+<section data-field="body" class="e-content">
+<section name="4783" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="09a8" id="09a8" class="graf graf--h3 graf--leading graf--title">Ottergram writeup (BAC) (Bugforge)</h3><figure name="16de" id="16de" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*s1pDn0Dft0pDq17eq2clzQ.png" data-width="320" data-height="570" src="https://cdn-images-1.medium.com/max/800/1*s1pDn0Dft0pDq17eq2clzQ.png"></figure><p name="599a" id="599a" class="graf graf--p graf-after--figure">Step 1: Register and comment</p><p name="4701" id="4701" class="graf graf--p graf-after--p">Once registered, ensure you’re capturing traffic and make a comment:</p><figure name="c62c" id="c62c" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Nn0dZuEIU9bcVGe0IR_19g.png" data-width="414" data-height="257" src="https://cdn-images-1.medium.com/max/800/1*Nn0dZuEIU9bcVGe0IR_19g.png"></figure><p name="d61c" id="d61c" class="graf graf--p graf-after--figure">Step 2: The POST</p><p name="22f9" id="22f9" class="graf graf--p graf-after--p">The POST request will look fairly normal. But send it to repeater for some checks.</p><figure name="c21d" id="c21d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*J9iAXm0SeJBdScwK91xGFg.png" data-width="613" data-height="276" src="https://cdn-images-1.medium.com/max/800/1*J9iAXm0SeJBdScwK91xGFg.png"></figure><p name="6bfb" id="6bfb" class="graf graf--p graf-after--figure">Next, I did a GET request and I could see other user’s comments:</p><figure name="5296" id="5296" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*2E9PAtqcV4-kntzs9tuX7g.png" data-width="619" data-height="408" src="https://cdn-images-1.medium.com/max/800/1*2E9PAtqcV4-kntzs9tuX7g.png"></figure><p name="ee0d" id="ee0d" class="graf graf--p graf-after--figure">Step 3: PUTting a comment in</p><p name="0ee6" id="0ee6" class="graf graf--p graf-after--p">I changed my request type to a PUT and appended a /1 to the end of comments to see if I could directly update a comment. the /1 (as /1 is the admin user’s post.) To break it down:</p><blockquote name="2de8" id="2de8" class="graf graf--pullquote graf-after--p">PUT /api/posts/1/comments/1<br>The first “/1”” is the post id<br>the second “/1” is the comment ID</blockquote><p name="5d54" id="5d54" class="graf graf--p graf-after--pullquote">And it turns out that this comment is owned by admin. So effectively we’re overwriting an admin comment.</p><figure name="ea24" id="ea24" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*INmtZH9OpXfNzZsU79hh9Q.png" data-width="820" data-height="445" src="https://cdn-images-1.medium.com/max/800/1*INmtZH9OpXfNzZsU79hh9Q.png"></figure><p name="adc3" id="adc3" class="graf graf--p graf-after--figure">Browsing back to the page shows that admin’s comment was updated to my malicious POST, and the flag is underneath!</p><figure name="c4cb" id="c4cb" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*omgiJBHWxViN-woyZI3sXw.png" data-width="403" data-height="259" src="https://cdn-images-1.medium.com/max/800/1*omgiJBHWxViN-woyZI3sXw.png"></figure><p name="9c5e" id="9c5e" class="graf graf--p graf-after--figure">Thanks for reading!</p><p name="2ed8" id="2ed8" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/a46c997a1068"><time class="dt-published" datetime="2026-02-28T14:31:40.284Z">February 28, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/ottergram-writeup-bac-bugforge-a46c997a1068" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

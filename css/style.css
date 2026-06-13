@@ -176,6 +176,14 @@ body > * {
    Navigation
    ===================================================== */
 
+/* Placeholder reserves the same vertical space the nav takes so loading
+   the nav via JS doesn't cause a layout shift on initial render. */
+#nav {
+    min-height: 56px;
+    background: rgba(6, 8, 15, 0.85);
+    border-bottom: 1px solid var(--border);
+}
+
 .topnav {
     position: sticky;
     top: 0;

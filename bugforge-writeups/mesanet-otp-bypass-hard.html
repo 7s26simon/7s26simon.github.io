@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>MesaNet (OTP Bypass) (Hard) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/mesanet-otp-bypass-hard-bugforge-4438695b5330 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>MesaNet (OTP Bypass) (Hard)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/mesanet-otp-bypass-hard/1*4Hgs53Ba150vBPMNZpZOqA.png"/></figure><p>Ok. This was a TOUGH one. Or at least, it was when doing it. Afterwards, it all kinda makes sense. Here goes.</p><p><strong>Step 1: Log in as operator / operator</strong></p><p>We’re given a login. Once we get in, we can browse around, but soon enough, we come across the /dev OTP page which looks familiar from the last time we visited MesaNet.</p><figure><img src="images/mesanet-otp-bypass-hard/1*wECX7IJE_GKBXL0GqL49cg.png"/></figure><p>The OTP is expecting a 4-digit PIN. So naturally, you’d send something like: {“pin”: “1234”}</p><p>In this case, the server-side code checks the pin using a loose comparison or an <code>includes()</code>-type check, and it accepts a JSON array instead of a single string. So instead of brute-forcing 10,000 combinations one at a time (which would get rate-limited and blocked), you can send all possible pins in a single request, which would look like this:</p><pre class="code-view-two">{"pin": ["0000","0001","0002","0003", ... ,"9999"]}</pre><p>The backend iterates over the array (or checks if the correct pin is <em>in</em> the array), finds a match, and accepts it, bypassing the OTP in one shot.</p><p><strong>Step 2: Bypassing OTP</strong></p><p>I jumped over to my local LLM and told it to generate me the JSON above. To make it easy for you, click <a href="https://pastebin.com/gj3P92L0">here</a> to go to pastebin and you’ll see my entire request. Replace the cookie + lab URL of course before sending in burpsuite’s repeater:</p><figure><img src="images/mesanet-otp-bypass-hard/1*5cBkdHwwDhv5LiN7kVMgwg.png"/></figure><p>At this point, you’ll be re-directed to /dev</p><figure><img src="images/mesanet-otp-bypass-hard/1*59Mqro4R22Znni7f_Hit-Q.png"/></figure><p>Request to view this in your browser, by right clicking on the request pane in burpsuite and selecting Request in browser &gt; In original session:</p><figure><img src="images/mesanet-otp-bypass-hard/1*5ZaLpDEmFWGQujI9JZUfSw.png"/></figure><p>grab the URL and paste it into your browser:</p><figure><img src="images/mesanet-otp-bypass-hard/1*MrKc6cRYq6uA2qDOqkLQQQ.png"/></figure><p>Now you’ll have access to the /dev page and you’ll have bypassed the OTP:</p><figure><img src="images/mesanet-otp-bypass-hard/1*Z_cKCQuZAovF7M-T2WTgXg.png"/></figure><p><strong>Step 3: API documentation</strong></p><p>At the bottom of the page, you’ll see a cURL example. This is VERY important and this is how we’ll solve this lab.</p><p>Notice that the entitlements are given per function e.g read , write</p><figure><img src="images/mesanet-otp-bypass-hard/1*y7P9IESEPLysahnEdYCgFQ.png"/></figure><p>So we can craft this and send it to the gateway (which if you looked at your traffic earlier, was sent without all of these entitlements):</p><pre class="code-view-two">POST /gateway HTTP/2
+Host: lab-1773830028448-uexicl.labs-app.bugforge.io
+Cookie: connect.sid=s%3AyXTkxZH_wE2PanvTNEEedbyggfq8HRkp.guV3BfGwUskCXoSv2xP53vZTnlpqqsvTy5LneXzgb7U
+Content-Type: application/json
+Content-Length: 291
+
+{"id":"a7f3c4e9-8b2d-4a6f-9c1e-5d8a3b7f2c4e",
+"endpoint":"/api/notes/list",
+"data":{
+},
+"entitlements":{
+"nexus":{
+"access":true,
+"read":[
+"public",
+"restricted",
+"confidential"
+],
+"write":[
+"public",
+"restricted",
+"confidential"
+]
+},
+
+"mail":{
+"access":true,
+"canSend":true,
+"maxClassification":"confidential"
+}
+}
+}</pre><p>Essentially what we’ve done is added “confidential” to our nexus entitlements which means that now, we’re exploiting a weak access control check.</p><p>The actual access control check for releasing the flag isn’t just “can you see confidential notes” , it’s specifically checking whether your entitlements explicitly include <code>confidential</code> in the read array.</p><p>The operator session apparently lets you see confidential notes by default (maybe because they own them, or because L3 clearance grants it), but the flag is gated behind the entitlements object literally containing <code>"confidential"</code>. The backend probably has a check like "if entitlements.read includes all three levels, return the flag."</p><p>It’s a subtle distinction. The operator can <em>view</em> confidential content through normal access, but the flag only drops when the backend sees the full <code>["public","restricted","confidential"]</code> entitlement set being explicitly set.</p><p>You should end up with the flag in the response (at the bottom):</p><figure><img src="images/mesanet-otp-bypass-hard/1*Xj5_jkapDK_IBapC4k_qAg.png"/></figure><p>Thanks for reading!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

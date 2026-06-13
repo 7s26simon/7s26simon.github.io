@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Surfer - Writeup (TryHackMe)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Surfer - Writeup (TryHackMe)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link here. This is not required…
+</section>
+<section data-field="body" class="e-content">
+<section name="41b9" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="42fa" id="42fa" class="graf graf--h3 graf--leading graf--title">Surfer - Writeup (TryHackMe)</h3><p name="29ec" id="29ec" class="graf graf--p graf-after--h3">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p><figure name="f5b8" id="f5b8" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*idjHygODi7rJuFTIe0qoWA.png" data-width="512" data-height="512" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*idjHygODi7rJuFTIe0qoWA.png"><figcaption class="imageCaption">Surfer</figcaption></figure><p name="fbf7" id="fbf7" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 1: </strong>Recon</p><p name="6e1b" id="6e1b" class="graf graf--p graf-after--p">I loaded up the URL and browsed to it. This brought me to a login box. I tried “admin” for the username and “admin” for the password (expecting it not to work, but it did) and I was in right away.</p><figure name="d758" id="d758" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*5RKJEFk8tgj011ydwh4rBg.png" data-width="853" data-height="675" src="https://cdn-images-1.medium.com/max/800/1*5RKJEFk8tgj011ydwh4rBg.png"><figcaption class="imageCaption">Login portal</figcaption></figure><p name="76d7" id="76d7" class="graf graf--p graf-after--figure">The page now showed a dashboard consisting of sales information, along with revenue and visitors. In the top right-hand side, there was an “Admin” profile which didn’t seem to lead anywhere interesting.</p><p name="7cc6" id="7cc6" class="graf graf--p graf-after--p">The only place which seemed to do anything was the “Export to PDF” function which is at the bottom of the dashboard page.</p><figure name="11fa" id="11fa" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*zeVhCtafG8mO-cpTAHzC1g.png" data-width="957" data-height="861" src="https://cdn-images-1.medium.com/max/800/1*zeVhCtafG8mO-cpTAHzC1g.png"><figcaption class="imageCaption">Export to PDF Function</figcaption></figure><p name="7964" id="7964" class="graf graf--p graf-after--figure">I viewed the source of the page and could see a hidden field which looked interesting. When you click “Export to PDF”, it uses the value in the hidden field and sends it to export2pdf.php.</p><p name="9ac2" id="9ac2" class="graf graf--p graf-after--p">Looking back at the “Recent Activity” in the screenshot above, we can see it looks like that /internal/admin.php is hosting the flag.</p><p name="34b0" id="34b0" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Step 2:</strong> Installing my add-on</p><p name="7892" id="7892" class="graf graf--p graf-after--p">Time to install the add-on “Form-Hack-Reloaded”, which you can get from <a href="https://github.com/7s26simon/Form-Hack-Reloaded" data-href="https://github.com/7s26simon/Form-Hack-Reloaded" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is a forked repo of an old add-on from 2016. The “Reloaded” version is one that I heavily modified using 100% AI to bring it up to 2025 requirements for security assessments. “Form-Hack-Reloaded” can toggle on/off hidden fields within a page, and when you refresh the page, it persistently makes the hidden fields visible (or not, depending on if it’s on or off). There is even a red/green light to show if the tool is working or not.</p><figure name="e2b1" id="e2b1" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*6E4HKHlPDKqbfmWEhzcsxw.png" data-width="881" data-height="694" src="https://cdn-images-1.medium.com/max/800/1*6E4HKHlPDKqbfmWEhzcsxw.png"><figcaption class="imageCaption">Firefox Debuging Page</figcaption></figure><p name="ea54" id="ea54" class="graf graf--p graf-after--figure">Going to: “about:debugging” (without quotes) in Firefox, then “This Firefox” in the top-left allows you to “Load a Temporary Add-on”. At the time of writing, Form-Hack-Reloaded isn’t available in the Chrome or Mozilla add-on stores, but it will be soon. Make sure you’ve extracted the files from the zip and load the add on by browsing to the extracted files and selecting main.js.</p><p name="03e6" id="03e6" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Step 3:</strong> Viewing Hidden Fields</p><figure name="5e89" id="5e89" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*9T9ZG5vRIi0FE5zk27YVPQ.png" data-width="903" data-height="432" src="https://cdn-images-1.medium.com/max/800/1*9T9ZG5vRIi0FE5zk27YVPQ.png"><figcaption class="imageCaption">There’s no place like 127.0.0.1</figcaption></figure><p name="93a2" id="93a2" class="graf graf--p graf-after--figure">Once the add-on was running, it shows all hidden fields so we can edit it in the page, rather than editing source code. From here, I changed the URL to display <a href="http://127.0.0.1/internal/admin.php" data-href="http://127.0.0.1/internal/admin.php" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">http://127.0.0.1/internal/admin.php</a> and hit “Export to PDF”</p><figure name="0861" id="0861" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*3483Mc4B3sMbGNQKHcH-HQ.png" data-width="903" data-height="432" src="https://cdn-images-1.medium.com/max/800/1*3483Mc4B3sMbGNQKHcH-HQ.png"><figcaption class="imageCaption">Modified URL</figcaption></figure><p name="e759" id="e759" class="graf graf--p graf-after--figure">The flag was now revealed due to SSRF being the exploit here.</p><figure name="0d5e" id="0d5e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*2mdzGKYkE2OaLY44VNHhoQ.png" data-width="903" data-height="432" src="https://cdn-images-1.medium.com/max/800/1*2mdzGKYkE2OaLY44VNHhoQ.png"><figcaption class="imageCaption">Flag</figcaption></figure><p name="b7fd" id="b7fd" class="graf graf--p graf-after--figure graf--trailing"><strong class="markup--strong markup--p-strong">Final thoughts:</strong> Another very enjoyable room. Simple enough to be done relatively quickly, but the room teaches you to look at source code as the vulnerability might be hiding in plain sight. 9/10 room.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/aaa08f330786"><time class="dt-published" datetime="2025-12-30T09:24:09.720Z">December 30, 2025</time></a>.</p><p><a href="https://medium.com/@7s26simon/surfer-tryhackme-writeup-aaa08f330786" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

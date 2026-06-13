@@ -1,0 +1,110 @@
+slug,dest,title,date,categories
+md2pdf-writeup-tryhackme,thm-writeups,MD2PDF - Writeup (TryHackMe),2025-12-27,ssrf
+evil-gpt-writeup-tryhackme,thm-writeups,Evil-GPT - Writeup (TryHackMe),2025-12-29,access-control
+surfer-writeup-tryhackme,thm-writeups,Surfer - Writeup (TryHackMe),2025-12-30,ssrf
+the-great-disappearing-act-tryhackme-writeup,thm-writeups,The Great Disappearing Act -TryHackMe Writeup,2026-01-05,
+tanuki-writeup,bugforge-writeups,Tanuki -Writeup,2026-01-07,xxe
+sokudo-writeup-03f1384a,bugforge-writeups,Sokudo writeup,2026-01-08,
+shady-oaks-financial,bugforge-writeups,Shady Oaks Financial,2026-01-09,jwt
+ottergram-writeup-7e048a3d,bugforge-writeups,Ottergram Writeup,2026-01-10,graphql
+furhire-writeup,bugforge-writeups,Furhire Writeup,2026-01-11,sqli access-control jwt
+tanuki-pt-2-writeup,bugforge-writeups,Tanuki pt 2 Writeup,2026-01-21,xxe
+cafeclub-writeup-aca44b33,bugforge-writeups,CafeClub Writeup,2026-01-25,race
+cheesy-does-it-writeup-46ced7ba,bugforge-writeups,Cheesy Does It writeup,2026-01-26,business-logic
+tanuki-writeup-5a3d073c,bugforge-writeups,Tanuki writeup,2026-01-27,idor
+copypasta-writeup-3f0fddab,bugforge-writeups,Copypasta writeup,2026-01-28,sqli
+sokudo-writeup-c9413182,bugforge-writeups,Sokudo writeup,2026-01-29,
+ottergram-writeup-1ecd388f,bugforge-writeups,Ottergram writeup,2026-01-31,
+cafeclub-writeup-afb70036,bugforge-writeups,CafeClub writeup,2026-02-01,weak-auth
+galaxy-dash-medium-difficulty-writeup,bugforge-writeups,Galaxy Dash (Medium difficulty) writeup,2026-02-01,jwt
+cheesy-does-it-writeup-70eca5f4,bugforge-writeups,Cheesy Does It writeup,2026-02-02,
+tanuki-writeup-8bc0c8d4,bugforge-writeups,Tanuki writeup,2026-02-03,
+copypasta-writeup-7776d9a7,bugforge-writeups,CopyPasta writeup,2026-02-04,idor
+sokudo-writeup-0e2c54aa,bugforge-writeups,Sokudo writeup,2026-02-05,
+ottergram-writeup-2f1b56ad,bugforge-writeups,Ottergram writeup,2026-02-07,access-control
+cafeclub-writeup-c0e8f42b,bugforge-writeups,Cafeclub writeup,2026-02-08,
+cheesy-does-it-walkthrough,bugforge-writeups,Cheesy Does it walkthrough,2026-02-09,
+tanuki-writeup-a83b3d9f,bugforge-writeups,Tanuki writeup,2026-02-10,
+mustacchio-writeup-tryhackme,thm-writeups,mustacchio writeup (TryHackMe),2026-02-10,xxe access-control
+copypasta-writeup-74c34045,bugforge-writeups,CopyPasta writeup,2026-02-11,
+shady-oaks-financial-writeup-broken-auth,bugforge-writeups,Shady Oaks Financial writeup (Broken auth),2026-02-13,auth-bypass access-control
+mesanet-writeup-hard-sqli,bugforge-writeups,MesaNet writeup (hard) (SQLi),2026-02-14,sqli
+cafeclub-writeup-business-logic,bugforge-writeups,CafeClub writeup (Business Logic),2026-02-15,business-logic
+ottergram-writeup-broken-auth,bugforge-writeups,Ottergram writeup (Broken Auth),2026-02-15,auth-bypass
+cheesy-does-it-sqli-writeup,bugforge-writeups,Cheesy Does It (SQLi) writeup,2026-02-16,sqli
+cupidbot-writeup-tryhackme,thm-writeups,CupidBot writeup (TryHackMe),2026-02-16,prompt-injection
+hidden-deep-into-my-heart-writeup-tryhackme,thm-writeups,Hidden Deep Into my Heart writeup (TryHackMe),2026-02-16,weak-auth
+galaxy-dash-xss-medium,bugforge-writeups,Galaxy Dash (XSS) (Medium),2026-02-17,xss
+copypasta-writeup-bac-bdf03ba7,bugforge-writeups,CopyPasta writeup (BAC),2026-02-18,access-control
+gift-list-writeup-idor,bugforge-writeups,Gift List writeup (IDOR),2026-02-19,idor
+ottergram-writeup-lfi,bugforge-writeups,Ottergram writeup (LFI),2026-02-21,lfi path-traversal
+shady-oaks-financial-writeup-race-condition,bugforge-writeups,Shady Oaks Financial writeup(Race Condition),2026-02-21,race
+how-i-became-a-papa-practical-ai-pentest-associate-by-tcm,gensec,How I Became a PAPA (Practical AI Pentest Associate) by TCM,2026-02-22,prompt-injection
+cheesy-does-it-writeup-business-logic-flaw,bugforge-writeups,Cheesy Does it writeup (Business Logic flaw),2026-02-23,business-logic
+furhire-writeup-mfa-bypass-medium,bugforge-writeups,Furhire writeup (MFA Bypass) (Medium),2026-02-23,sqli weak-auth
+copypasta-writeup-bac-376b9016,bugforge-writeups,Copypasta writeup (BAC),2026-02-26,access-control
+sokudo-writeup-api9-2023,bugforge-writeups,Sokudo writeup (API9:2023),2026-02-26,jwt
+ottergram-writeup-bac,bugforge-writeups,Ottergram writeup (BAC),2026-02-28,access-control
+shady-oaks-financial-writeup-bfla,bugforge-writeups,Shady Oaks Financial writeup (BFLA),2026-02-28,access-control
+cafeclub-writeup-lfi,bugforge-writeups,CafeClub writeup (LFI),2026-03-02,lfi
+galaxy-dash-writeup-sqli,bugforge-writeups,Galaxy Dash writeup (SQLi),2026-03-02,sqli
+copypasta-sqli,bugforge-writeups,Copypasta (SQLi),2026-03-04,sqli
+tanuki-ssrf,bugforge-writeups,Tanuki (SSRF),2026-03-04,ssrf
+cheesy-does-it-writeup-blf,bugforge-writeups,Cheesy Does It writeup (BLF),2026-03-07,business-logic
+expressway-writeup-hackthebox,htb-writeups,ExpressWay writeup (HackTheBox),2026-03-07,
+cheesy-does-it-business-logic-vuln,bugforge-writeups,Cheesy Does It (Business Logic Vuln),2026-03-09,business-logic
+gift-lab-bac-3fa17774,bugforge-writeups,Gift Lab (BAC),2026-03-14,weak-auth access-control jwt
+mesanet-otp-bypass-hard,bugforge-writeups,MesaNet (OTP Bypass) (Hard),2026-03-18,weak-auth
+ottergram-websockets,bugforge-writeups,Ottergram (websockets),2026-03-21,idor websocket
+galaxy-dash-bac-walkthrough,bugforge-writeups,Galaxy Dash (BAC) Walkthrough,2026-03-22,access-control
+ottergram-xss-live-stream,bugforge-writeups,Ottergram (XSS) (Live Stream),2026-03-28,xss
+cafeclub-writeup-idor,bugforge-writeups,CafeClub writeup (IDOR),2026-04-01,idor
+necromancers-notebook-jwt,bugforge-writeups,Necromancers Notebook (JWT),2026-04-03,jwt
+cafeclub-business-logic,bugforge-writeups,CafeClub (Business Logic),2026-04-05,business-logic
+tanuki-jwt,bugforge-writeups,Tanuki (JWT),2026-04-07,jwt
+gift-lab-bac-48f0318b,bugforge-writeups,Gift Lab (BAC),2026-04-09,access-control
+shady-oaks-financial-jwt,bugforge-writeups,Shady Oaks Financial (JWT),2026-04-10,jwt
+tricky-tunnels,webverse-writeups,Tricky Tunnels,2026-04-11,jwt
+dockethive,webverse-writeups,DocketHive,2026-04-12,lfi idor info-disclosure
+fixture-medium,webverse-writeups,Fixture (Medium),2026-04-13,sqli idor ssrf
+parcel-sqli-writeup,webverse-writeups,Parcel (SQLi) Writeup,2026-04-16,sqli
+sokudo-graphql,bugforge-writeups,Sokudo (GraphQL),2026-04-16,graphql
+mirage-lfi,webverse-writeups,Mirage (LFI),2026-04-17,lfi
+breach-graphql,webverse-writeups,Breach (GraphQL),2026-04-18,graphql
+ottergram-bac-verbtamper,bugforge-writeups,Ottergram (BAC) (VerbTamper),2026-04-18,access-control
+quarter-shift-graphql-ssrf,webverse-writeups,Quarter Shift (GraphQL + SSRF),2026-04-19,graphql ssrf
+tanuki-bac,bugforge-writeups,Tanuki (BAC),2026-04-21,access-control
+method-based-access-control-can-be-circumvented-portswigger-academy,gensec,Method-based access control can be circumvented - Portswigger Academy,2026-04-24,access-control
+insecure-direct-object-references-portswigger-academy-lab,gensec,Insecure direct object references — Portswigger Academy Lab,2026-04-25,idor
+diceforge-rce,bugforge-writeups,DiceForge (RCE),2026-04-26,xss rce
+cheesy-does-it-jwt,bugforge-writeups,Cheesy Does It (JWT),2026-04-27,jwt
+copypasta-bac,bugforge-writeups,CopyPasta (BAC),2026-04-29,access-control
+outbox-ssti,webverse-writeups,OutBox (SSTI),2026-05-02,ssti
+sprocket-line-rxss,webverse-writeups,Sprocket Line (RXSS),2026-05-03,xss
+diceforge-bypass-paywall,bugforge-writeups,DiceForge (Bypass Paywall),2026-05-04,access-control
+newsforge-bfla,webverse-writeups,NewsForge (BFLA),2026-05-05,rce access-control
+ottergram-graphql,bugforge-writeups,Ottergram (GraphQL),2026-05-09,graphql
+sunnyside-daycare-ssti,webverse-writeups,Sunnyside Daycare (SSTI),2026-05-09,ssti rce
+furhire-ssrf-weekly,bugforge-writeups,Furhire (SSRF) (Weekly),2026-05-10,ssrf
+phone-vault-official-writeup,webverse-writeups,Phone Vault (Official writeup),2026-05-12,
+mapleton-lfi-to-rce,webverse-writeups,Mapleton (LFI to RCE),2026-05-13,rce lfi path-traversal
+galaxy-dash-idor,bugforge-writeups,Galaxy Dash (IDOR),2026-05-15,idor
+joystick-websockets,webverse-writeups,Joystick (Websockets),2026-05-16,websocket
+loop-roam-git-exposure,webverse-writeups,Loop & Roam (git exposure),2026-05-17,info-disclosure
+the-caretaker-official-writeup,webverse-writeups,The Caretaker (Official Writeup),2026-05-17,sqli
+lazy-human-resources-official-writeup-bac,webverse-writeups,Lazy Human Resources (Official writeup) (BAC),2026-05-18,access-control
+snooker-logic-flaw,webverse-writeups,Snooker (Logic flaw),2026-05-19,business-logic
+mednode-sqli,bugforge-writeups,MedNode (SQLi),2026-05-20,sqli
+vibed-sqli,webverse-writeups,Vibed (SQLi),2026-05-21,sqli ssti
+brackish-brewing-co-with-verbtamper-v1-8-1,webverse-writeups,Brackish Brewing Co. (with VerbTamper v1.8.1),2026-05-22,
+furhire-broken-auth-weekly,bugforge-writeups,FurHire (Broken Auth) (Weekly),2026-05-22,auth-bypass jwt
+disgruntled-employee-official-writeup,webverse-writeups,Disgruntled Employee (Official Writeup),2026-05-25,
+versed-sqli,webverse-writeups,Versed (SQLi),2026-05-25,sqli
+angry-teacher-official-walkthrough,webverse-writeups,Angry Teacher (Official Walkthrough),2026-05-26,
+cafeclub-broken-business-logic,bugforge-writeups,CafeClub (Broken Business Logic),2026-05-26,business-logic
+reportverse-official-writeup,webverse-writeups,ReportVerse (Official Writeup),2026-05-27,
+bomb-threat-official-walkthrough,webverse-writeups,Bomb Threat (Official Walkthrough),2026-05-28,
+crate-sleeve-sxss,webverse-writeups,Crate & Sleeve (SXSS),2026-05-28,xss
+bill-s-steak-house-rce,webverse-writeups,Bill’s Steak House (RCE),2026-05-29,rce
+ottergram-priv-esc,bugforge-writeups,Ottergram (Priv-Esc),2026-05-30,access-control
+tamper-temple-official-writeup-hard,webverse-writeups,Tamper Temple (Official writeup) (hard),2026-06-01,access-control jwt info-disclosure

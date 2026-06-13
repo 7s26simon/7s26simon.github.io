@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Cheesy Does It writeup // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/cheesy-does-it-writeup-bugforge-70eca5f40dcf -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Cheesy Does It writeup</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*z3cp1FF3PHmkhwWI5u7CVw.png"/></figure><p>This poor pizza chef does some outstanding pizzas….the only problem is, he is losing money with every pizza he makes! Let’s investigate why!</p><p><strong>Step 1</strong>: Register</p><p>As always with BF labs, we’ll need to register an account. The aim with these kinds of labs is often to get the pizza for free using various methods. So this time, we’ll see how the “normal” pizza flow is.</p><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*QZq1YuwTrbM0F40yuR5fhA.png"/></figure><p><strong>Step 2:</strong> Add pizza to cart</p><p>Add a pizza to the cart and then click the cart icon which should now show a red circle with a ‘1’ in (top right) to see the pizza in the cart.</p><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*O9ZdJaYWHCfkKho-pFuMYA.png"/></figure><p><strong>Step 2:</strong> Add a custom tip of 100%</p><p>Add a custom tip of 100% and hit the Place Order button. Ensure you’re capturing traffic.</p><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*iiFudnZoComBimvvC5aIBw.png"/></figure><p><strong>Step 3: </strong>Negative Tip</p><p>Immediately after submitting your order, you’ll see this request. Here, make your tip -100% by adding a minus symbol before the 100.</p><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*rbiCk7sQjb4aGU7vEoxgJQ.png"/></figure><p><strong>Step 4:</strong> Payment token</p><p>At this point, a payment_token is generated for you and the tip disappears (so maybe there is some logic going on here to invalidate the tip and just charge you for the pizza). Forward this request on.</p><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*-hGWMDwrBnMQpvqvupvyYg.png"/></figure><p><strong>Step 5:</strong> Alter the tip (again)</p><p>Now you’ll see this request, where the tip is showing again as 100.</p><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*s0Uobh6cVXTAZwCF14vS1Q.png"/></figure><p>Same applies again. Enter a minus symbol before the 100.</p><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*5IDp0kHIUm5dh5p2dBJtOg.png"/></figure><p>Right-click and click on Do Intercept &gt; Response to this request (if you’re not using burp suite, you may have the equivalent in whatever tool you’re using).</p><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*tT_q7UF-K4wZu8UK86iTZw.png"/></figure><p><strong>Step 7:</strong> Free pizza</p><p>You’ll now find that the pizza has had 100% of the price taken off and the flag appears in the order_number repsonse:</p><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*33ZiStk9yAssoYmmLB_mDw.png"/></figure><p>And you’ll also see it on screen:</p><figure><img src="images/cheesy-does-it-writeup-70eca5f4/1*mw5JQT7eJJVkVodzPKTsQw.png"/></figure><p>Why did this happen? Well, the logic behind this is likely: calculated_total = items_total × (1 + tip_percentage ÷ 100) which would get you a free pizza if the tip_percentage is -100% as -100% evaluates to zero, regardless of the items_total value.</p><p>Thanks for reading!</p><p>### UPDATE ###</p><p>I’ve since been told by h00p that the first step isn’t necessary and you don’t need to do the negative tip until you hit the /api/orders endpoint. I should probably go back and test this, but I believe it. That explains why when I did this originally and only did a -100 on the first endpoint after checking out, it didn’t give me the discount. So, thanks h00p!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Brackish Brewing Co. (with VerbTamper v1.8.1) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/brackish-brewing-co-with-verbtamper-v1-8-1-webverse-330e033cdb08 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a class="active" href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Brackish Brewing Co. (with VerbTamper v1.8.1)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><p><strong>Note: </strong>My articles are on a scheduled release via medium, which means the times they appear may vary considerably. I may end up doing 1-2 per week and release them on a Friday or Saturday at a specific time each week, I haven’t decided yet.</p><p>Lab can be found at: <a href="https://webverselabs-pro.com/">https://webverselabs-pro.com/</a></p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*Uq5Jusn1pdnT9XKsi2mVdQ.png"/></figure><p>The description of this challenge made me think that this could be the perfect lab for <a href="https://github.com/7s26simon/VerbTamper/releases">VerbTamper</a>, which is a tool I vibe-coded and has been extremely useful for CTFs.</p><p>I loaded up the lab and saw the following page:</p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*9SwbK2iagA85n5Fw63hmsg.png"/></figure><p>Browsing to /staff (which was mentioned in the lab description “A small craft brewery’s website has a staff-only portal at /staff”) was denied.</p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*8pt7XLXm3VnM9GpdX6raQg.png"/></figure><p>I sent the request over to VerbTamper, as it has a bunch of bypasses built in and might be able to help out:</p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*tCKHz2EKX7d-Mak5XTNdCQ.png"/></figure><p>I selected the X-Forwarded-For header from the drop-down menu:</p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*Iq0BKtFF5GW-G8hyl-37VA.png"/></figure><p>Next, I hit send:</p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*01GGzW0ObVhk7CKrQXp7QQ.png"/></figure><p>And then, searched for the flag in the response:</p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*ne2AR7MDZ10xlZycUW2Rgw.png"/></figure><p>And that’s the beauty of VerbTamper v1.8.1. And what’s more, is that you can simply copy the entire request and send to repeater DIRECTLY from VerbTamper (if any issues, remember to add a new line for the request to work):</p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*2VtA7XqB21qDB-LBoe54Dw.png"/></figure><p>And now we can send it from repeater:</p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*nTbzS5L0FvhUOtgbJj4gKQ.png"/></figure><p>and now…this also means that we can now right click (from repeater) to request in the original session:</p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*2tlMA0vAen4nsaOy3snB2A.png"/></figure><p>and view the flag in the browser if we wish:</p><figure><img src="images/brackish-brewing-co-with-verbtamper-v1-8-1/1*mGy-zfC0NpLxme6Nb9DqfA.png"/></figure><p>Thanks for following along!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Tanuki writeup (BugForge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Tanuki writeup (BugForge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link here. This is not required…
+</section>
+<section data-field="body" class="e-content">
+<section name="2946" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="7434" id="7434" class="graf graf--h3 graf--leading graf--title">Tanuki writeup (BugForge)</h3><p name="9ceb" id="9ceb" class="graf graf--p graf-after--h3">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p><figure name="25da" id="25da" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*TFV76-qyFIvZbTLHDtiK9Q.png" data-width="2848" data-height="1600" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*TFV76-qyFIvZbTLHDtiK9Q.png"><figcaption class="imageCaption">Tanuki</figcaption></figure><p name="d0f9" id="d0f9" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 1:</strong> Register and go to your Profile</p><p name="1349" id="1349" class="graf graf--p graf-after--p">As the title says, register an account and go to the Profile page in the top right</p><figure name="452c" id="452c" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Iox5CPjHg2dqmGPwQuAKxA.png" data-width="2620" data-height="1160" src="https://cdn-images-1.medium.com/max/800/1*Iox5CPjHg2dqmGPwQuAKxA.png"></figure><p name="316d" id="316d" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2:</strong> Update profile</p><p name="d0a3" id="d0a3" class="graf graf--p graf-after--p">From here you can update your profile (change your full name for example). Ensure you’re capturing the request for later and send to repeater.</p><figure name="9b2d" id="9b2d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*dFpjNpGx4t2sUSYeq8tIzQ.png" data-width="1728" data-height="784" src="https://cdn-images-1.medium.com/max/800/1*dFpjNpGx4t2sUSYeq8tIzQ.png"></figure><p name="ab63" id="ab63" class="graf graf--p graf-after--figure">Now open an incognito tab and make a secondary user. (stay logged into both, not that it should matter too much.)</p><p name="18af" id="18af" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Step 3:</strong> Change password (again)</p><p name="c460" id="c460" class="graf graf--p graf-after--p">In repeater, change the <code class="markup--code markup--p-code u-paddingRight0 u-marginRight0">/api/profile/<strong class="markup--strong markup--p-strong">&lt;username&gt;</strong></code> of the <code class="markup--code markup--p-code">PUT</code> request to the secondary user you created. You may also need to change the email address e.g user2@example.com and send the request. You’ll get the flag.</p><figure name="b305" id="b305" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*gmnwQTX-KhzpMeFCbUB8XQ.png" data-width="1596" data-height="634" src="https://cdn-images-1.medium.com/max/800/1*gmnwQTX-KhzpMeFCbUB8XQ.png"></figure><p name="1787" id="1787" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Conclusion</strong></p><p name="b9d5" id="b9d5" class="graf graf--p graf-after--p">This is an IDOR aka Insecure Direct Object Reference (IDOR) vulnerability, specifically in the profile update functionality.</p><p name="b6d1" id="b6d1" class="graf graf--p graf-after--p">The vulnerability allows an attacker to change another user’s email/password by simply modifying the username parameter in the <code class="markup--code markup--p-code">PUT</code> request to <code class="markup--code markup--p-code">/api/profile/&lt;username&gt;</code> . This happens because the application fails to properly verify that the authenticated user has authorization to modify the target profile.</p><p name="a306" id="a306" class="graf graf--p graf-after--p graf--trailing">Thanks for reading!</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/5a3d073c4c80"><time class="dt-published" datetime="2026-01-27T08:14:12.973Z">January 27, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/tanuki-writeup-bugforge-5a3d073c4c80" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

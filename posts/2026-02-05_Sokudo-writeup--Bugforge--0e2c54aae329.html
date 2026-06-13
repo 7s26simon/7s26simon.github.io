@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Sokudo writeup (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Sokudo writeup (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link here. This is not required…
+</section>
+<section data-field="body" class="e-content">
+<section name="6c3f" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="4d4d" id="4d4d" class="graf graf--h3 graf--leading graf--title">Sokudo writeup (Bugforge)</h3><p name="a761" id="a761" class="graf graf--p graf-after--h3">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p><figure name="c614" id="c614" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*afotZ9tzjNIXu1TyhrvyHA.png" data-width="456" data-height="256" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*afotZ9tzjNIXu1TyhrvyHA.png"></figure><p name="f0fc" id="f0fc" class="graf graf--p graf-after--figure">This one was a bit more difficult than the usual dailies. This lab was on Bugforge previously, but it has came back around and it’s a very, very good lab and teaches some really good lessons. So here goes!</p><p name="e203" id="e203" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Step 1:</strong> Register</p><p name="2112" id="2112" class="graf graf--p graf-after--p">After registering you’ll see the following screen. Ensure you’re capturing traffic in your proxy tool of choice. Click around and get a feel for the pages. Practice lets you attempt to speed-type and it’ll post up your stats. Check stats to see a list of stats.</p><figure name="36d1" id="36d1" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*X7RQLKSbxAGk9FgIEOJ9VQ.png" data-width="1324" data-height="584" src="https://cdn-images-1.medium.com/max/800/1*X7RQLKSbxAGk9FgIEOJ9VQ.png"></figure><p name="389f" id="389f" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2:</strong> /api/stats</p><p name="4ecf" id="4ecf" class="graf graf--p graf-after--p">In the GET request to /api/stats , you’ll see a response with wpm (words per minute) amongst other information. This is interesting. Right-click and send to repeater for editing.</p><figure name="48f4" id="48f4" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*CrBJCuzfKZ9w5T4NbacTJA.png" data-width="973" data-height="528" src="https://cdn-images-1.medium.com/max/800/1*CrBJCuzfKZ9w5T4NbacTJA.png"></figure><p name="b25d" id="b25d" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3:</strong> Changes</p><p name="0b86" id="0b86" class="graf graf--p graf-after--p">We’re going to need to make some changes. But first, let’s discuss why we’re about to do what we’re about to do.</p><blockquote name="21e7" id="21e7" class="graf graf--blockquote graf-after--p">The HTTP protocol allows different methods (aka verbs) which indicate the intent of the request:</blockquote><blockquote name="01d7" id="01d7" class="graf graf--blockquote graf-after--blockquote"><code class="markup--code markup--blockquote-code">GET</code> is used to retrieve data from the server</blockquote><blockquote name="08b0" id="08b0" class="graf graf--blockquote graf-after--blockquote"><code class="markup--code markup--blockquote-code">PUT</code> is generally used to<strong class="markup--strong markup--blockquote-strong"> </strong>create, update or completely replace a resource at a specific URL</blockquote><blockquote name="54c3" id="54c3" class="graf graf--blockquote graf-after--blockquote">Because this endpoint returns json, there’s a good chance the same /api/stats path also accepts a PUT or POST with json to create or update stats.</blockquote><blockquote name="e748" id="e748" class="graf graf--blockquote graf-after--blockquote">We can test this by taking the json body we saw in the GET response and using it as the body of a PUT request back to the same endpoint.</blockquote><blockquote name="5ffc" id="5ffc" class="graf graf--blockquote graf-after--blockquote">Content-Type: application/json is an HTTP header that tells the server (or client) exactly how to interpret the request/response body (source: <a href="https://stackoverflow.com/questions/477816/which-json-content-type-do-i-use" data-href="https://stackoverflow.com/questions/477816/which-json-content-type-do-i-use" class="markup--anchor markup--blockquote-anchor" rel="nofollow noopener" target="_blank">https://stackoverflow.com/questions/477816/which-json-content-type-do-i-use</a>)</blockquote><p name="9a0d" id="9a0d" class="graf graf--p graf-after--blockquote">Firstly, change the method to a PUT request. Copy the json data from the previous response and copy it into our newly formed PUT request.</p><p name="9f93" id="9f93" class="graf graf--p graf-after--p">Now because we’re sending json content, we need to add a “Content-Type: application/json” header. Send the new request and you’ll get the flag.</p><figure name="8dad" id="8dad" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*2rRFGhlI0cX3aIUiHvbdNw.png" data-width="973" data-height="528" src="https://cdn-images-1.medium.com/max/800/1*2rRFGhlI0cX3aIUiHvbdNw.png"></figure><p name="cb3a" id="cb3a" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Bonus Content:</strong></p><p name="dabf" id="dabf" class="graf graf--p graf-after--p">The lab was due to expire, so I figured I’d take a last look before Sokudo leaves the rotation. And, I found a thing! So if we look at the leaderboard, you can see I typed 2520 WPM (words per minute). Looks good, right?</p><figure name="c1fb" id="c1fb" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*TJU0YUEFXLG2Rqg6Q8QHgg.png" data-width="961" data-height="357" src="https://cdn-images-1.medium.com/max/800/1*TJU0YUEFXLG2Rqg6Q8QHgg.png"></figure><p name="5055" id="5055" class="graf graf--p graf-after--figure">I think I can type faster ;-) There’s a POST req to /api/session/submit which contains the following body:</p><figure name="5612" id="5612" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*SxU1ZD4EqbU3wPciH8Z0JA.png" data-width="353" data-height="163" src="https://cdn-images-1.medium.com/max/800/1*SxU1ZD4EqbU3wPciH8Z0JA.png"></figure><p name="2091" id="2091" class="graf graf--p graf--startsWithDoubleQuote graf-after--figure">“duration” and “timeElapsed”. This is how the app seems to process and calculate how many words you typed in that duration. So I changed the timeElapsed value to 0.2 and sent the request.</p><p name="9cb0" id="9cb0" class="graf graf--p graf-after--p">I got the following response: wpm:3540:</p><figure name="a5d7" id="a5d7" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*OoepB8Pouh-_SJzbQUv2XA.png" data-width="704" data-height="291" src="https://cdn-images-1.medium.com/max/800/1*OoepB8Pouh-_SJzbQUv2XA.png"></figure><p name="ed39" id="ed39" class="graf graf--p graf-after--figure">Let’s go and refresh the leaderboard. Yep, I am now a faster typer! 3540 words per minute!</p><figure name="874c" id="874c" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*l9OQgKg2Jr9THuaGbgCJWg.png" data-width="964" data-height="353" src="https://cdn-images-1.medium.com/max/800/1*l9OQgKg2Jr9THuaGbgCJWg.png"></figure><p name="780c" id="780c" class="graf graf--p graf-after--figure">Let’s go further still. Turns out you can overwrite the text generated and user input. 11760 WPM! That’ll do for today!</p><figure name="4cb5" id="4cb5" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*FJDBZNlIyjRnbQBTGU1PWg.png" data-width="564" data-height="285" src="https://cdn-images-1.medium.com/max/800/1*FJDBZNlIyjRnbQBTGU1PWg.png"></figure><p name="c5e3" id="c5e3" class="graf graf--p graf-after--figure">Not the flag, but still a cool bonus find!</p><p name="6cd5" id="6cd5" class="graf graf--p graf-after--p graf--trailing">Thanks for reading!</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/0e2c54aae329"><time class="dt-published" datetime="2026-02-05T20:11:04.044Z">February 5, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/sokudo-writeup-bugforge-0e2c54aae329" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

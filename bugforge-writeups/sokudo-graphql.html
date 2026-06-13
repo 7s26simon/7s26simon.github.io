@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Sokudo (GraphQL) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/sokudo-graphql-bugforge-c5dc9802c62b -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Sokudo (GraphQL)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/sokudo-graphql/1*MtrnuqxQh_XnE5CoBECdqg.png"/></figure><p>Lab can be found at: <a href="https://bugforge.io">https://bugforge.io</a></p><p>I always love graphQL challenges and as soon as I went to the “Practice” link and saw a graphQL endpoint, I knew we had a fun lab ahead of us!</p><p>Step 1: Register and go to practice</p><p>As above, register, hit practice and look at your proxy history for a call to /api/graphQL</p><figure><img src="images/sokudo-graphql/1*pBmmxXS564jNLQl4XhDZEQ.png"/></figure><p>Step 2: /api/graphQL</p><p>The api seems to log when the activity was started and provides some metadata, in this case, that it was a 15 second session:</p><figure><img src="images/sokudo-graphql/1*5DNzIudyorBz3gXJpHqCgA.png"/></figure><p>We can see that from the query:</p><figure><img src="images/sokudo-graphql/1*uyEFN9kEdqWgezznCrYFzg.png"/></figure><p>Step 3: Introspection disabled, so probe!</p><p>I tried to use introspection but found it was disabled and therefore we’d have to bypass introspection and used some error-based responses to figure this one out. In other words, we’d have to manually probe and see what comes back.</p><figure><img src="images/sokudo-graphql/1*BhLCqP24BoOdylKxte8v6A.png"/></figure><p>graphQL is kind enough to respond with very useful error messages that we can use to assist us in our attack. In this case, graphQL returned some suggestions, namely in the way of syntax.</p><p>Let’s quickly break down how graphQL works. We can probe like this (which is what we did in the previous step):</p><pre class="code-view-two">{"query":"{ user }"}</pre><p>If this exists, great. If not, we may get an error that helps us along our way. In our case, we get an error that helps us.</p><p>The syntax requires a query followed by field names. So for example, we could have something like:</p><pre class="code-view-two">{"query":"{ user {id} }"}</pre><p>and if id exists, we’ll get it in our response:</p><figure><img src="images/sokudo-graphql/1*LaxOfMRxRSr1bF6U4hngvA.png"/></figure><p>So armed with this information, we can try id, email and password (standard fields for accounts). And luckily, in one shot, we get the flag!</p><figure><img src="images/sokudo-graphql/1*GUU6bHT2TpBb4x06sONbDg.png"/></figure><p>Something to note, with graphQL we can do this:</p><pre class="code-view-two">{"query":"{ users { a b c d e f } }"}</pre><p>Each invalid field gets its own error whereas valid fields are silent. One request can yeild many answers.</p><p>You should be aware that graphql-js can cap the number of errors returned, so if you throw 30 candidates at once and get only 5 errors, the other 25 aren’t necessarily valid, so then you’d have to retry in smaller batches.</p><p>Additionally, a query looks like this:</p><pre class="code-view-two">{"query":"{ knownField { candidateField } }"}</pre><p>we have the query, a known field e.g users and then candidates of that known field e.g id, username, email etc. So when we perform a query, what we’re really saying is: give me the id, password, email that are in the user field and we ended up with:</p><pre class="code-view-two">{"query":"{ user { id email password } }"}</pre><p>this listed all users and their respective id, email and password:</p><pre class="code-view-two">{"data":{"users":[{"id":"1","email":"admin@sokudo.app","password":"bug{ZF4sBCzmklc5wlpsa1BjMWGQvullfIvI}"},{"id":"2","email":"speed@example.com","password":"password123"},{"id":"3","email":"learner@example.com","password":"learner456"},{"id":"4","email":"7s26simon@7s26simon.com","password":"simons"}]}}</pre><h2><strong>BONUS CONTENT - Clairvoyance</strong></h2><p>Ever been to see a clairvoyant? You’re about to!</p><p>I install clairvoyance on my kali machine and got my command ready to go. I figured that now I’d done this lab manually, I should do it in a more streamlined, automated way too.</p><figure><img src="images/sokudo-graphql/1*gpOdaDCoe0AkMSrDqqG7Kg.png"/></figure><p>My command was as follows:</p><pre class="code-view-two">clairvoyance
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiI3czI2c2ltb24iLCJpYXQiOjE3NzYzNzMzNjJ9.83wly5W_01tezdZ5UzANTIiAW4fP7GCVXZnCuBJVyaU" 
+  -H "Content-Type: application/json"
+  -o schema.json
+  https://lab-1776373206751-pyw3ew.labs-app.bugforge.io/api/graphql</pre><ul><li>-H is the header, which in this case is our auth token.</li><li>-H is another header, our content type (application/json)</li><li>-o is the output, we are going to pipe all of the output into schema.json</li></ul><p>And of course, the graphql URL we’re targetting. After it has run, you’ll see the following:</p><figure><img src="images/sokudo-graphql/1*UK9d11cWx994w2TG58SkaA.png"/></figure><p>Now, this is where things get tricky unless you follow this simple rule. Open the schema file and scroll to the very bottom. You’ll see the “user” object. Make a mental note of this and we’ll come back in a second.</p><figure><img src="images/sokudo-graphql/1*t0jqGIPDA29DooPVOOm-aA.png"/></figure><p>Why did we scroll to the bottom? Let me ask Claude to explain this:</p><figure><img src="images/sokudo-graphql/1*OsWNG9u8-9b3tkZ9DbYLGg.png"/></figure><p>So now, we have the object (User), we can slowly scroll up and see the field names which we’ll use in our graphQL query. So email is a valid field, password is a valid field. Make sense? I hope so!</p><figure><img src="images/sokudo-graphql/1*UZeqxCas2Ql7z6pI7azMzA.png"/></figure><p>Because now, we update our curl command (note: “sudo apt install jq” might be necessary because we’ll be piping the response to jq)</p><pre class="code-view-two">curl -s -X POST https://lab-1776373206751-pyw3ew.labs-app.bugforge.io/api/graphql \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiI3czI2c2ltb24iLCJpYXQiOjE3NzYzNzMzNjJ9.83wly5W_01tezdZ5UzANTIiAW4fP7GCVXZnCuBJVyaU" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"{ users { id username email role full_name password } }"}' | jq .</pre><p>Results? Flag? You bet! all we did here, was look at the schema and realise the user object has valid fields of id, username, email, role etc and we added them as data to our curl command and piped the results to jq which is a json command line processor, which makes it look nice and pretty in our terminal!</p><figure><img src="images/sokudo-graphql/1*efkOyl3vVZp5wyrc2eX_ig.png"/></figure><p>Thanks for reading!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

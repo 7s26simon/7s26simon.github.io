@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>MD2PDF Writeup (TryHackMe) Writeup // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/tryhackme-md2pdf-writeup-1f9342e0b042 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a class="active" href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>MD2PDF Writeup (TryHackMe) Writeup</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img alt="Room: MD2PDF" src="images/md2pdf-writeup-tryhackme/1*GD5pTkq1Rizm4QnTR4C4dg.png"/><figcaption class="imageCaption">Room: MD2PDF</figcaption></figure><p><strong>Step 1: Testing Functionality</strong></p><p>I began by loading up the IP of the target and was greeted with a text-box and a button that says “Convert to PDF”. I put the word “test” (without quotes) into the text-box and sure enough, it coverts to a PDF, rendered in the browser with the word “test” displayed.</p><figure><img alt="PDF blob" src="images/md2pdf-writeup-tryhackme/1*6YiihRb1_2xO1YZyYBQBzg.png"/><figcaption class="imageCaption">PDF blob</figcaption></figure><p>Note that the URL starts with the word “blob:” which is known as a “Blob URL”. This is a temporary, client-side URL that points to data stored in the browser’s memory. Blob URLs are created using JavaScript directly within the browser without needing to upload them to a server.</p><p>They are particularly useful for tasks like previewing uploaded files or creating dynamic content on the fly (which is what we see here).</p><p>These URLs are typically only accessible within the browser context that created them and are automatically invalidated when the page is closed or refreshed. For fun, I tested this theory and if you close the browser and re-open the blob URL, it can no longer find the PDF. That’s not necessary for the challenge itself, but doesn’t hurt to know.</p><p><strong>Step 2:</strong> <strong>Initial enumeration</strong></p><p>I perform an Nmap scan to see what else might be lurking on the server. As seen in the screenshot below, port 5000 is open, so naturally, I browse to the URL only to find the same thing, however, it looks slightly different visually.</p><figure><img alt="Nmap Results" src="images/md2pdf-writeup-tryhackme/1*zQmJHJLHcpg89nVCg0W-hQ.png"/><figcaption class="imageCaption">Nmap Results</figcaption></figure><p><strong>Step 3:</strong> <strong>Viewing Source Code for clues</strong></p><p>At this point, I look at the source code and see the following script:</p><pre class="code-view-two"> &lt;script&gt;
+    $(document).ready(function () {
+      var editor = CodeMirror.fromTextArea(document.getElementById("md"), {
+        mode: "markdown",
+        lineNumbers: true,
+        tabSize: 2,
+        lineWrapping: true,
+      })
+      $("#convert").click(function () {
+        const data = new FormData()
+        data.append("md", editor.getValue())
+        $("#progress").show()
+
+        fetch("/convert", {
+          method: "POST",
+          body: data,
+        })
+          .then((response) =&gt; response.blob())
+          .then((data) =&gt; window.open(URL.createObjectURL(data)))
+          .catch((error) =&gt; {
+            $("#progress").hide()
+            console.log(error)
+          })
+      })
+    })</pre><p>The script above is basically taking text from the page and when the button “Convert to PDF” is clicked, it takes the text (data) you entered into the text-box and performs a POST request to /convert and responds with a “blob” which is opened in a new tab, which is the behaviour observed earlier. I decided to test with some simple HTML and as expected, it rendered in the PDF.</p><figure><img alt="HTML Rendering" src="images/md2pdf-writeup-tryhackme/1*hvqMzSYFZ9TvnKp_a1WqOg.png"/><figcaption class="imageCaption">HTML Rendering</figcaption></figure><p>So at this point, we know we can generate a PDF with text and we know we can enter HTML. Ideally, we would want to make the server pull some data from the local file-system.</p><p><strong>Step 4:</strong> <strong>Enumeration</strong></p><p>I now ran the command ‘dirb &lt;IP&gt;’ (which is a neat web content scanner that can find hidden directories and files) against the server to see if there where any sub directories we could browse to, and there was one that gave an interesting error message.</p><p>The error message says that the page can only be seen internally. It just so happens we have a PDF generator which is taking our text and rendering it in the browser.</p><figure><img alt="Forbidden Page" src="images/md2pdf-writeup-tryhackme/1*Mg-vBpKfMJD6tYPx84XD9w.png"/><figcaption class="imageCaption">Forbidden Page</figcaption></figure><p><strong>Step 5: Building The Payload</strong></p><p>Next was to go back to the original page and craft the payload. Note: the payload can be <a href="http://127.0.0.1">http://127.0.0.1</a>:5000 OR hostname:5000, both work as both go to the same place.</p><figure><img alt="Payload" src="images/md2pdf-writeup-tryhackme/1*teHrS-_JedjFICC_yUlegQ.png"/><figcaption class="imageCaption">Payload</figcaption></figure><p><strong>Step 6: Get the flag</strong></p><p>The flag was now displayed and the room is complete!</p><figure><img alt="Flag is rendered within the iframe" src="images/md2pdf-writeup-tryhackme/1*4xoJF-GrPeeH6uZB9ou9eQ.png"/><figcaption class="imageCaption">Flag is rendered within the iframe</figcaption></figure><p><strong>Final Thoughts</strong></p><p>Very enjoyable room. PDF rendering exploits are an interesting subset of SSRF and I’d like to see more like this. 9/10 room for me.</p><p>Thanks for reading.</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

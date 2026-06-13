@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>FurHire (Broken Auth) (Weekly) (BugForge.io)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">FurHire (Broken Auth) (Weekly) (BugForge.io)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Lab can be found at: https://bugforge.io
+</section>
+<section data-field="body" class="e-content">
+<section name="9362" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="dbe7" id="dbe7" class="graf graf--h3 graf--leading graf--title">FurHire (Broken Auth) (Weekly) (BugForge.io)</h3><p name="d2ca" id="d2ca" class="graf graf--p graf-after--h3">Lab can be found at: <a href="https://bugforge.io" data-href="https://bugforge.io" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://bugforge.io</a></p><figure name="3b9e" id="3b9e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ONrUZdhiHflA9rYBbMRR0Q.png" data-width="450" data-height="450" src="https://cdn-images-1.medium.com/max/800/1*ONrUZdhiHflA9rYBbMRR0Q.png"></figure><p name="665a" id="665a" class="graf graf--p graf-after--figure">7am. Tired. Barely any sleep. But hey, this needed solving because in 48 hours, a new weekly lab is (or <em class="markup--em markup--p-em">was </em>if you’re reading this after the fact) due out.</p><p name="5497" id="5497" class="graf graf--p graf-after--p">When I’ve tackled FurHire in the past, it usually helps to create two accounts. So, I did:</p><figure name="7da6" id="7da6" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*yNGQEWRilqGtJYq3ZSaLFQ.png" data-width="2002" data-height="1100" src="https://cdn-images-1.medium.com/max/800/1*yNGQEWRilqGtJYq3ZSaLFQ.png"></figure><p name="83b4" id="83b4" class="graf graf--p graf-after--figure">I thought I saw something upon registration which turned out to be the key to solving the lab (I just didn’t recognise it yet). I sent the GET /api/jobs requests from both accounts to comparer and spotted the refresh_token was eerily similar. In fact, only the final 3 characters were different:</p><figure name="9456" id="9456" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*VovNrrLMQP7USmkuSCOosw.png" data-width="1988" data-height="950" src="https://cdn-images-1.medium.com/max/800/1*VovNrrLMQP7USmkuSCOosw.png"></figure><p name="c5da" id="c5da" class="graf graf--p graf-after--figure">I continued poking around the app, but came back to the refresh_token. I began looking in javascript files for “refresh_token” but found nothing. Feeling a little defeated, I removed the “_token” part and began simply searching for “refresh”. Ok, a hit:</p><figure name="bb3a" id="bb3a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*to3sudJxbriTY1X0KOx3mA.png" data-width="1236" data-height="766" src="https://cdn-images-1.medium.com/max/800/1*to3sudJxbriTY1X0KOx3mA.png"></figure><p name="1f1e" id="1f1e" class="graf graf--p graf-after--figure">I will never pretend to be a javascript expert, but my untrained eye told me that it was refreshing the token upon expiry, as a POST request and to do so, it was using /api/refresh.</p><p name="5bfd" id="5bfd" class="graf graf--p graf-after--p">I grabbed the code and threw it into google gemini for a better reading:</p><figure name="43da" id="43da" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*_84venH5fQrJ0QMfeptXzQ.png" data-width="1790" data-height="720" src="https://cdn-images-1.medium.com/max/800/1*_84venH5fQrJ0QMfeptXzQ.png"></figure><p name="4a68" id="4a68" class="graf graf--p graf-after--figure">Ok, but if we do a POST request and say we’re “admin”, maybe it will take our word for it and give us a refresh_token?</p><p name="239e" id="239e" class="graf graf--p graf-after--p">WAIT A MINUTE ….! Burpsuite told me that the expiration time of the JWT was 5 minutes. What if? The refresh_token is generating a new JWT?</p><figure name="9cf4" id="9cf4" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*HJtpyLY3jDz74sd9BFCgxA.png" data-width="1080" data-height="418" src="https://cdn-images-1.medium.com/max/800/1*HJtpyLY3jDz74sd9BFCgxA.png"></figure><p name="d1fe" id="d1fe" class="graf graf--p graf-after--figure">If the theory was right, I was expecting an automatic call to /api/refresh at 7:05:02am, right as the JWT expires. It did. I could see in dev tools a POST request had been made to the /api/refresh endpoint and my JWT changed.</p><figure name="5e57" id="5e57" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*paimB4rvlP2qWIqnuO-WNw.png" data-width="1416" data-height="512" src="https://cdn-images-1.medium.com/max/800/1*paimB4rvlP2qWIqnuO-WNw.png"></figure><p name="1217" id="1217" class="graf graf--p graf-after--figure">I jumped over into Caido because I was going to use the automate function to iterate through all of the refresh_tokens (17,000+ permutations) and see if any would generate the admin JWT:</p><figure name="605e" id="605e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*DTJ9YFv4QogkCV-9hJEgfA.png" data-width="1952" data-height="884" src="https://cdn-images-1.medium.com/max/800/1*DTJ9YFv4QogkCV-9hJEgfA.png"></figure><p name="c51d" id="c51d" class="graf graf--p graf-after--figure">I sent an empty POST req to see what error it would generate and sure enough, it asked for the username as expected:</p><figure name="01ea" id="01ea" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*HSG6HiC2p4lQt5q3Ey7C8w.png" data-width="2082" data-height="1032" src="https://cdn-images-1.medium.com/max/800/1*HSG6HiC2p4lQt5q3Ey7C8w.png"></figure><p name="0ea0" id="0ea0" class="graf graf--p graf-after--figure">I added a json body with the username set to password and hit send. “Invalid or expired refresh token”. Perfect.</p><figure name="c5e5" id="c5e5" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*-4UaOeM1JBQx83F7Ufvr7A.png" data-width="2022" data-height="810" src="https://cdn-images-1.medium.com/max/800/1*-4UaOeM1JBQx83F7Ufvr7A.png"></figure><p name="fc33" id="fc33" class="graf graf--p graf-after--figure">I sent it over to automate and set my a-z simple list on the final 3 characters in the refresh_token:</p><figure name="9c3a" id="9c3a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*EuXq3Lz1M6fuhIQGydhM1Q.png" data-width="1646" data-height="1114" src="https://cdn-images-1.medium.com/max/800/1*EuXq3Lz1M6fuhIQGydhM1Q.png"></figure><p name="60a0" id="60a0" class="graf graf--p graf-after--figure">Then I set it off:</p><figure name="7fcf" id="7fcf" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*H7GzV9o2mBesi-A_2-cmXQ.png" data-width="1970" data-height="1174" src="https://cdn-images-1.medium.com/max/800/1*H7GzV9o2mBesi-A_2-cmXQ.png"></figure><p name="e7c1" id="e7c1" class="graf graf--p graf-after--figure">After a minute or two, I got a hit:</p><figure name="926c" id="926c" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*HSPl9_jJn3gSVOpA0Ha2zQ.png" data-width="2000" data-height="598" src="https://cdn-images-1.medium.com/max/800/1*HSPl9_jJn3gSVOpA0Ha2zQ.png"></figure><p name="516e" id="516e" class="graf graf--p graf-after--figure">I took the valid JWT and browsed to the admin panel for the flag:</p><figure name="7a4e" id="7a4e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*PraR1zq6heHEqDBEAK6pLQ.png" data-width="2430" data-height="1192" src="https://cdn-images-1.medium.com/max/800/1*PraR1zq6heHEqDBEAK6pLQ.png"></figure><p name="60fc" id="60fc" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="9faf" id="9faf" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/94254cf2229e"><time class="dt-published" datetime="2026-05-22T07:07:01.958Z">May 22, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/furhire-broken-auth-weekly-bugforge-io-94254cf2229e" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>The Caretaker (Official Writeup) WebVerse</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">The Caretaker (Official Writeup) WebVerse</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Lab can be found at: https://webverselabs-pro.com/
+</section>
+<section data-field="body" class="e-content">
+<section name="b41f" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="c23a" id="c23a" class="graf graf--h3 graf--leading graf--title">The Caretaker (Official Writeup) WebVerse</h3><p name="87bf" id="87bf" class="graf graf--p graf-after--h3">Lab can be found at: <a href="https://webverselabs-pro.com/" data-href="https://webverselabs-pro.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://webverselabs-pro.com/</a></p><figure name="beb6" id="beb6" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*vq0SsooIPLUobBnuHSjAtQ.png" data-width="539" data-height="539" src="https://cdn-images-1.medium.com/max/800/1*vq0SsooIPLUobBnuHSjAtQ.png"></figure><p name="f7ad" id="f7ad" class="graf graf--p graf-after--figure">First, you’ll land on the diary of a wanted man:</p><figure name="b1e4" id="b1e4" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*p0sRzJWkPenZf8fckBRqvw.png" data-width="1900" data-height="1006" src="https://cdn-images-1.medium.com/max/800/1*p0sRzJWkPenZf8fckBRqvw.png"></figure><p name="7ae4" id="7ae4" class="graf graf--p graf-after--figure">Scroll to the bottom and select “SEARCH DIARY”:</p><figure name="9891" id="9891" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*FCpj84WJdM9VkjrS2u5-Bg.png" data-width="1708" data-height="740" src="https://cdn-images-1.medium.com/max/800/1*FCpj84WJdM9VkjrS2u5-Bg.png"></figure><p name="8b44" id="8b44" class="graf graf--p graf-after--figure">The search field is vulnerable to SQLi. The following payload will reveal the username and password to log into the diary:</p><figure name="5579" id="5579" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*8Bb3KQPIJvg3SkQsVrgKeg.png" data-width="1954" data-height="1130" src="https://cdn-images-1.medium.com/max/800/1*8Bb3KQPIJvg3SkQsVrgKeg.png"></figure><p name="36f3" id="36f3" class="graf graf--p graf-after--figure">Go back to the homepage and select “ADMIN ACCESS”. Enter the credentials you got from the SQLi:</p><figure name="7706" id="7706" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*9Wv3wBYNf3Ii-8NOIx4SfQ.png" data-width="1130" data-height="1110" src="https://cdn-images-1.medium.com/max/800/1*9Wv3wBYNf3Ii-8NOIx4SfQ.png"></figure><p name="81c7" id="81c7" class="graf graf--p graf-after--figure">Now you’ll be in a new area known as the “SEALED ARCHIVES”. Scroll down to the bottom to see an interesting blog post.</p><figure name="b015" id="b015" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Cz2UAtOealX0ANFH1o_h9A.png" data-width="1896" data-height="1100" src="https://cdn-images-1.medium.com/max/800/1*Cz2UAtOealX0ANFH1o_h9A.png"></figure><p name="7beb" id="7beb" class="graf graf--p graf-after--figure">The Caretaker has given you his name. Or has he? “Igida Iuds”. Then he hints that the page may reveal a key to help you figure out his real name:</p><figure name="e603" id="e603" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*HplxOt4rFlcAKN0nam3nnQ.png" data-width="1712" data-height="884" src="https://cdn-images-1.medium.com/max/800/1*HplxOt4rFlcAKN0nam3nnQ.png"></figure><p name="8c0f" id="8c0f" class="graf graf--p graf-after--figure">Open up dev tools and you’ll see the key: evadinglawenforcement</p><figure name="a3e2" id="a3e2" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*wSF8gHSA4HXIbNmMVYpULQ.png" data-width="1238" data-height="724" src="https://cdn-images-1.medium.com/max/800/1*wSF8gHSA4HXIbNmMVYpULQ.png"></figure><p name="9142" id="9142" class="graf graf--p graf-after--figure">The key can be decoded on <a href="https://gchq.github.io/CyberChef/#recipe=Vigen%C3%A8re_Decode%28%27evadinglawenforcement%27%29&amp;input=SWdpZGEgSXVkcw" data-href="https://gchq.github.io/CyberChef/#recipe=Vigen%C3%A8re_Decode(&#39;evadinglawenforcement&#39;)&amp;input=SWdpZGEgSXVkcw" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">cyberchef</a> and the real name you have been looking for is: Elias Voss.</p><figure name="1435" id="1435" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*UnGefGnjAGgpC13mIIVTYA.png" data-width="1238" data-height="924" src="https://cdn-images-1.medium.com/max/800/1*UnGefGnjAGgpC13mIIVTYA.png"></figure><p name="7725" id="7725" class="graf graf--p graf-after--figure">Now, enter the name into the /whoami page and you’ll be rewarded with the flag:</p><figure name="60ea" id="60ea" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*znLMtxeot6FZb42wUMvd8Q.png" data-width="1572" data-height="1270" src="https://cdn-images-1.medium.com/max/800/1*znLMtxeot6FZb42wUMvd8Q.png"></figure><p name="1f7d" id="1f7d" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="a0ba" id="a0ba" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/f1a596dc83e2"><time class="dt-published" datetime="2026-05-17T10:33:46.582Z">May 17, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/the-caretaker-official-writeup-webverse-f1a596dc83e2" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

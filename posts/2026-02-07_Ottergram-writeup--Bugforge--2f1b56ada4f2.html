@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Ottergram writeup (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Ottergram writeup (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+I’ll post 2 methods for this as there are two similar but slightly different ways to solve this.
+</section>
+<section data-field="body" class="e-content">
+<section name="8926" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="1867" id="1867" class="graf graf--h3 graf--leading graf--title">Ottergram writeup (Bugforge)</h3><figure name="cbcb" id="cbcb" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*s1pDn0Dft0pDq17eq2clzQ.png" data-width="320" data-height="570" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*s1pDn0Dft0pDq17eq2clzQ.png"></figure><p name="e4c4" id="e4c4" class="graf graf--p graf-after--figure">I’ll post 2 methods for this as there are two similar but slightly different ways to solve this.</p><h3 name="a022" id="a022" class="graf graf--h3 graf-after--p">Method one (harder)</h3><p name="7d55" id="7d55" class="graf graf--p graf-after--h3"><strong class="markup--strong markup--p-strong">Step 1:</strong> Register</p><p name="5302" id="5302" class="graf graf--p graf-after--p">Register on the login page and log in as the user you just created.</p><figure name="b6e2" id="b6e2" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*RtJEEuC87oQ6ShAVR543fA.png" data-width="344" data-height="347" src="https://cdn-images-1.medium.com/max/800/1*RtJEEuC87oQ6ShAVR543fA.png"></figure><p name="44ac" id="44ac" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2:</strong> Upload</p><p name="1b5d" id="1b5d" class="graf graf--p graf-after--p">I uploaded a picture and noticed that there was no delete button after the upload.</p><figure name="f026" id="f026" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*sQslwigPjIcZjMErQfAkFQ.png" data-width="381" data-height="516" src="https://cdn-images-1.medium.com/max/800/1*sQslwigPjIcZjMErQfAkFQ.png"></figure><p name="588c" id="588c" class="graf graf--p graf-after--figure">This got me thinking, ok, I wonder if we can delete from the API instead? I ran js-recon-buddy. One of the endpoints it found was /api/admin/posts.</p><figure name="20f3" id="20f3" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*VD6p9McwsJaXw9RHvnGErQ.png" data-width="734" data-height="267" src="https://cdn-images-1.medium.com/max/800/1*VD6p9McwsJaXw9RHvnGErQ.png"></figure><p name="6bcb" id="6bcb" class="graf graf--p graf-after--figure">I opened up the js file here: <em class="markup--em markup--p-em">hxxps://lab-1770452964620-spj7bg.labs-app.bugforge.io/static/js/main.49fc4dc1.js</em> and began looking for anything relating to “delete”. I found a line that mentioned /api/admin/posts/ and “Post deleted successfully”. Ok, so maybe an admin can delete a picture?</p><figure name="e26e" id="e26e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*LQ7rqS5k0X-J0uJAHAPfBg.png" data-width="1012" data-height="155" src="https://cdn-images-1.medium.com/max/800/1*LQ7rqS5k0X-J0uJAHAPfBg.png"></figure><p name="af77" id="af77" class="graf graf--p graf-after--figure">I first tried on my own account. Nope. We couldn’t. I thought this might be a dead end.</p><figure name="b17e" id="b17e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*dF5f-RZY-K6XDeYYe1bOwA.png" data-width="338" data-height="115" src="https://cdn-images-1.medium.com/max/800/1*dF5f-RZY-K6XDeYYe1bOwA.png"></figure><p name="f336" id="f336" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3:</strong> Admin only feature?</p><p name="0829" id="0829" class="graf graf--p graf-after--p">Thoughts at this point: if this was an admin only feature, is it checking to see if only admin can delete? Let’s find out. In firefox, using the network tab, select an appropriate request and change the URL to include /api/admin/posts and after seeing the js, I felt fairly certain that we can append a 1 to that.</p><figure name="6093" id="6093" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*yGCBiM5yS8doqRPz9wpBAg.png" data-width="393" data-height="262" src="https://cdn-images-1.medium.com/max/800/1*yGCBiM5yS8doqRPz9wpBAg.png"></figure><p name="7fc8" id="7fc8" class="graf graf--p graf-after--figure">Ensure the method is set to DELETE and hit send. The picture IS deleted. We get the “Post deleted successfully” message we saw earlier in the js file and the flag shows in the Response:</p><figure name="9f57" id="9f57" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*jIQsVtNq4B5Z9lTB_Wbugw.png" data-width="813" data-height="201" src="https://cdn-images-1.medium.com/max/800/1*jIQsVtNq4B5Z9lTB_Wbugw.png"></figure><p name="c2b6" id="c2b6" class="graf graf--p graf-after--figure">So, what was the issue here? Well, the front-end wasn’t showing a delete button, but the api was capable of deleting uploaded files. The real problem was that no authentication was taking place. A standard user can delete an admin’s uploads without any checks to see if the user should be able to delete the upload.</p><p name="23af" id="23af" class="graf graf--p graf-after--p">This is a broken access control issue where an admin endpoint fails to verify the user’s role before performing the action, which resulted in the picture being deleted and us given the flag.</p><h3 name="b1f2" id="b1f2" class="graf graf--h3 graf-after--p">Method two (easier)</h3><p name="e0d8" id="e0d8" class="graf graf--p graf-after--h3">The challenge gave us the admin credentials. So we could log in as “admin” and “admin123” for the password. Notice with the admin profile, if we ‘flag’ a photo for admin review, we can review it.</p><figure name="6965" id="6965" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*pvs9exjIIFO_pn6VQTRD2w.png" data-width="397" data-height="399" src="https://cdn-images-1.medium.com/max/800/1*pvs9exjIIFO_pn6VQTRD2w.png"></figure><p name="d1a8" id="d1a8" class="graf graf--p graf-after--figure">If you select the spanner icon in the bottom right, you’ll see this page:</p><figure name="efc7" id="efc7" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*UnCupCHmo51oGTB9HpHTxA.png" data-width="381" data-height="553" src="https://cdn-images-1.medium.com/max/800/1*UnCupCHmo51oGTB9HpHTxA.png"></figure><p name="fc2e" id="fc2e" class="graf graf--p graf-after--figure">If you intercept the request to “Delete Post”, you’ll see this:</p><figure name="34af" id="34af" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*0q7rUbqb68YNpXN58G04xw.png" data-width="694" data-height="311" src="https://cdn-images-1.medium.com/max/800/1*0q7rUbqb68YNpXN58G04xw.png"></figure><p name="c605" id="c605" class="graf graf--p graf-after--figure">So send this request above to repeater, and then register a new account (below) which will provide you a new token. Take the new bearer token and copy it into your repeater tab.</p><figure name="a772" id="a772" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*MwxFcPotDsnxTq8e-PgHmA.png" data-width="691" data-height="257" src="https://cdn-images-1.medium.com/max/800/1*MwxFcPotDsnxTq8e-PgHmA.png"></figure><p name="ecbb" id="ecbb" class="graf graf--p graf-after--figure">Once the new token is in your repeater tab, it should still be pointing at the /api/admin/posts/1 (change to /2) and send it for the flag.</p><figure name="2578" id="2578" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*A6GqkTYv1nQJ0fKziS55bw.png" data-width="689" data-height="240" src="https://cdn-images-1.medium.com/max/800/1*A6GqkTYv1nQJ0fKziS55bw.png"></figure><p name="bbe5" id="bbe5" class="graf graf--p graf-after--figure graf--trailing">Thanks for reading!</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/2f1b56ada4f2"><time class="dt-published" datetime="2026-02-07T09:11:17.549Z">February 7, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/ottergram-writeup-bugforge-2f1b56ada4f2" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

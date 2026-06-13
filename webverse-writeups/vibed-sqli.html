@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Vibed (SQLi) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/vibed-sqli-webverse-c22d86877ae0 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a class="active" href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Vibed (SQLi)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/vibed-sqli/1*cupLiUcKoJuqOaq_LOK3_w.png"/></figure><p>Lab can be found at: <a href="https://webverselabs-pro.com/">https://webverselabs-pro.com/</a></p><p>We land on the homepage which provides an overview of all models, spend and traffic from various LLMs:</p><figure><img src="images/vibed-sqli/1*IPBhpKO_mgY0seD8-la3lg.png"/></figure><p>I tested for SSTI but got a SQL error. Ok, let’s go with SQLi:</p><figure><img src="images/vibed-sqli/1*2Iyyo4ZWs-fVi_O4JT2h0Q.png"/></figure><p>I began with the go-to payload:</p><figure><img src="images/vibed-sqli/1*Cmih_sfrXI81ft-uxqnK7g.png"/></figure><p>Then began trying to figure out how many columns we were dealing with. 6?:</p><figure><img src="images/vibed-sqli/1*oqQi7ejAV7FCQrmvIwXRvQ.png"/></figure><p>Nope, 5:</p><figure><img src="images/vibed-sqli/1*RG7CAKww69lVDXWM_Hj3pg.png"/></figure><p>The next payload enumerated tables: models, request_logs, secrets, workspaces:</p><pre class="code-view-two">' UNION SELECT 1,name,3,4,5 FROM sqlite_master WHERE type='table'-- </pre><figure><img src="images/vibed-sqli/1*bZf6gml9yAXoDv5pt64zyg.png"/></figure><p>Now I knew ‘secrets’ existed, I used ‘sql’ which gives the column names, in this case <code>name</code>, <code>value</code>, <code>rotated_at</code> without having to guess them. This is because SQLite stores the original create statement verbatim and hands it straight back:</p><pre class="code-view-two">' UNION SELECT 1,sql,3,4,5 FROM sqlite_master WHERE name='secrets'-- </pre><figure><img src="images/vibed-sqli/1*7RNpShfXd4CKvyEepXItjg.png"/></figure><p>Now we knew we had a table called secrets which contained name and value column names, there’s a powerful command I like to use for SQLi CTFs:</p><pre class="code-view-two">' UNION SELECT 1,name||'::'||value,rotated_at,4,5 FROM secrets--</pre><p>The ||’::’|| bit is is SQLite’s string concatenation operator which basically joins strings together.</p><p>So <code>name||'::'||value</code> means: name + '::' + value and in this case, this was name was ‘platform_bootstrap_token’ and the value was the flag:</p><figure><img src="images/vibed-sqli/1*ARpR5K8H8WRO32Fl0mftFQ.png"/></figure><p>Thanks for following along!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

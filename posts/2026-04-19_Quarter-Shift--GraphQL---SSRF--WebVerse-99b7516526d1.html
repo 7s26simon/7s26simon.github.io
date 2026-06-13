@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Quarter Shift (GraphQL + SSRF) WebVerse</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Quarter Shift (GraphQL + SSRF) WebVerse</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Webverse
+</section>
+<section data-field="body" class="e-content">
+<section name="805a" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="3887" id="3887" class="graf graf--h3 graf--leading graf--title">Quarter Shift (GraphQL + SSRF) WebVerse</h3><p name="84e1" id="84e1" class="graf graf--p graf-after--h3">Note: this writeup is MAINLY for the graphQL part, as that’s the part I wanted to exploit (despite completing the lab). I’ll cover the whole lab, but with a focus on graphQL:</p><figure name="40d1" id="40d1" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*XgWHHdWUAd86DMfGhq1GPg.png" data-width="1024" data-height="1024" src="https://cdn-images-1.medium.com/max/800/1*XgWHHdWUAd86DMfGhq1GPg.png"></figure><p name="789e" id="789e" class="graf graf--p graf-after--figure">I opened up the page and was greeted with a gambling/casino type page. The aim of the game was to gain access to the webapp.</p><figure name="2284" id="2284" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ZuZnTIJt4aYi6aTKEV4sLA.png" data-width="2732" data-height="1228" src="https://cdn-images-1.medium.com/max/800/1*ZuZnTIJt4aYi6aTKEV4sLA.png"></figure><p name="3622" id="3622" class="graf graf--p graf-after--figure">After clicking around, I landed upon portal.quartershift.local, so I added this to /etc/hosts along with ‘dashboard’ which I had fuzzed.</p><figure name="63a7" id="63a7" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*WQfsr9OgZjmk8kObrCp42Q.png" data-width="1076" data-height="508" src="https://cdn-images-1.medium.com/max/800/1*WQfsr9OgZjmk8kObrCp42Q.png"></figure><p name="62a9" id="62a9" class="graf graf--p graf-after--figure">I created an account:</p><figure name="2649" id="2649" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*OxfWcDzPVw11NqNvD6O4-w.png" data-width="816" data-height="956" src="https://cdn-images-1.medium.com/max/800/1*OxfWcDzPVw11NqNvD6O4-w.png"></figure><p name="00e6" id="00e6" class="graf graf--p graf-after--figure">Soon after, I looked at my history and saw a hit to a graphQL endpoint:</p><figure name="cb21" id="cb21" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ssAKh7iTaTz5aZ6L5JPnXQ.png" data-width="1690" data-height="836" src="https://cdn-images-1.medium.com/max/800/1*ssAKh7iTaTz5aZ6L5JPnXQ.png"></figure><p name="8c48" id="8c48" class="graf graf--p graf-after--figure">I used the usual introspection query to look at the schema:</p><figure name="52ba" id="52ba" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Jjn4cvzURsldC4Q4KEr8NA.png" data-width="1696" data-height="948" src="https://cdn-images-1.medium.com/max/800/1*Jjn4cvzURsldC4Q4KEr8NA.png"></figure><p name="283b" id="283b" class="graf graf--p graf-after--figure">Scrolling down got more interesting. I could see there was a moderator and I should be able to look up the moderator’s id, email, display name and resetCode. Reset code? Password reset code?</p><figure name="69d9" id="69d9" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*YvIDAj4fzm4FaxUV1_-8AA.png" data-width="1736" data-height="824" src="https://cdn-images-1.medium.com/max/800/1*YvIDAj4fzm4FaxUV1_-8AA.png"></figure><p name="38ee" id="38ee" class="graf graf--p graf-after--figure">I went to reset the moderator@quartershift.local (guessed the email based on the info I had):</p><figure name="6738" id="6738" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*qad0y8ba27vbvdXAFaP1TQ.png" data-width="918" data-height="878" src="https://cdn-images-1.medium.com/max/800/1*qad0y8ba27vbvdXAFaP1TQ.png"></figure><p name="ae86" id="ae86" class="graf graf--p graf-after--figure">I clicked on the “I have a reset code” link and went back to graphQL to hunt for the reset code. I used the following query:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="bash" name="332b" id="332b" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">query={moderator(<span class="hljs-built_in">id</span>:1){<span class="hljs-built_in">id</span>+email+resetCode}}</span></pre><p name="a0ec" id="a0ec" class="graf graf--p graf-after--pre">Because we’re running this in a GET request, we have to use + symbols between the fields we’re querying. Also, you’ll notice moderator(id:1) was used as part of the query. Why?</p><p name="aaf1" id="aaf1" class="graf graf--p graf-after--p">Because it’s analogous to SQL’s <code class="markup--code markup--p-code">SELECT id, email, resetCode FROM moderators WHERE id = 1</code>. The argument goes in brackets (parentheses) after the field name, the field selection goes in the curly braces. Every GraphQL query follows this pattern, so it’s one to get familiar with.</p><p name="358a" id="358a" class="graf graf--p graf-after--p">I had two problems. One was that in order to gain access to the next graphQL query, I needed an extra header so it looked like it was coming in from a legitimate internal endpoint (think localhost).</p><p name="36ba" id="36ba" class="graf graf--p graf-after--p">A look at <a href="http://scores.quartershift.local:8090/static/app.js.map" data-href="http://scores.quartershift.local:8090/static/app.js.map" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">http://scores.quartershift.local:8090/static/app.js.map</a> showed</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="objectivec" name="be91" id="be91" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> tournaments API tiering uses X-Client: kiosk in event venues.</span><br /><span class="hljs-keyword">const</span> <span class="hljs-built_in">CLIENT_TIER_HEADER</span> = <span class="hljs-string">&quot;X-Client&quot;</span>;<br /><span class="hljs-keyword">const</span> KIOSK_TIER = <span class="hljs-string">&quot;kiosk&quot;</span>;</span></pre><p name="c159" id="c159" class="graf graf--p graf-after--pre">The GraphQL resolver checks for <code class="markup--code markup--p-code">X-Client: kiosk</code> and if present, unlocks the <code class="markup--code markup--p-code">moderator</code> query and the full schema. Without it, only the public <code class="markup--code markup--p-code">leaderboardTop</code> query is accessible.</p><h3 name="413e" id="413e" class="graf graf--h3 graf-after--p">What is a graphQL resolver?</h3><p name="c6ff" id="c6ff" class="graf graf--p graf-after--h3">A resolver is just a function on the server that handles a specific GraphQL query or field. When a GraphQL request comes in, the GraphQL engine looks at what was asked for, in this case, say “<em class="markup--em markup--p-em">moderator(id: 21)</em>” then calls the corresponding resolver function to fetch that data. The resolver is where the actual logic lives: it queries the database, applies business rules, checks permissions and returns the result.</p><p name="b8a6" id="b8a6" class="graf graf--p graf-after--p">In this case, it’s essentially a poor access control mechanism (security by obscurity). The correct implementation would be something like mutual TLS or a signed token for kiosk devices, not a plain header that any HTTP client can add. But hey, as the attacker, we’re not complaining!</p><p name="fecb" id="fecb" class="graf graf--p graf-after--p">The other problem I had to solve? The moderator’s id was not 1. Thankfully this was easy to figure out.</p><figure name="e519" id="e519" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*46Ik9wkZDvobBYRPiSDOvA.png" data-width="1682" data-height="814" src="https://cdn-images-1.medium.com/max/800/1*46Ik9wkZDvobBYRPiSDOvA.png"></figure><p name="8352" id="8352" class="graf graf--p graf-after--figure">A quick run of intruder showed that the moderator was id=21 and with this, we could get the id, email and reset code back:</p><figure name="f97d" id="f97d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*lf8P_WOGmtXAube2w_pSmQ.png" data-width="2154" data-height="1028" src="https://cdn-images-1.medium.com/max/800/1*lf8P_WOGmtXAube2w_pSmQ.png"></figure><p name="dcfe" id="dcfe" class="graf graf--p graf-after--figure">From here, I could now reset the password of the moderator and use the resetCode that I’d retrieved from the introspection:</p><figure name="7ca1" id="7ca1" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*0Alf4UQxKYDPdeI87ry-QQ.png" data-width="826" data-height="908" src="https://cdn-images-1.medium.com/max/800/1*0Alf4UQxKYDPdeI87ry-QQ.png"></figure><p name="893c" id="893c" class="graf graf--p graf-after--figure">Now I could log in (see top right, i’m now the tournament_mod):</p><figure name="baa2" id="baa2" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*a3j_ihhFHjxF7guWZbhT2w.png" data-width="2040" data-height="1032" src="https://cdn-images-1.medium.com/max/800/1*a3j_ihhFHjxF7guWZbhT2w.png"></figure><p name="184c" id="184c" class="graf graf--p graf-after--figure">I could fuzz further into the moderator console:</p><figure name="b0f5" id="b0f5" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*NdAdwXhAZDE0Xo-8aq0vrA.png" data-width="2040" data-height="972" src="https://cdn-images-1.medium.com/max/800/1*NdAdwXhAZDE0Xo-8aq0vrA.png"></figure><p name="3b7a" id="3b7a" class="graf graf--p graf-after--figure">From here, I could get SSRF:</p><figure name="a1bb" id="a1bb" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*e0USBQ5agUjE1a17-ohNSw.png" data-width="2128" data-height="1040" src="https://cdn-images-1.medium.com/max/800/1*e0USBQ5agUjE1a17-ohNSw.png"></figure><p name="708b" id="708b" class="graf graf--p graf-after--figure">using this URL, and grab the flag:</p><figure name="9e8e" id="9e8e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*eKmKbLLoygaHpMklpPMwxQ.png" data-width="2290" data-height="844" src="https://cdn-images-1.medium.com/max/800/1*eKmKbLLoygaHpMklpPMwxQ.png"></figure><p name="c812" id="c812" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="2872" id="2872" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/99b7516526d1"><time class="dt-published" datetime="2026-04-19T15:21:23.702Z">April 19, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/quarter-shift-graphql-ssrf-webverse-99b7516526d1" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

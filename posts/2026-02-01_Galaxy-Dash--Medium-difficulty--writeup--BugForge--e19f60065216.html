@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Galaxy Dash (Medium difficulty) writeup (BugForge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Galaxy Dash (Medium difficulty) writeup (BugForge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+I’ll pre-fix this with: I think this was my favourite lab so far. I feel like I say that a lot about BugForge’s labs. I was 5th to solve…
+</section>
+<section data-field="body" class="e-content">
+<section name="60dd" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="2619" id="2619" class="graf graf--h3 graf--leading graf--title">Galaxy Dash (Medium difficulty) writeup (BugForge)</h3><p name="d4cf" id="d4cf" class="graf graf--p graf-after--h3">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p><figure name="3657" id="3657" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*TEKHTORnh3SLeZP4tKxfrQ.png" data-width="346" data-height="461" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*TEKHTORnh3SLeZP4tKxfrQ.png"></figure><p name="4352" id="4352" class="graf graf--p graf-after--figure">I’ll pre-fix this with: I think this was my favourite lab so far. I feel like I say that a lot about BugForge’s labs. I was 5th to solve this one, 4 folks solved this in very good time and at the time of writing, there have been 7 solves with 149 hours 22 mins remaining. I am looking forward to seeing more people solve this one — there is a lot to learn from this one.</p><figure name="d7e8" id="d7e8" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*hF0y51gYoloxu3mqjPGlrw.png" data-width="578" data-height="294" src="https://cdn-images-1.medium.com/max/800/1*hF0y51gYoloxu3mqjPGlrw.png"></figure><p name="ac89" id="ac89" class="graf graf--p graf-after--figure">Ok, enough rambling. Let’s go.</p><p name="d6ef" id="d6ef" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Step 1: </strong>Browsing around</p><p name="8f58" id="8f58" class="graf graf--p graf-after--p">Create an account and browse around to get a feel for what it’s all about. Essentially, it’s a delivery company called Galaxy Dash.</p><figure name="d85b" id="d85b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*8PoZUHckTBGs1lPB7EEJ6Q.png" data-width="1186" data-height="418" src="https://cdn-images-1.medium.com/max/800/1*8PoZUHckTBGs1lPB7EEJ6Q.png"></figure><p name="6aa2" id="6aa2" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2: </strong>Book a delivery</p><p name="c1ec" id="c1ec" class="graf graf--p graf-after--p">I booked a new delivery (select any Destination Location) and any other settings you want, they don’t matter too much, as we’ll see in a minute. Ensure you’re capturing traffic at this point.</p><figure name="0a42" id="0a42" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*vYXM_R_pLeyqEmXt4wbHfA.png" data-width="959" data-height="565" src="https://cdn-images-1.medium.com/max/800/1*vYXM_R_pLeyqEmXt4wbHfA.png"></figure><p name="4a3b" id="4a3b" class="graf graf--p graf-after--figure">As mentioned, any route/options will be fine here, so go ahead and book the delivery.</p><figure name="43cd" id="43cd" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*XOdYHndJ3-R_BLX-4RVbUA.png" data-width="959" data-height="565" src="https://cdn-images-1.medium.com/max/800/1*XOdYHndJ3-R_BLX-4RVbUA.png"></figure><p name="cd83" id="cd83" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3: </strong>Finding an interesting endpoint</p><p name="087b" id="087b" class="graf graf--p graf-after--p">I spotted something which really piqued my interest. We had some kind of internal URL which was hitting a shipping endpoint. I wont lie, I stared at this with a confused look on my face for a while. I tried several things but got nothing. In the end, I posted in BugForge’s discord and b33f (shoutout to b33f) said to ping him if I wanted to know if I’m in a rabbit hole or not.</p><p name="b783" id="b783" class="graf graf--p graf-after--p">b33f confirmed I was not in a rabbit hole and that I was on track. This is when I fell asleep. I was tired and had been surviving on little sleep. 1 hour 30 mins later I woke up and went at it again.</p><figure name="acf8" id="acf8" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*cPV8U6C9H9S2Hx-BjGUcrQ.png" data-width="959" data-height="565" src="https://cdn-images-1.medium.com/max/800/1*cPV8U6C9H9S2Hx-BjGUcrQ.png"></figure><p name="3b1c" id="3b1c" class="graf graf--p graf-after--figure">So armed with 1 hour 30 mins sleep, I selected a wordlist and began fuzzing the /shipping endpoint (directory-list-2.3-medium.txt) if anyone cares to know.</p><figure name="1dc1" id="1dc1" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*yk-9n0XH9qKfXZxqCsIvvw.png" data-width="1061" data-height="516" src="https://cdn-images-1.medium.com/max/800/1*yk-9n0XH9qKfXZxqCsIvvw.png"></figure><p name="2039" id="2039" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 4: </strong>‘auth’ discovery</p><p name="243f" id="243f" class="graf graf--p graf-after--p">I got a hit on auth. Interesting, let’s continue.</p><figure name="b8cc" id="b8cc" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*U7hrSyg0FwZB6MzPlXojow.png" data-width="1051" data-height="472" src="https://cdn-images-1.medium.com/max/800/1*U7hrSyg0FwZB6MzPlXojow.png"></figure><p name="4c36" id="4c36" class="graf graf--p graf-after--figure">I now selected the /auth/$auth$ folder to fuzz:</p><figure name="6c3f" id="6c3f" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*pcaAS7vEg1_Aj2nhShDxWg.png" data-width="1051" data-height="472" src="https://cdn-images-1.medium.com/max/800/1*pcaAS7vEg1_Aj2nhShDxWg.png"></figure><p name="4a40" id="4a40" class="graf graf--p graf-after--figure">And this is where I got ‘public’ and ‘private’ hits:</p><figure name="f05f" id="f05f" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*yjGz3pbXuefoAEI2W4P65g.png" data-width="727" data-height="208" src="https://cdn-images-1.medium.com/max/800/1*yjGz3pbXuefoAEI2W4P65g.png"></figure><p name="72a2" id="72a2" class="graf graf--p graf-after--figure">Public key:</p><figure name="711b" id="711b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*F9XmBZFLL13rQmgS7NtGvw.png" data-width="742" data-height="452" src="https://cdn-images-1.medium.com/max/800/1*F9XmBZFLL13rQmgS7NtGvw.png"></figure><p name="4ea7" id="4ea7" class="graf graf--p graf-after--figure">Private key:</p><figure name="ea44" id="ea44" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*S1mcuMdT6ea0K7y4xsF62g.png" data-width="742" data-height="452" src="https://cdn-images-1.medium.com/max/800/1*S1mcuMdT6ea0K7y4xsF62g.png"></figure><p name="0c38" id="0c38" class="graf graf--p graf-after--figure">This now got me thinking about the JWT. I plugged the JWT into JWT editor with an ID of “private” (though I don’t think it matters what you call it). Be sure to set the format to PEM. Leave the key size.</p><figure name="4b60" id="4b60" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*vBIAFbjIGhqD6nieT204Tg.png" data-width="874" data-height="584" src="https://cdn-images-1.medium.com/max/800/1*vBIAFbjIGhqD6nieT204Tg.png"></figure><p name="76e1" id="76e1" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 5: </strong>Forging the JWT</p><p name="9278" id="9278" class="graf graf--p graf-after--p">I realised now that the JWT we have was RSA256 (i.e not symmetric) which means that I had the public/private keys relating to the JWT.</p><blockquote name="1c88" id="1c88" class="graf graf--blockquote graf-after--p">For reference:</blockquote><blockquote name="05a5" id="05a5" class="graf graf--blockquote graf-after--blockquote">a <strong class="markup--strong markup--blockquote-strong">Private key</strong> signs the token</blockquote><blockquote name="383b" id="383b" class="graf graf--blockquote graf-after--blockquote">a <strong class="markup--strong markup--blockquote-strong">Public key</strong> verifies the signature</blockquote><blockquote name="3ad5" id="3ad5" class="graf graf--blockquote graf-after--blockquote">If it was <strong class="markup--strong markup--blockquote-strong">HS256</strong> (HMAC-SHA256) then that would be an example of symmetric encryption.</blockquote><p name="e5a5" id="e5a5" class="graf graf--p graf-after--blockquote">I edited the JWT role to ‘admin’ in the payload part of the JWT and selected ‘Attack’ to re-sign the JWT with the private key I had just placed in the editor.</p><p name="1402" id="1402" class="graf graf--p graf-after--p">I manually copied out the new serialized JWT (blue text in the screenshot below)</p><figure name="4836" id="4836" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*tyOWTJT9FCDvoQhu7_jn9A.png" data-width="432" data-height="574" src="https://cdn-images-1.medium.com/max/800/1*tyOWTJT9FCDvoQhu7_jn9A.png"></figure><p name="bbcb" id="bbcb" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 6: </strong>Using the newly forged JWT</p><p name="bbc2" id="bbc2" class="graf graf--p graf-after--p">I selected a totally different request from my http history and sent it to repeater. I pasted in my altered JWT and the response had an X-Galaxy-Flag: header containing the flag.</p><figure name="493c" id="493c" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ecrzMDVXq2PGqi2Ynl_lRQ.png" data-width="856" data-height="418" src="https://cdn-images-1.medium.com/max/800/1*ecrzMDVXq2PGqi2Ynl_lRQ.png"></figure><p name="3fed" id="3fed" class="graf graf--p graf-after--figure">Loved this challenge. Really cool to see it on a lab. Read more about it here: <a href="https://portswigger.net/web-security/jwt" data-href="https://portswigger.net/web-security/jwt" class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">https://portswigger.net/web-security/jwt</a></p><p name="01f4" id="01f4" class="graf graf--p graf-after--p graf--trailing">Thanks for reading! Subscribe for more.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/e19f60065216"><time class="dt-published" datetime="2026-02-01T10:38:39.598Z">February 1, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/galaxy-dash-medium-difficulty-writeup-bugforge-e19f60065216" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

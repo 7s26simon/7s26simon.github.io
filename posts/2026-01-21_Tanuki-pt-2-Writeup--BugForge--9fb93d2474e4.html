@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Tanuki pt 2 Writeup (BugForge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Tanuki pt 2 Writeup (BugForge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link here. This is not required…
+</section>
+<section data-field="body" class="e-content">
+<section name="c246" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="4b9a" id="4b9a" class="graf graf--h3 graf--leading graf--title">Tanuki pt 2 Writeup (BugForge)</h3><p name="e0c8" id="e0c8" class="graf graf--p graf-after--h3">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p><figure name="b282" id="b282" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*O1cnrLH2PW8gIbIuRjOOaA.png" data-width="1532" data-height="990" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*O1cnrLH2PW8gIbIuRjOOaA.png"><figcaption class="imageCaption">Tanuki returns!</figcaption></figure><p name="b7ed" id="b7ed" class="graf graf--p graf-after--figure">We did Tanuki recently and if I recall, it was an xinclude attack. This time, it’s slightly different. Here’s what I did.</p><p name="4518" id="4518" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Step 1:</strong> I registered and signed into Tanuki:</p><figure name="4a2c" id="4a2c" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*qGFswXtqsCgyioYvwMIn3A.png" data-width="2268" data-height="1476" src="https://cdn-images-1.medium.com/max/800/1*qGFswXtqsCgyioYvwMIn3A.png"></figure><p name="c508" id="c508" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2:</strong> I assumed the deck import feature would be our way in. I recalled that last time we visited Tanuki, you could download a JSON sample deck. I looked for it here.</p><figure name="96df" id="96df" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*18MKESRrsfl2ia9apywwQQ.png" data-width="2412" data-height="1468" src="https://cdn-images-1.medium.com/max/800/1*18MKESRrsfl2ia9apywwQQ.png"></figure><p name="a411" id="a411" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3:</strong> Sure enough, the sample deck was there, but in JSON. Last time, I painstakingly began to manually convert it. Silly me, it turns out online converters can instantly convert the JSON to XML. However… we’ll see in step 4 why this method was a bit of a nightmare.</p><figure name="6e29" id="6e29" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*zeOWJy0_FfeZiqZR0BjDuA.png" data-width="1840" data-height="790" src="https://cdn-images-1.medium.com/max/800/1*zeOWJy0_FfeZiqZR0BjDuA.png"></figure><p name="b2b8" id="b2b8" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 4:</strong> I opened up the .json file and copied out all of the contents. I went to a site to convert the XML (<a href="https://www.site24x7.com/tools/json-to-xml.html" data-href="https://www.site24x7.com/tools/json-to-xml.html" class="markup--anchor markup--p-anchor" rel="nofollow noopener noopener" target="_blank">https://www.site24x7.com/tools/json-to-xml.html</a>) and converted it and then saved it as a .xml file.</p><figure name="8ee7" id="8ee7" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*SOeuiyd0uV9lnxeM5PchvQ.png" data-width="1584" data-height="1072" src="https://cdn-images-1.medium.com/max/800/1*SOeuiyd0uV9lnxeM5PchvQ.png"></figure><p name="0b4d" id="0b4d" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 5:</strong> From here I began forming my XXE payload. I got it working but it took a bit of effort to make the XML work nicely. (This screenshot below was NOT the finished payload, I’m sure other walkthroughs will show that). I am just showing my workings. And part of that was to get rid of the excess cards. For this vulnerability we only “need” one card, so I decided to get rid of anything we don’t need.</p><figure name="6b75" id="6b75" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*AKkJrCi7XqNBQ-iEyTqQkQ.png" data-width="1098" data-height="588" src="https://cdn-images-1.medium.com/max/800/1*AKkJrCi7XqNBQ-iEyTqQkQ.png"></figure><p name="cac5" id="cac5" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 6:</strong> Once the payload is working, you can upload your XML file and it’ll show 0/1 card (if like me, your XML file only contains one front/back card).</p><figure name="84b3" id="84b3" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*GPno3LKJI0mEW9hohdIzQQ.png" data-width="872" data-height="710" src="https://cdn-images-1.medium.com/max/800/1*GPno3LKJI0mEW9hohdIzQQ.png"></figure><p name="b67d" id="b67d" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 7:</strong> A quick and simple “give me the flag” front card…</p><figure name="ad88" id="ad88" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*UgtrEp4or84S-NKPXz6ZJg.png" data-width="1868" data-height="1040" src="https://cdn-images-1.medium.com/max/800/1*UgtrEp4or84S-NKPXz6ZJg.png"></figure><p name="08cd" id="08cd" class="graf graf--p graf-after--figure">Step 8: And the back of the card, reveals the flag, showing our XXE attack was a success and we can read the flag.txt file.</p><figure name="4f93" id="4f93" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*pgwPjqRdDIBRJkbYf4W0cg.png" data-width="1834" data-height="1066" src="https://cdn-images-1.medium.com/max/800/1*pgwPjqRdDIBRJkbYf4W0cg.png"></figure><p name="a08f" id="a08f" class="graf graf--p graf-after--figure graf--trailing">Thanks for reading!</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/9fb93d2474e4"><time class="dt-published" datetime="2026-01-21T21:01:08.211Z">January 21, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/tanuki-pt-2-bugforge-writeup-9fb93d2474e4" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

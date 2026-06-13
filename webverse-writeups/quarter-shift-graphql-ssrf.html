@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Quarter Shift (GraphQL + SSRF) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/quarter-shift-graphql-ssrf-webverse-99b7516526d1 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a class="active" href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Quarter Shift (GraphQL + SSRF)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><p>Note: this writeup is MAINLY for the graphQL part, as that’s the part I wanted to exploit (despite completing the lab). I’ll cover the whole lab, but with a focus on graphQL:</p><figure><img src="images/quarter-shift-graphql-ssrf/1*XgWHHdWUAd86DMfGhq1GPg.png"/></figure><p>I opened up the page and was greeted with a gambling/casino type page. The aim of the game was to gain access to the webapp.</p><figure><img src="images/quarter-shift-graphql-ssrf/1*ZuZnTIJt4aYi6aTKEV4sLA.png"/></figure><p>After clicking around, I landed upon portal.quartershift.local, so I added this to /etc/hosts along with ‘dashboard’ which I had fuzzed.</p><figure><img src="images/quarter-shift-graphql-ssrf/1*WQfsr9OgZjmk8kObrCp42Q.png"/></figure><p>I created an account:</p><figure><img src="images/quarter-shift-graphql-ssrf/1*OxfWcDzPVw11NqNvD6O4-w.png"/></figure><p>Soon after, I looked at my history and saw a hit to a graphQL endpoint:</p><figure><img src="images/quarter-shift-graphql-ssrf/1*ssAKh7iTaTz5aZ6L5JPnXQ.png"/></figure><p>I used the usual introspection query to look at the schema:</p><figure><img src="images/quarter-shift-graphql-ssrf/1*Jjn4cvzURsldC4Q4KEr8NA.png"/></figure><p>Scrolling down got more interesting. I could see there was a moderator and I should be able to look up the moderator’s id, email, display name and resetCode. Reset code? Password reset code?</p><figure><img src="images/quarter-shift-graphql-ssrf/1*YvIDAj4fzm4FaxUV1_-8AA.png"/></figure><p>I went to reset the moderator@quartershift.local (guessed the email based on the info I had):</p><figure><img src="images/quarter-shift-graphql-ssrf/1*qad0y8ba27vbvdXAFaP1TQ.png"/></figure><p>I clicked on the “I have a reset code” link and went back to graphQL to hunt for the reset code. I used the following query:</p><pre class="code-view-two">query={moderator(id:1){id+email+resetCode}}</pre><p>Because we’re running this in a GET request, we have to use + symbols between the fields we’re querying. Also, you’ll notice moderator(id:1) was used as part of the query. Why?</p><p>Because it’s analogous to SQL’s <code>SELECT id, email, resetCode FROM moderators WHERE id = 1</code>. The argument goes in brackets (parentheses) after the field name, the field selection goes in the curly braces. Every GraphQL query follows this pattern, so it’s one to get familiar with.</p><p>I had two problems. One was that in order to gain access to the next graphQL query, I needed an extra header so it looked like it was coming in from a legitimate internal endpoint (think localhost).</p><p>A look at <a href="http://scores.quartershift.local:8090/static/app.js.map">http://scores.quartershift.local:8090/static/app.js.map</a> showed</p><pre class="code-view-two">// NOTE: tournaments API tiering uses X-Client: kiosk in event venues.
+const CLIENT_TIER_HEADER = "X-Client";
+const KIOSK_TIER = "kiosk";</pre><p>The GraphQL resolver checks for <code>X-Client: kiosk</code> and if present, unlocks the <code>moderator</code> query and the full schema. Without it, only the public <code>leaderboardTop</code> query is accessible.</p><h2>What is a graphQL resolver?</h2><p>A resolver is just a function on the server that handles a specific GraphQL query or field. When a GraphQL request comes in, the GraphQL engine looks at what was asked for, in this case, say “<em>moderator(id: 21)</em>” then calls the corresponding resolver function to fetch that data. The resolver is where the actual logic lives: it queries the database, applies business rules, checks permissions and returns the result.</p><p>In this case, it’s essentially a poor access control mechanism (security by obscurity). The correct implementation would be something like mutual TLS or a signed token for kiosk devices, not a plain header that any HTTP client can add. But hey, as the attacker, we’re not complaining!</p><p>The other problem I had to solve? The moderator’s id was not 1. Thankfully this was easy to figure out.</p><figure><img src="images/quarter-shift-graphql-ssrf/1*46Ik9wkZDvobBYRPiSDOvA.png"/></figure><p>A quick run of intruder showed that the moderator was id=21 and with this, we could get the id, email and reset code back:</p><figure><img src="images/quarter-shift-graphql-ssrf/1*lf8P_WOGmtXAube2w_pSmQ.png"/></figure><p>From here, I could now reset the password of the moderator and use the resetCode that I’d retrieved from the introspection:</p><figure><img src="images/quarter-shift-graphql-ssrf/1*0Alf4UQxKYDPdeI87ry-QQ.png"/></figure><p>Now I could log in (see top right, i’m now the tournament_mod):</p><figure><img src="images/quarter-shift-graphql-ssrf/1*a3j_ihhFHjxF7guWZbhT2w.png"/></figure><p>I could fuzz further into the moderator console:</p><figure><img src="images/quarter-shift-graphql-ssrf/1*NdAdwXhAZDE0Xo-8aq0vrA.png"/></figure><p>From here, I could get SSRF:</p><figure><img src="images/quarter-shift-graphql-ssrf/1*e0USBQ5agUjE1a17-ohNSw.png"/></figure><p>using this URL, and grab the flag:</p><figure><img src="images/quarter-shift-graphql-ssrf/1*eKmKbLLoygaHpMklpPMwxQ.png"/></figure><p>Thanks for following along!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>CopyPasta writeup (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">CopyPasta writeup (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link here. This is not required…
+</section>
+<section data-field="body" class="e-content">
+<section name="d14d" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="48e1" id="48e1" class="graf graf--h3 graf--leading graf--title">CopyPasta writeup (Bugforge)</h3><p name="50c3" id="50c3" class="graf graf--p graf-after--h3">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p><figure name="f94e" id="f94e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*esaP0HbK9FTz-CrLPEszZA.png" data-width="499" data-height="333" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*esaP0HbK9FTz-CrLPEszZA.png"></figure><p name="e163" id="e163" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 1:</strong> Register and go to the public link</p><p name="1905" id="1905" class="graf graf--p graf-after--p">Register, browse to the dashboard and then open dev tools. Click on the “Public” button/link and proceed to step 2.</p><figure name="8967" id="8967" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*qM0_Tk072Cqo7jJ3wDZocA.png" data-width="1044" data-height="500" src="https://cdn-images-1.medium.com/max/800/1*qM0_Tk072Cqo7jJ3wDZocA.png"></figure><p name="a6ef" id="a6ef" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2:</strong> View a snippet</p><p name="1c11" id="1c11" class="graf graf--p graf-after--p">Select “View” (with dev tools still open on the network tab).</p><figure name="fd4b" id="fd4b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*k7j2vINg7oOu6kBgHgylmw.png" data-width="691" data-height="472" src="https://cdn-images-1.medium.com/max/800/1*k7j2vINg7oOu6kBgHgylmw.png"></figure><p name="52c2" id="52c2" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3:</strong> See network activity</p><p name="cf1e" id="cf1e" class="graf graf--p graf-after--p">You’ll see a call to /api/snippet/1 and this is what we need to look at.</p><figure name="53e3" id="53e3" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*k2_6UkDDSS4NwcM60jUJtA.png" data-width="1001" data-height="253" src="https://cdn-images-1.medium.com/max/800/1*k2_6UkDDSS4NwcM60jUJtA.png"></figure><p name="3c6e" id="3c6e" class="graf graf--p graf-after--figure">Turn on your proxy (in my case, burpsuite) and prepare to capture this traffic. Right-click ‘1’ and “Open in new tab”.</p><figure name="1f8b" id="1f8b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Atccg8uhKf1fQkAjDgifeg.png" data-width="379" data-height="272" src="https://cdn-images-1.medium.com/max/800/1*Atccg8uhKf1fQkAjDgifeg.png"></figure><p name="5c7f" id="5c7f" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 4:</strong> Capture the request</p><p name="68e8" id="68e8" class="graf graf--p graf-after--p">Notice, we do not have a valid token in this request. So grab one from a previous request and paste it below the host header.</p><figure name="a616" id="a616" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*rWImbWcPZGPxy79TiN3YCw.png" data-width="665" data-height="305" src="https://cdn-images-1.medium.com/max/800/1*rWImbWcPZGPxy79TiN3YCw.png"></figure><p name="2172" id="2172" class="graf graf--p graf-after--figure">Once you have a valid token, iterate through the snippets e.g 1, 2, 3 etc. When we land on 4, we get the flag. This is because the “is_public”: is set to 0. (0 = no) in this case. So because we can access a private snippet, this is an IDOR vulnerability.</p><figure name="594f" id="594f" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*uIqS1GT9Fvd6biguwGnm7Q.png" data-width="658" data-height="355" src="https://cdn-images-1.medium.com/max/800/1*uIqS1GT9Fvd6biguwGnm7Q.png"></figure><h3 name="7aec" id="7aec" class="graf graf--h3 graf-after--figure">Bonus Content</h3><p name="13d8" id="13d8" class="graf graf--p graf-after--h3">Fellow BugForger (is that what we’re calling ourselves? I guess we are now) d4rkto0th spotted something interesting. I had spotted it too but didn’t consider writing it up until I saw his post and realised, it’s actually a very nice find. So, here it is. Some really cool bonus content.</p><p name="49e3" id="49e3" class="graf graf--p graf-after--p">snippet 4 is owned by a profile called “pythonista”. When you browse to pythonista’s profile via /profile/pythonista, you see she has just 1 public snippet. Ok. But what happens if we request /api/profile/pythonista , what then? Let’s try it.</p><figure name="be28" id="be28" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*I17lVUUoIqHbOC_V5PGtpg.png" data-width="512" data-height="503" src="https://cdn-images-1.medium.com/max/800/1*I17lVUUoIqHbOC_V5PGtpg.png"></figure><p name="1880" id="1880" class="graf graf--p graf-after--figure">When we request the profile via the API, we see a private snippet along with a confirmation it’s private (is_public=0) and the share code. Can we really share someone else’s snippet that is set to private??</p><figure name="083b" id="083b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*y3bsbNek93v6bingMG-9PQ.png" data-width="684" data-height="381" src="https://cdn-images-1.medium.com/max/800/1*y3bsbNek93v6bingMG-9PQ.png"></figure><p name="05d1" id="05d1" class="graf graf--p graf-after--figure">You bet. We sure can! If we take the share_code value and combine it with the share code URL from pythonista’s public profile:</p><figure name="5e5d" id="5e5d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*HnbZbgHJG5I4HYBkaIGIgg.png" data-width="602" data-height="251" src="https://cdn-images-1.medium.com/max/800/1*HnbZbgHJG5I4HYBkaIGIgg.png"></figure><p name="0ada" id="0ada" class="graf graf--p graf-after--figure">We end up with: “<em class="markup--em markup--p-em">https://lab-1770238163421-97v8bp.labs-app.bugforge.io/share/20edf174-f783-44f2-8186-22fdbdde47f2</em>”. If we browse to this URL, we can see the private snippet and can share it with anyone (who has a registered account and is signed in).</p><figure name="3257" id="3257" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*PPm9x6vmy28ef30KEynRzw.png" data-width="504" data-height="369" src="https://cdn-images-1.medium.com/max/800/1*PPm9x6vmy28ef30KEynRzw.png"></figure><p name="c494" id="c494" class="graf graf--p graf-after--figure">Just for fun, I ran the code and to my surprise, it actually works! You can generate a password with it.</p><figure name="8450" id="8450" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*tcJlvJvXmhQ7Xk8jc6rUDQ.png" data-width="586" data-height="445" src="https://cdn-images-1.medium.com/max/800/1*tcJlvJvXmhQ7Xk8jc6rUDQ.png"></figure><p name="25d2" id="25d2" class="graf graf--p graf-after--figure">If you really want to scrutinise the code, you’ll see the “import random”. This is already not a good sign, since import random uses Mersenne Twister PRNG.</p><p name="796d" id="796d" class="graf graf--p graf-after--p">It was created by Makoto Matsumoto and Takuji Nishimura in 1997 and it derives its name from its period length which the number of values before the sequence repeats and which is a Mersenne prime. (Source: asecuritysite.com)</p><p name="27d7" id="27d7" class="graf graf--p graf-after--p">PRNGs are deterministic and periodic. With the periodic nature, we can repeat the random sequence for the length of all the possible outputs which will eventually repeat. (Source: asecuritysite.com)</p><p name="681b" id="681b" class="graf graf--p graf-after--p">Anyway, that’s as far as we need to take it. Cool huh?</p><p name="68a8" id="68a8" class="graf graf--p graf-after--p graf--trailing">Thanks for reading! Subscribe for more.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/7776d9a77395"><time class="dt-published" datetime="2026-02-04T21:07:40.282Z">February 4, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/copypasta-writeup-bugforge-7776d9a77395" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

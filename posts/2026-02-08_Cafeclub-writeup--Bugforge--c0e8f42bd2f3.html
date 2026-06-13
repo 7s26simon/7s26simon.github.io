@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Cafeclub writeup (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Cafeclub writeup (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Note: this is the way I did it. This isn’t necessarily the best/only way to do it.
+</section>
+<section data-field="body" class="e-content">
+<section name="a362" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="9ce9" id="9ce9" class="graf graf--h3 graf--leading graf--title">Cafeclub writeup (Bugforge)</h3><figure name="2ae0" id="2ae0" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*VSJhsXuBHzszzlVGB_L4bw.png" data-width="346" data-height="461" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*VSJhsXuBHzszzlVGB_L4bw.png"></figure><p name="0cec" id="0cec" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Note: </strong>this is the way I did it. This isn’t necessarily the <em class="markup--em markup--p-em">best/only</em> way to do it.</p><p name="ae97" id="ae97" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Step 1:</strong> Register</p><p name="4d7c" id="4d7c" class="graf graf--p graf-after--p">Register on the CafeClub site and get your proxy tool ready to capture traffic.</p><figure name="1d5d" id="1d5d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*N-tFa4L8Op00KEQncDm2eg.png" data-width="475" data-height="434" src="https://cdn-images-1.medium.com/max/800/1*N-tFa4L8Op00KEQncDm2eg.png"></figure><p name="a609" id="a609" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2:</strong> Profile</p><p name="13bf" id="13bf" class="graf graf--p graf-after--p">Click on the profile (person) icon in the top right and select ‘Profile’.</p><figure name="ff26" id="ff26" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*4sQ-mqkq8LgHawYZNxvAMA.png" data-width="629" data-height="325" src="https://cdn-images-1.medium.com/max/800/1*4sQ-mqkq8LgHawYZNxvAMA.png"></figure><p name="dfe7" id="dfe7" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3:</strong> Intercept</p><p name="da21" id="da21" class="graf graf--p graf-after--p">In the profile area, there is a place to change your password. Ensure you’re capturing traffic and intercept the PUT request to change password.</p><figure name="de59" id="de59" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*niJqVvc2dQMTQOYbneC0Xg.png" data-width="653" data-height="176" src="https://cdn-images-1.medium.com/max/800/1*niJqVvc2dQMTQOYbneC0Xg.png"></figure><p name="0136" id="0136" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 4:</strong> Change id</p><p name="2f19" id="2f19" class="graf graf--p graf-after--p">My id was 6 and the password I was changing to was the word ‘password.</p><figure name="ed8e" id="ed8e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*43j6hdRzq7e8XK8rz1jLLw.png" data-width="480" data-height="149" src="https://cdn-images-1.medium.com/max/800/1*43j6hdRzq7e8XK8rz1jLLw.png"></figure><p name="1a91" id="1a91" class="graf graf--p graf-after--figure">Change the id to that of another user e.g 7:</p><figure name="efc0" id="efc0" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*3imfHRqK-zUHZgNFt_lPQA.png" data-width="493" data-height="227" src="https://cdn-images-1.medium.com/max/800/1*3imfHRqK-zUHZgNFt_lPQA.png"></figure><p name="8905" id="8905" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 5:</strong> Intercept response</p><p name="5aff" id="5aff" class="graf graf--p graf-after--p">Right-click and intercept the response if your’e using burpsuite (may be different with other tools).</p><figure name="5fab" id="5fab" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*gnSBwJNBtwaZXNO5iKvuoA.png" data-width="651" data-height="257" src="https://cdn-images-1.medium.com/max/800/1*gnSBwJNBtwaZXNO5iKvuoA.png"></figure><p name="a37b" id="a37b" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 6:</strong> Flag in response</p><p name="bdc0" id="bdc0" class="graf graf--p graf-after--p">The response will come back to say that the password change was successful and give you the flag.</p><figure name="dcf0" id="dcf0" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ggrHnnaMuC2E-UUHSa3Heg.png" data-width="648" data-height="288" src="https://cdn-images-1.medium.com/max/800/1*ggrHnnaMuC2E-UUHSa3Heg.png"></figure><p name="c7f5" id="c7f5" class="graf graf--p graf-after--figure">Thanks for reading!</p><p name="f959" id="f959" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/c0e8f42bd2f3"><time class="dt-published" datetime="2026-02-08T11:03:10.548Z">February 8, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/cafeclub-writeup-bugforge-c0e8f42bd2f3" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

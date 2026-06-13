@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Cheesy Does It (JWT) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/cheesy-does-it-jwt-bugforge-io-61ac58da484c -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Cheesy Does It (JWT)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/cheesy-does-it-jwt/1*r1CO_2yfwY6FRPpSf42QDw.png"/></figure><p>I got first blood on this one, which was cool!</p><figure><img src="images/cheesy-does-it-jwt/1*tLGZ435IOMyD_XbNYk0_sA.png"/></figure><p>But enough bragging! How do we do it? I began by registering for an account at Cheesy Does It, our favourite online pizza shop:</p><figure><img src="images/cheesy-does-it-jwt/1*FizjtVgwB3SAHMy9JOaT_A.png"/></figure><p>Burp history showed a JWT token after logging in, so I took a look at it:</p><figure><img src="images/cheesy-does-it-jwt/1*tlpYbHtcCtfKV6jT31Kx1Q.png"/></figure><p>I jumped on over to hashcat and ran it against the rockyou password list.</p><pre class="code-view-two">hashcat -a 0 -m 16500 &lt;token&gt; /usr/share/wordlists/rockyou.txt</pre><p><code><strong>-a 0</strong></code> means attack mode 0, which is a straight dictionary attack. It tries each word in the wordlist as-is, one by one.</p><p><code><strong>-m 16500</strong></code>means hash mode 16500, which is specifically JWT (JSON Web Token) with HS256/HS384/HS512.</p><p>token (kinda obvious what this one is!)</p><p>&lt;wordlist&gt; simply supply the wordlist of choice</p><figure><img src="images/cheesy-does-it-jwt/1*jiwzklN5Pzo9PgZqCCEQ_g.png"/></figure><p>Within seconds, the JWT was cracked:</p><figure><img src="images/cheesy-does-it-jwt/1*nF9FJKQ-7uOHtohU2CeHqQ.png"/></figure><p>I now had the secret and could use it to craft a new JWT:</p><figure><img src="images/cheesy-does-it-jwt/1*bmRU70uBImK7VO30LNf01g.png"/></figure><p>Now you have a choice. You can curl your way to the flag (/api/admin/users):</p><pre class="code-view-two">curl -s -i "https://lab-1777277321080-yo0ipw.labs-app.bugforge.io/api/admin/users"
+  -H "Authorization: Bearer &lt;token-here&gt;" | grep -i "bug"</pre><p><code><strong>curl</strong></code> sends a request to the URL</p><p><code><strong>-s</strong></code> silent mode</p><p><code><strong>-i</strong></code> tells curl to include response headers in the output. Without this you'd only see the response body and would miss the <code>X-Flag</code> header where the flag is displayed</p><p><code><strong>"https://..."</strong></code> the target URL (the admin users endpoint)</p><p><code><strong>-H "Authorization: Bearer eyJ..."</strong></code> adds the Authorization header with the forged JWT token. Note: The <code>-H</code> flag lets you set any custom header</p><p><code><strong>| grep -i "bug"</strong></code> pipes the output into grep, filtering for just the line containing bug. The <code>-i</code> makes it case-insensitive</p><figure><img src="images/cheesy-does-it-jwt/1*ZUP8otCjIBkFXjgejlh0Tg.png"/></figure><p>Or use BurpSuite, the choice is yours:</p><figure><img src="images/cheesy-does-it-jwt/1*nP4jR7-vAVi06VE1SCglkQ.png"/></figure><p>Thanks for following along!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

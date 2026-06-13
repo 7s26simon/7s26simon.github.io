@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>mustacchio writeup (TryHackMe) Writeup // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/mustacchio-writeup-tryhackme-7d8351760914 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a class="active" href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>mustacchio writeup (TryHackMe) Writeup</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/mustacchio-writeup-tryhackme/1*i6zkN7Zx37RGem_WwUJkVA.png"/></figure><p>This is/was a fairly long (45 min+) room. So I wont bother with “Step 1: do this” and “Step 2: do that”. Instead, I’ll show you how I did it.</p><p>I began by running an nmap scan using the attackerbox. I added the dns switch because for some reason, THM boxes seem to require it now. When you run nmap without it, their attackbox’s don’t seem to work.</p><p>Anyway, 3 ports open:</p><figure><img src="images/mustacchio-writeup-tryhackme/1*ohPJ2pjBoK9mpqwzIDQe-g.png"/></figure><p>I went for port 80 first and that’s when I discovered, mustacchio:</p><figure><img src="images/mustacchio-writeup-tryhackme/1*0_G-J_07S3vcxip_7H2Cow.png"/></figure><p>Mustacchio was a VERY boring site. Not much functionality whatsoever. I ran dirb and got some hits. /custom/ stood out:</p><figure><img src="images/mustacchio-writeup-tryhackme/1*i-Zlk5sM5idrHaXk-M-4Og.png"/></figure><p>/custom/js/ had a file called: users.bak</p><figure><img src="images/mustacchio-writeup-tryhackme/1*vb9ybSV7BAdmai099BD19Q.png"/></figure><p>users.bak contained a password hash, which could easily be cracked online:</p><figure><img src="images/mustacchio-writeup-tryhackme/1*x5gbqG716ySXXR53rDP-DQ.png"/></figure><p>From here, I went to the port we discovered earlier: 8765.</p><figure><img src="images/mustacchio-writeup-tryhackme/1*1BIoUghfM6pwxhqO-zaW1g.png"/></figure><p>After logging in with “admin” and the password I’d just cracked, I was now faced with an admin page which allowed users to comment on the site:</p><figure><img src="images/mustacchio-writeup-tryhackme/1*QpFY2kTf9oIdpd5R2dlJZw.png"/></figure><p>I fired up burp and submitted the word “test”. This gave me some interesting information. 1) XML was in use and 2) the comments suggested A) Barry had a key and B) SSH required a key, which was most likely in Barry’s .ssh folder.</p><figure><img src="images/mustacchio-writeup-tryhackme/1*1Nz3XqnkOTMA-0HGUbcdAw.png"/></figure><p>I took a look at the cookies and edited my cookie path to see if this would make any difference, but it didn’t seem to:</p><figure><img src="images/mustacchio-writeup-tryhackme/1*G3fy9YdtCs62BRbIUwhYpA.png"/></figure><p>And that’s when I realised, it wanted me to download the /auth/dontforget.bak file. In the response, there was an XML file (which I would modify and make into my payload).</p><figure><img src="images/mustacchio-writeup-tryhackme/1*Ha7m5YfU0C9chGvXNZKlbg.png"/></figure><p>My payload looked as follows:</p><figure><img src="images/mustacchio-writeup-tryhackme/1*Z7a5E0Y5ZzsPb0vFPwJsig.png"/></figure><p>and it worked! I had XXE on the comment box:</p><figure><img src="images/mustacchio-writeup-tryhackme/1*HZL7v4EFxtHARPzzqcEqww.png"/></figure><p>I looked at the results of the XXE and could now confirm that the user ‘barry’ did exist. So now, I grabbed his private key from /home/barry/.ssh/id_rsa. If you look at the first line, you’ll see it says: “Proc-Type: 4,ENCRYPTED DEK-Info: AES128-CBC which means I’d have to try and crack it.</p><p><code>Proc-Type: 4,ENCRYPTED</code> explicitly says the key is encrypted</p><p><code>DEK-Info: AES-128-CBC,D137279D69A43E71BB7FCB87FC61D25E</code> tells you the encryption algorithm (AES-128-CBC) and the IV (initialization vector)</p><p>An unencrypted RSA key would jump straight into the base64 data right after <code>-----BEGIN RSA PRIVATE KEY-----</code> with no <code>Proc-Type</code> or <code>DEK-Info</code> headers.</p><figure><img src="images/mustacchio-writeup-tryhackme/1*uzhcg2_xOAK8kcX0PwlAxA.png"/></figure><p>from here I ran:</p><p><code>ssh2john barry_id_rsa &gt; barry_hash.txt</code></p><p><code>john barry_hash.txt --wordlist=/usr/share/wordlists/rockyou.txt</code></p><p>which displayed the password. Now I could SSH as barry. Now we’re SSH’d in as barry, we can get the user flag:</p><figure><img src="images/mustacchio-writeup-tryhackme/1*-jnePNx9nJ0lepQXx5DjbA.png"/></figure><p>sudo -l didn’t work (required a password) so I began looking for files with a sticky bit set.</p><figure><img src="images/mustacchio-writeup-tryhackme/1*gpJBueGKAZM-0sTp6XPvQA.png"/></figure><p>I ran this command: find / -perm -4000 -exec ls -ldb {} \; 2&gt;/dev/null</p><p>This finds all<strong> </strong>SUID binaries on the system.</p><p>Breaking it down piece by piece:</p><p><code>find /</code> searches the entire filesystem starting from the root directory</p><p><code>-perm -4000</code>find files with the SUID bit set (the <code>4</code> in <code>4000</code>). The <code>-</code> means "at least these permissions"</p><p><code>-exec ls -ldb {} \;</code> for each result, run <code>ls -ldb</code> on it:</p><p><code>-l</code> long format (shows permissions, owner, size, etc)</p><p><code>-d</code>show the directory entry itself, not its contents</p><p><code>-b</code>escape non-printable characters</p><p><code>{}</code> placeholder for each found file</p><p><code>\;</code> terminates the <code>-exec</code> command</p><p><code>2&gt;/dev/null</code> suppress "permission denied" errors from directories you can't read</p><p>This command is used a lot when enumerating for priv esc, since SUID binaries run as the file owner (usually root) regardless of who executes them.</p><p>I ran “strings” on the /home/joe/live_log file and it contained the tail command without an absolute path, meaning we can do a path hijack by running:</p><figure><img src="images/mustacchio-writeup-tryhackme/1*fki-AdlsHoNL9GkAXRiSBQ.png"/></figure><p>For reference: <code>echo '/bin/bash -p' &gt;&gt; tail</code> was used because<code>/bin/bash -p</code> launches a bash shell with the <code>-p</code> flag, which means "don't drop privileges." Without <code>-p</code>, bash would see that the real UID (barry) doesn't match the effective UID (root) and drop back down to barry. The <code>-p</code> flag tells it to keep the root privileges. This is how we maintain root persistence once we run the exploit.</p><p>Also, by exporting the /tmp path variable, it places this first in the list, so when the /home/joe/live_log file is run, it looks in /tmp first and sees our malicious tail, and runs it as root, giving us root permissions.</p><figure><img src="images/mustacchio-writeup-tryhackme/1*yGecrcw91XLmocxoXtfC9A.png"/></figure><p>Thanks for reading!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

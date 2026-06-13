@@ -64,6 +64,35 @@
     border: 1px solid var(--border);
 }
 
+/* Embedded video iframes (YouTube etc.) - imports from Medium have no dimensions. */
+#marg-asthetic iframe,
+#marg-asthetic-two iframe {
+    display: block;
+    width: 100%;
+    max-width: 720px;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    margin: 28px auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+    background: #000;
+}
+
+#marg-asthetic figure,
+#marg-asthetic-two figure {
+    margin: 24px 0;
+}
+
+#marg-asthetic figcaption,
+#marg-asthetic-two figcaption {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+    font-style: italic;
+}
+
 .code-view,
 .code-view-two {
     display: block;

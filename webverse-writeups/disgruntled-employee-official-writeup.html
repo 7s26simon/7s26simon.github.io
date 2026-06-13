@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Disgruntled Employee (Official Writeup) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/disgruntled-employee-official-writeup-webverse-pro-com-5663e741ae53 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a class="active" href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Disgruntled Employee (Official Writeup)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><p>Lab can be found at: <a href="https://webverselabs-pro.com/">https://webverselabs-pro.com/</a></p><figure><img src="images/disgruntled-employee-official-writeup/1*YDo2dVJvDV8-mNUbBEo3hg.png"/></figure><p>You have been given credentials, so log in as john.smith@techcorp.com with Password123!</p><figure><img src="images/disgruntled-employee-official-writeup/1*6q6YAjf6IyEb59fODTegoA.png"/></figure><p>When you log in, you’ll see that Sarah Johnson has been promoted and you have been de-moted and you have lost access to documents. These are/were your clues:</p><figure><img src="images/disgruntled-employee-official-writeup/1*eWgtT0ZKv3jgens82Y5Wlw.png"/></figure><p><strong>Note: </strong>if you log back into John’s account at this point, the info about Sarah will NOT be there. This is intentional and it’s supposed to make you study what is on the page. If you were capturing traffic, you’ll see Sarah Johnson in the response (plus the lab info on WebVerse mentions Sarah Johnson too).</p><figure><img src="images/disgruntled-employee-official-writeup/1*oOkNLfQt36e7NgEFQPXQ6g.png"/></figure><p>Next, log out of John’s account and go to the forgotten password link:</p><figure><img src="images/disgruntled-employee-official-writeup/1*YRZufCdZ5w3QHa4sKvqCDQ.png"/></figure><p>You’ll see the URL changes and expects a token. The error message hints at encoding the email as this is the token:</p><figure><img src="images/disgruntled-employee-official-writeup/1*NG1VR-ctWMI_Feb1YBgJOw.png"/></figure><p>Base64 encode Sarah’s email (token) and take a copy of it:</p><figure><img src="images/disgruntled-employee-official-writeup/1*_KfIYCmP4vUfGU-N1mHCrw.png"/></figure><p>Add it to the token parameter in the URL:</p><figure><img src="images/disgruntled-employee-official-writeup/1*frcIJyBjlJEPehMdzYwRfw.png"/></figure><p>This will let you set a new password for Sarah’s account:</p><figure><img src="images/disgruntled-employee-official-writeup/1*ktRJlTbKlLBYG_oWgC3Q3w.png"/></figure><p>From here, log in as Sarah and go to “My Documents” on the left:</p><figure><img src="images/disgruntled-employee-official-writeup/1*pDACdKuJjnjspvUJvv9GsA.png"/></figure><p>Download the Salary Review file and you’ll find a password in plaintext:</p><figure><img src="images/disgruntled-employee-official-writeup/1*vU9MFOv3K7v1vDY6H1iYfQ.png"/></figure><p>Where can you put the password? Well, there is a password required for the 2nd file:</p><figure><img src="images/disgruntled-employee-official-writeup/1*AUK5-AYx1uGTtGSqfTNOVQ.png"/></figure><p>This pdf file is a pentest report and says that tech corp is vulnerable to mass assignment:</p><figure><img src="images/disgruntled-employee-official-writeup/1*pvLMOPB_pJH8MNQkrCsKZA.png"/></figure><p>Log out of Sarah’s account and select “Create account”:</p><figure><img src="images/disgruntled-employee-official-writeup/1*A-utEns3nvkJsskbd0o2_Q.png"/></figure><p>Capture the request in your proxy and add a role of “webadmin”:</p><figure><img src="images/disgruntled-employee-official-writeup/1*kmrBBc53Py52eomI2wgoXg.png"/></figure><p>Log into the account and you’ll see you have upgraded to “webadmin” and you now have an “Admin Panel” on the left side. Select it and you’ll see a list of employees. Promote John Smith back to manager:</p><figure><img src="images/disgruntled-employee-official-writeup/1*QuMAwEPOkQkMJ0bH5XWxzA.png"/></figure><p>John will now be a manager with an updated salary:</p><figure><img src="images/disgruntled-employee-official-writeup/1*e0EY_6IGJteBJNrk1dMz8w.png"/></figure><p>For fun, you can also de-mote Sarah and clear the logs (this isn’t necessary for the flag)</p><figure><img src="images/disgruntled-employee-official-writeup/1*P3R34_n7kJNntOGGRdRWQQ.png"/></figure><p>Now go back and log in as John for the flag:</p><figure><img src="images/disgruntled-employee-official-writeup/1*miSzefHOBEin3eZrYIvtbw.png"/></figure><p>Thanks for following along!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

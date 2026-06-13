@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>MedNode (SQLi) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/mednode-sqli-bugforge-io-caa26009eaf4 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>MedNode (SQLi)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/mednode-sqli/1*w96_FpqJIzVgiTkdRntbUQ.png"/></figure><p>Lab can be found at: <a href="https://bugforge.io">https://bugforge.io</a></p><p>Well, <a href="https://medium.com/@originalshadowforge">ShadowForge</a> is going to make us work for this one! He’s designed a Medical Appointment Portal. I registered my account:</p><figure><img src="images/mednode-sqli/1*bWcoD7IetA7HxDGEMdR-KA.png"/></figure><p>Next, I set up a dr’s appointment (if only real life was this easy!!!)</p><figure><img src="images/mednode-sqli/1*Q4jGbI4oIGKIJ-6tU9Gmpg.png"/></figure><p>I’ll be honest. For a short while, I couldn’t find the vuln. I couldn’t see what was the intended path. I DID however, note that there was nowhere to delete an appointment. Or was there? I viewed the source of the page and at the very bottom of the html was a patient.js file. Curious, I clicked it:</p><figure><img src="images/mednode-sqli/1*lZt_hS_D6A9JUqAQdKbgKA.png"/></figure><p>I did a CTRL+F for “cancel” and there it was. A hidden API endpoint to cancel an appointment.</p><figure><img src="images/mednode-sqli/1*K5HPagouh34ADIFHB0cQMg.png"/></figure><p>I needed to find my id and I found it by checking the login request/response after I’d logged in. My id was 5:</p><figure><img src="images/mednode-sqli/1*3mgJnX7XUQhxM9j3jxBd6w.png"/></figure><p>I set up my post request. Now, I always find it weird when a POST request doesn’t have a body. But IT DOESN’T NEED TO… it’s only a cancel action, it’s not a data submission. This was somewhat like a REST API. Let me explain:</p><p>Normal REST uses HTTP verbs to express intent:</p><ul><li><code>GET /appointments/5</code> -&gt; read appointment 5</li><li><code>DELETE /appointments/5</code> -&gt; delete appointment 5</li><li><code>PATCH /appointments/5</code> -&gt; update appointment 5</li></ul><p>But <em>sometimes</em> developers want to carry out an action that doesn’t map cleanly to a verb, like “cancel” which isn’t quite a delete (the record stays, the status just changes). So instead of:</p><pre class="code-view-two">PATCH /appointments/5   body: {"status": "cancelled"}</pre><p>…developers use a sub-resource action pattern:</p><pre class="code-view-two">POST /appointments/5/cancel</pre><p>Anyway. Enough talking, let’s do it:</p><figure><img src="images/mednode-sqli/1*bQab5CY83zzFj9-ioMgvFg.png"/></figure><p>Next I played with the POST req. Remember, there was no body. So I tried SQLi in the resource id (in this case, 5) which returned a 500 Internal Server Error:</p><figure><img src="images/mednode-sqli/1*Jz81X81x6DcUQTL9RbROlg.png"/></figure><p>I now saved the POST req to a txt file and got ready to run sqlmap:</p><figure><img src="images/mednode-sqli/1*dhRR1eUUBMjV72tFzFf6SA.png"/></figure><p>sqlmap saw a vulnerability, so I told it to continue:</p><figure><img src="images/mednode-sqli/1*d5vQ_BPe6tHXdwsTxGmN8w.png"/></figure><p>sqlmap dumped the database along with the flag:</p><figure><img src="images/mednode-sqli/1*y7fH1HFxQF86jDKuhk_meQ.png"/></figure><p>Thanks for following along!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

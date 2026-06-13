@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Shady Oaks Financial writeup (BFLA) (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Shady Oaks Financial writeup (BFLA) (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+As of 03/04/2026 (or if you’re in the US, 04/03/2026, damn that’ll never stop confusing me) this lab came back into rotation. I was going…
+</section>
+<section data-field="body" class="e-content">
+<section name="0c68" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="f862" id="f862" class="graf graf--h3 graf--leading graf--title">Shady Oaks Financial writeup (BFLA) (Bugforge)</h3><figure name="adf4" id="adf4" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*X9FNo5MHhDHUD-KdPIkp-g.png" data-width="2848" data-height="1600" src="https://cdn-images-1.medium.com/max/800/1*X9FNo5MHhDHUD-KdPIkp-g.png"></figure><p name="4580" id="4580" class="graf graf--p graf-after--figure">As of 03/04/2026 (or if you’re in the US, 04/03/2026, damn that’ll never stop confusing me) this lab came back into rotation. I was going to record a video, but 404yeti from the bugforge community kindly recorded and shared his solution, so I am adding this to my old writeup on this lab. Here goes:</p><figure name="d53f" id="d53f" class="graf graf--figure graf--iframe graf-after--p"><iframe src="https://www.youtube.com/embed/acYylII7rEQ?feature=oembed" width="700" height="393" frameborder="0" scrolling="no"></iframe></figure><p name="cbd6" id="cbd6" class="graf graf--p graf-after--figure">If you wish to follow my writeup, continue below. Otherwise, thanks 404yeti for the video walkthrough!</p><p name="1ae3" id="1ae3" class="graf graf--p graf-after--p">Step 1: Register &amp; Upgrade</p><p name="d10e" id="d10e" class="graf graf--p graf-after--p">Immediately after registering, I was drawn the the “Upgrade” button on the top menu bar:</p><figure name="ce9e" id="ce9e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*hM4UOoLd98qE_PNJhRLJvw.png" data-width="1103" data-height="415" src="https://cdn-images-1.medium.com/max/800/1*hM4UOoLd98qE_PNJhRLJvw.png"></figure><p name="b444" id="b444" class="graf graf--p graf-after--figure">If you follow the request you’ll see it leads to /api/upgrade and passes a json body with a role of “insider”:</p><figure name="b950" id="b950" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*MRUxKzK-yIZ_Kik8Wxv29Q.png" data-width="850" data-height="458" src="https://cdn-images-1.medium.com/max/800/1*MRUxKzK-yIZ_Kik8Wxv29Q.png"></figure><p name="8e30" id="8e30" class="graf graf--p graf-after--figure">Step 2: What if we try administrator?</p><p name="5e69" id="5e69" class="graf graf--p graf-after--p">If we send our request to repeater and send it on its way, we get a success message and we get provided a new token:</p><figure name="87c8" id="87c8" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*He8nRytRfSsJxGMclvWoNQ.png" data-width="843" data-height="467" src="https://cdn-images-1.medium.com/max/800/1*He8nRytRfSsJxGMclvWoNQ.png"></figure><p name="85dd" id="85dd" class="graf graf--p graf-after--figure">Take the token, send a GET req to /api/admin/flag and you’ll see the flag in the response:</p><figure name="c081" id="c081" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*7SXN4LC6VghjMhKGCJJBDg.png" data-width="779" data-height="406" src="https://cdn-images-1.medium.com/max/800/1*7SXN4LC6VghjMhKGCJJBDg.png"></figure><p name="75eb" id="75eb" class="graf graf--p graf-after--figure">Thanks for reading!</p><p name="6a9b" id="6a9b" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/d48f002446ba"><time class="dt-published" datetime="2026-02-28T09:58:46.553Z">February 28, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/shady-oaks-financial-writeup-bfla-bugforge-d48f002446ba" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Disgruntled Employee (Official Writeup) WebVerse-Pro.com</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Disgruntled Employee (Official Writeup) WebVerse-Pro.com</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Lab can be found at: https://webverselabs-pro.com/
+</section>
+<section data-field="body" class="e-content">
+<section name="0085" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="16b8" id="16b8" class="graf graf--h3 graf--leading graf--title">Disgruntled Employee (Official Writeup) WebVerse-Pro.com</h3><p name="143e" id="143e" class="graf graf--p graf-after--h3">Lab can be found at: <a href="https://webverselabs-pro.com/" data-href="https://webverselabs-pro.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://webverselabs-pro.com/</a></p><figure name="a7be" id="a7be" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*YDo2dVJvDV8-mNUbBEo3hg.png" data-width="439" data-height="439" src="https://cdn-images-1.medium.com/max/800/1*YDo2dVJvDV8-mNUbBEo3hg.png"></figure><p name="f53d" id="f53d" class="graf graf--p graf-after--figure">You have been given credentials, so log in as john.smith@techcorp.com with Password123!</p><figure name="78ce" id="78ce" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*6q6YAjf6IyEb59fODTegoA.png" data-width="1262" data-height="944" src="https://cdn-images-1.medium.com/max/800/1*6q6YAjf6IyEb59fODTegoA.png"></figure><p name="0533" id="0533" class="graf graf--p graf-after--figure">When you log in, you’ll see that Sarah Johnson has been promoted and you have been de-moted and you have lost access to documents. These are/were your clues:</p><figure name="7627" id="7627" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*eWgtT0ZKv3jgens82Y5Wlw.png" data-width="1760" data-height="666" src="https://cdn-images-1.medium.com/max/800/1*eWgtT0ZKv3jgens82Y5Wlw.png"></figure><p name="1fd9" id="1fd9" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Note: </strong>if you log back into John’s account at this point, the info about Sarah will NOT be there. This is intentional and it’s supposed to make you study what is on the page. If you were capturing traffic, you’ll see Sarah Johnson in the response (plus the lab info on WebVerse mentions Sarah Johnson too).</p><figure name="e675" id="e675" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*oOkNLfQt36e7NgEFQPXQ6g.png" data-width="1544" data-height="614" src="https://cdn-images-1.medium.com/max/800/1*oOkNLfQt36e7NgEFQPXQ6g.png"></figure><p name="f199" id="f199" class="graf graf--p graf-after--figure">Next, log out of John’s account and go to the forgotten password link:</p><figure name="630a" id="630a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*YRZufCdZ5w3QHa4sKvqCDQ.png" data-width="1112" data-height="750" src="https://cdn-images-1.medium.com/max/800/1*YRZufCdZ5w3QHa4sKvqCDQ.png"></figure><p name="c83c" id="c83c" class="graf graf--p graf-after--figure">You’ll see the URL changes and expects a token. The error message hints at encoding the email as this is the token:</p><figure name="1d97" id="1d97" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*NG1VR-ctWMI_Feb1YBgJOw.png" data-width="1886" data-height="1202" src="https://cdn-images-1.medium.com/max/800/1*NG1VR-ctWMI_Feb1YBgJOw.png"></figure><p name="93de" id="93de" class="graf graf--p graf-after--figure">Base64 encode Sarah’s email (token) and take a copy of it:</p><figure name="7791" id="7791" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*_KfIYCmP4vUfGU-N1mHCrw.png" data-width="1392" data-height="872" src="https://cdn-images-1.medium.com/max/800/1*_KfIYCmP4vUfGU-N1mHCrw.png"></figure><p name="6279" id="6279" class="graf graf--p graf-after--figure">Add it to the token parameter in the URL:</p><figure name="f0e1" id="f0e1" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*frcIJyBjlJEPehMdzYwRfw.png" data-width="1334" data-height="1140" src="https://cdn-images-1.medium.com/max/800/1*frcIJyBjlJEPehMdzYwRfw.png"></figure><p name="83f5" id="83f5" class="graf graf--p graf-after--figure">This will let you set a new password for Sarah’s account:</p><figure name="0dea" id="0dea" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ktRJlTbKlLBYG_oWgC3Q3w.png" data-width="1254" data-height="824" src="https://cdn-images-1.medium.com/max/800/1*ktRJlTbKlLBYG_oWgC3Q3w.png"></figure><p name="4e55" id="4e55" class="graf graf--p graf-after--figure">From here, log in as Sarah and go to “My Documents” on the left:</p><figure name="a999" id="a999" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*pDACdKuJjnjspvUJvv9GsA.png" data-width="2210" data-height="746" src="https://cdn-images-1.medium.com/max/800/1*pDACdKuJjnjspvUJvv9GsA.png"></figure><p name="781c" id="781c" class="graf graf--p graf-after--figure">Download the Salary Review file and you’ll find a password in plaintext:</p><figure name="14ce" id="14ce" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*vU9MFOv3K7v1vDY6H1iYfQ.png" data-width="1648" data-height="710" src="https://cdn-images-1.medium.com/max/800/1*vU9MFOv3K7v1vDY6H1iYfQ.png"></figure><p name="4f27" id="4f27" class="graf graf--p graf-after--figure">Where can you put the password? Well, there is a password required for the 2nd file:</p><figure name="9516" id="9516" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*AUK5-AYx1uGTtGSqfTNOVQ.png" data-width="1748" data-height="784" src="https://cdn-images-1.medium.com/max/800/1*AUK5-AYx1uGTtGSqfTNOVQ.png"></figure><p name="0ab6" id="0ab6" class="graf graf--p graf-after--figure">This pdf file is a pentest report and says that tech corp is vulnerable to mass assignment:</p><figure name="d17d" id="d17d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*pvLMOPB_pJH8MNQkrCsKZA.png" data-width="1178" data-height="840" src="https://cdn-images-1.medium.com/max/800/1*pvLMOPB_pJH8MNQkrCsKZA.png"></figure><p name="c054" id="c054" class="graf graf--p graf-after--figure">Log out of Sarah’s account and select “Create account”:</p><figure name="73a3" id="73a3" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*A-utEns3nvkJsskbd0o2_Q.png" data-width="1072" data-height="800" src="https://cdn-images-1.medium.com/max/800/1*A-utEns3nvkJsskbd0o2_Q.png"></figure><p name="934d" id="934d" class="graf graf--p graf-after--figure">Capture the request in your proxy and add a role of “webadmin”:</p><figure name="e85b" id="e85b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*kmrBBc53Py52eomI2wgoXg.png" data-width="2054" data-height="1108" src="https://cdn-images-1.medium.com/max/800/1*kmrBBc53Py52eomI2wgoXg.png"></figure><p name="ee4e" id="ee4e" class="graf graf--p graf-after--figure">Log into the account and you’ll see you have upgraded to “webadmin” and you now have an “Admin Panel” on the left side. Select it and you’ll see a list of employees. Promote John Smith back to manager:</p><figure name="0e62" id="0e62" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*QuMAwEPOkQkMJ0bH5XWxzA.png" data-width="1528" data-height="794" src="https://cdn-images-1.medium.com/max/800/1*QuMAwEPOkQkMJ0bH5XWxzA.png"></figure><p name="efa7" id="efa7" class="graf graf--p graf-after--figure">John will now be a manager with an updated salary:</p><figure name="1736" id="1736" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*e0EY_6IGJteBJNrk1dMz8w.png" data-width="1070" data-height="812" src="https://cdn-images-1.medium.com/max/800/1*e0EY_6IGJteBJNrk1dMz8w.png"></figure><p name="c303" id="c303" class="graf graf--p graf-after--figure">For fun, you can also de-mote Sarah and clear the logs (this isn’t necessary for the flag)</p><figure name="1e39" id="1e39" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*P3R34_n7kJNntOGGRdRWQQ.png" data-width="1868" data-height="884" src="https://cdn-images-1.medium.com/max/800/1*P3R34_n7kJNntOGGRdRWQQ.png"></figure><p name="d33a" id="d33a" class="graf graf--p graf-after--figure">Now go back and log in as John for the flag:</p><figure name="591a" id="591a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*miSzefHOBEin3eZrYIvtbw.png" data-width="1406" data-height="952" src="https://cdn-images-1.medium.com/max/800/1*miSzefHOBEin3eZrYIvtbw.png"></figure><p name="1346" id="1346" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="e26b" id="e26b" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/5663e741ae53"><time class="dt-published" datetime="2026-05-25T08:49:20.817Z">May 25, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/disgruntled-employee-official-writeup-webverse-pro-com-5663e741ae53" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

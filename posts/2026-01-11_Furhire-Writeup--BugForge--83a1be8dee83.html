@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Furhire Writeup (BugForge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Furhire Writeup (BugForge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link here. This is not required…
+</section>
+<section data-field="body" class="e-content">
+<section name="5dc8" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="91c5" id="91c5" class="graf graf--h3 graf--leading graf--title">Furhire Writeup (BugForge)</h3><p name="fc8f" id="fc8f" class="graf graf--p graf-after--h3">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p><figure name="58a9" id="58a9" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*18zYs-XcBAIFdZ2ICTFz2A.png" data-width="3136" data-height="1344" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*18zYs-XcBAIFdZ2ICTFz2A.png"></figure><p name="3540" id="3540" class="graf graf--p graf-after--figure">This is (I think) my first medium-rated lab on Bugforge. Full disclosure: the beginning of the challenge proved difficult because Caido (I’ll go with Caido, yeah…let’s blame Caido) seemed to have issues saving a request which can then be used by SQLmap to further enumerate/exploit the system.</p><p name="7904" id="7904" class="graf graf--p graf-after--p">Anyway. Here’s my write-up:</p><p name="11b6" id="11b6" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Step 1: Finding a bug / recon</strong></p><p name="660f" id="660f" class="graf graf--p graf-after--p">Are you a talented pet? Are you looking for a premier recruitment platform? Are you looking for a new job? No? Neither am I. But, I signed up immediately!</p><figure name="5914" id="5914" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*7l54Q8cjscP9k7UlO2eA2w.png" data-width="1718" data-height="962" src="https://cdn-images-1.medium.com/max/800/1*7l54Q8cjscP9k7UlO2eA2w.png"></figure><p name="5886" id="5886" class="graf graf--p graf-after--figure">I created a bio (purely to see what HTTP traffic it would generate in the background).</p><figure name="9b09" id="9b09" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*WTB-djoDgFUFgvGm6plYeA.png" data-width="1716" data-height="946" src="https://cdn-images-1.medium.com/max/800/1*WTB-djoDgFUFgvGm6plYeA.png"></figure><p name="e28c" id="e28c" class="graf graf--p graf-after--figure">I then began browsing around the pages looking for what could be my way in. And that’s when I came across…open positions:</p><figure name="2379" id="2379" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*TurvZD6qWX7ponN5A-I7WQ.png" data-width="1722" data-height="940" src="https://cdn-images-1.medium.com/max/800/1*TurvZD6qWX7ponN5A-I7WQ.png"></figure><p name="ce81" id="ce81" class="graf graf--p graf-after--figure">I selected the “Guard Dog Coordinator” job and went over to my Caido HTTP history. This was the right step, but I went down a path of pain soon after this. I added an apostrophe and saw a 304 not modified page returned:</p><figure name="57c4" id="57c4" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*U0qOGvYyd3vdOu-ihNijwg.png" data-width="1284" data-height="900" src="https://cdn-images-1.medium.com/max/800/1*U0qOGvYyd3vdOu-ihNijwg.png"></figure><p name="f822" id="f822" class="graf graf--p graf-after--figure">Ok, that’s good. I think. Let’s try two apostrophes. Ok, now I get a 200 OK response. Blind SQLi?</p><figure name="8319" id="8319" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Iz_yOWzXtY8JRLXPQ3H53w.png" data-width="1306" data-height="1028" src="https://cdn-images-1.medium.com/max/800/1*Iz_yOWzXtY8JRLXPQ3H53w.png"></figure><p name="f2de" id="f2de" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2: SQLMap Syntax</strong></p><p name="acf8" id="acf8" class="graf graf--p graf-after--p">I saved the request to my desktop and tried to run it. I’m going to be completely 100% transparent and include all the errors here to show you my workings. I went for a level 3 sqlmap on the URL you see in the picture. I thought this might just do the trick. (Spoiler: it didn’t).</p><figure name="92d9" id="92d9" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*d-X_-D0XXtVOh17ZhKp0UQ.png" data-width="1770" data-height="620" src="https://cdn-images-1.medium.com/max/800/1*d-X_-D0XXtVOh17ZhKp0UQ.png"></figure><p name="c089" id="c089" class="graf graf--p graf-after--figure">What follows, is a bit of a learning experience… so jump to <strong class="markup--strong markup--p-strong">Step 3: Priv Esc </strong>if you wish to skip this part. Another error (ignore the sqlmap being outdated, I fix that later, and that wasn’t the issue).</p><figure name="b222" id="b222" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*GSZIt1inaPajfLrPdcnthg.png" data-width="1746" data-height="850" src="https://cdn-images-1.medium.com/max/800/1*GSZIt1inaPajfLrPdcnthg.png"></figure><p name="c7af" id="c7af" class="graf graf--p graf-after--figure">When you use an * (asterix) symbol, it tells sqlmap to attack that parameter. I thought that might be the issue:</p><figure name="e407" id="e407" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*YoxnT-IlEBzUbiffbPjICQ.png" data-width="1444" data-height="142" src="https://cdn-images-1.medium.com/max/800/1*YoxnT-IlEBzUbiffbPjICQ.png"></figure><p name="afe6" id="afe6" class="graf graf--p graf-after--figure">Nope. That wasn’t it. So I checked my txt file and I must admit, I did think “hmm. Not sure that looks right” but I’d saved it from Caido, so what do I know? I decided to update my sqlmap and hit it hard with a level 5, risk 3 etc. No joy.</p><figure name="d252" id="d252" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*riU3JEIhwbIQA_5GoCtKLg.png" data-width="1826" data-height="946" src="https://cdn-images-1.medium.com/max/800/1*riU3JEIhwbIQA_5GoCtKLg.png"></figure><p name="0369" id="0369" class="graf graf--p graf-after--figure">At this point, I flipped over onto burpsuite, replayed the request, this time changing the GET request to /api/jobs/1* and saved the GET request to the same file. For the sake of completeness, I will show you the contents of the *new* txt file:</p><figure name="9f02" id="9f02" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*4xyYAjO56WCVt7B-wuVo_Q.png" data-width="1704" data-height="1090" src="https://cdn-images-1.medium.com/max/800/1*4xyYAjO56WCVt7B-wuVo_Q.png"></figure><p name="6b9a" id="6b9a" class="graf graf--p graf-after--figure">Yeah. Looks different, doesn’t it? Well, it turns out (from what I gather) burpsuite saves the file with this formatting, which plays nicely with sqlmap. As far as I can tell, Caido doesn’t have a similar solution? If it does, then please let me know in the comments. Anyway… finally, I was able to exploit the vulnerability and obtain a secret JWT:</p><figure name="e452" id="e452" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*vFyHjPXabj8XCoUrX0B0xA.png" data-width="1738" data-height="938" src="https://cdn-images-1.medium.com/max/800/1*vFyHjPXabj8XCoUrX0B0xA.png"></figure><p name="e9a7" id="e9a7" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3: Priv Esc</strong></p><p name="7d2e" id="7d2e" class="graf graf--p graf-after--p">So now, I took my JWT to jwt.io because A) it’s already signed and working and B) this is the secret for that JWT. If you look at my previous write-up on Shady Oaks (also Bugforge), which you can find <a href="https://medium.com/@7s26simon/shady-oaks-financial-bugforge-d5b07ca09eb9" data-href="https://medium.com/@7s26simon/shady-oaks-financial-bugforge-d5b07ca09eb9" class="markup--anchor markup--p-anchor" target="_blank">here</a>, you’ll see that I explained how JWT’s work there.</p><p name="579d" id="579d" class="graf graf--p graf-after--p">I updated my JWT to admin and signed it with the secret found from the blind SQLi. So now, I had a super-duper “admin” JWT. I pasted it in the request that was right in front of me in burpsuite (yes, I switched over to burpsuite after the Caido SQLmap fiasco).</p><figure name="5dee" id="5dee" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*3PVF72_vdZZbTpUZ_wdRGw.png" data-width="1858" data-height="1112" src="https://cdn-images-1.medium.com/max/800/1*3PVF72_vdZZbTpUZ_wdRGw.png"></figure><p name="5e54" id="5e54" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 4: Capturing the flag</strong></p><p name="d3d6" id="d3d6" class="graf graf--p graf-after--p">Now I knew the flag path and now my admin-priv JWT was working and getting responses, I sent a request to the /api/admin/flag endpoint:</p><figure name="f35b" id="f35b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*FyC0LmIJrY_PINCWeN8Vnw.png" data-width="1680" data-height="852" src="https://cdn-images-1.medium.com/max/800/1*FyC0LmIJrY_PINCWeN8Vnw.png"></figure><p name="0ff6" id="0ff6" class="graf graf--p graf-after--figure graf--trailing">Needless to say, a great challenge, great lab and definitely has made me want to spend a bit more time with Caido, SQLMap and see if it was me making it more difficult than it needed to be, or whether Caido’s saved .txt files are an issue. I realise that I initially sent a GET on /jobs/1* and the working payload was /api/jobs/1* but I tried both with Caido and both didn’t play nicely with sqlmap, whereas burpsuite’s did. Anyway, enough rambling, lab complete!</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/83a1be8dee83"><time class="dt-published" datetime="2026-01-11T15:43:16.076Z">January 11, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/furhire-writeup-bugforge-83a1be8dee83" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

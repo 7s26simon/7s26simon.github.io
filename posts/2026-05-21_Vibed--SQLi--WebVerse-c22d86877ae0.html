@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Vibed (SQLi) WebVerse</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Vibed (SQLi) WebVerse</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Lab can be found at: https://webverselabs-pro.com/
+</section>
+<section data-field="body" class="e-content">
+<section name="e72c" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="417a" id="417a" class="graf graf--h3 graf--leading graf--title">Vibed (SQLi) WebVerse</h3><figure name="661e" id="661e" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*cupLiUcKoJuqOaq_LOK3_w.png" data-width="450" data-height="450" src="https://cdn-images-1.medium.com/max/800/1*cupLiUcKoJuqOaq_LOK3_w.png"></figure><p name="1fee" id="1fee" class="graf graf--p graf-after--figure">Lab can be found at: <a href="https://webverselabs-pro.com/" data-href="https://webverselabs-pro.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://webverselabs-pro.com/</a></p><p name="a868" id="a868" class="graf graf--p graf-after--p">We land on the homepage which provides an overview of all models, spend and traffic from various LLMs:</p><figure name="5ce2" id="5ce2" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*IPBhpKO_mgY0seD8-la3lg.png" data-width="1960" data-height="1006" src="https://cdn-images-1.medium.com/max/800/1*IPBhpKO_mgY0seD8-la3lg.png"></figure><p name="ba8b" id="ba8b" class="graf graf--p graf-after--figure">I tested for SSTI but got a SQL error. Ok, let’s go with SQLi:</p><figure name="982d" id="982d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*2Iyyo4ZWs-fVi_O4JT2h0Q.png" data-width="2108" data-height="808" src="https://cdn-images-1.medium.com/max/800/1*2Iyyo4ZWs-fVi_O4JT2h0Q.png"></figure><p name="00eb" id="00eb" class="graf graf--p graf-after--figure">I began with the go-to payload:</p><figure name="84ac" id="84ac" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Cmih_sfrXI81ft-uxqnK7g.png" data-width="1736" data-height="1038" src="https://cdn-images-1.medium.com/max/800/1*Cmih_sfrXI81ft-uxqnK7g.png"></figure><p name="0437" id="0437" class="graf graf--p graf-after--figure">Then began trying to figure out how many columns we were dealing with. 6?:</p><figure name="670c" id="670c" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*oqQi7ejAV7FCQrmvIwXRvQ.png" data-width="1788" data-height="774" src="https://cdn-images-1.medium.com/max/800/1*oqQi7ejAV7FCQrmvIwXRvQ.png"></figure><p name="89be" id="89be" class="graf graf--p graf-after--figure">Nope, 5:</p><figure name="b084" id="b084" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*RG7CAKww69lVDXWM_Hj3pg.png" data-width="1918" data-height="1166" src="https://cdn-images-1.medium.com/max/800/1*RG7CAKww69lVDXWM_Hj3pg.png"></figure><p name="a4a8" id="a4a8" class="graf graf--p graf-after--figure">The next payload enumerated tables: models, request_logs, secrets, workspaces:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="lua" name="e5d0" id="e5d0" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-string">&#x27; UNION SELECT 1,name,3,4,5 FROM sqlite_master WHERE type=&#x27;</span><span class="hljs-built_in">table</span><span class="hljs-string">&#x27;-- </span></span></pre><figure name="145a" id="145a" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*bZf6gml9yAXoDv5pt64zyg.png" data-width="2310" data-height="1120" src="https://cdn-images-1.medium.com/max/800/1*bZf6gml9yAXoDv5pt64zyg.png"></figure><p name="ee2d" id="ee2d" class="graf graf--p graf-after--figure">Now I knew ‘secrets’ existed, I used ‘sql’ which gives the column names, in this case <code class="markup--code markup--p-code">name</code>, <code class="markup--code markup--p-code">value</code>, <code class="markup--code markup--p-code">rotated_at</code> without having to guess them. This is because SQLite stores the original create statement verbatim and hands it straight back:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="bash" name="1943" id="1943" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-string">&#x27; UNION SELECT 1,sql,3,4,5 FROM sqlite_master WHERE name=&#x27;</span>secrets<span class="hljs-string">&#x27;-- </span></span></pre><figure name="8566" id="8566" class="graf graf--figure graf-after--pre"><img class="graf-image" data-image-id="1*7RNpShfXd4CKvyEepXItjg.png" data-width="1908" data-height="978" src="https://cdn-images-1.medium.com/max/800/1*7RNpShfXd4CKvyEepXItjg.png"></figure><p name="2d15" id="2d15" class="graf graf--p graf-after--figure">Now we knew we had a table called secrets which contained name and value column names, there’s a powerful command I like to use for SQLi CTFs:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="bash" name="6615" id="6615" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-string">&#x27; UNION SELECT 1,name||&#x27;</span>::<span class="hljs-string">&#x27;||value,rotated_at,4,5 FROM secrets--</span></span></pre><p name="c423" id="c423" class="graf graf--p graf-after--pre">The ||’::’|| bit is is SQLite’s string concatenation operator which basically joins strings together.</p><p name="54bb" id="54bb" class="graf graf--p graf-after--p">So <code class="markup--code markup--p-code">name||&#39;::&#39;||value</code> means: name + &#39;::&#39; + value and in this case, this was name was ‘platform_bootstrap_token’ and the value was the flag:</p><figure name="9bea" id="9bea" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ARpR5K8H8WRO32Fl0mftFQ.png" data-width="1824" data-height="830" src="https://cdn-images-1.medium.com/max/800/1*ARpR5K8H8WRO32Fl0mftFQ.png"></figure><p name="53c4" id="53c4" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="562f" id="562f" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/c22d86877ae0"><time class="dt-published" datetime="2026-05-21T19:16:29.990Z">May 21, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/vibed-sqli-webverse-c22d86877ae0" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

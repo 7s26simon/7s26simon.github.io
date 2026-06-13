@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Brackish Brewing Co. (with VerbTamper v1.8.1) (WebVerse)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Brackish Brewing Co. (with VerbTamper v1.8.1) (WebVerse)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Note: My articles are on a scheduled release via medium, which means the times they appear may vary considerably. I may end up doing 1-2…
+</section>
+<section data-field="body" class="e-content">
+<section name="a684" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="13ac" id="13ac" class="graf graf--h3 graf--leading graf--title">Brackish Brewing Co. (with VerbTamper v1.8.1) (WebVerse)</h3><p name="392d" id="392d" class="graf graf--p graf-after--h3"><strong class="markup--strong markup--p-strong">Note: </strong>My articles are on a scheduled release via medium, which means the times they appear may vary considerably. I may end up doing 1-2 per week and release them on a Friday or Saturday at a specific time each week, I haven’t decided yet.</p><p name="d5db" id="d5db" class="graf graf--p graf-after--p">Lab can be found at: <a href="https://webverselabs-pro.com/" data-href="https://webverselabs-pro.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://webverselabs-pro.com/</a></p><figure name="3221" id="3221" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Uq5Jusn1pdnT9XKsi2mVdQ.png" data-width="450" data-height="450" src="https://cdn-images-1.medium.com/max/800/1*Uq5Jusn1pdnT9XKsi2mVdQ.png"></figure><p name="b286" id="b286" class="graf graf--p graf-after--figure">The description of this challenge made me think that this could be the perfect lab for <a href="https://github.com/7s26simon/VerbTamper/releases" data-href="https://github.com/7s26simon/VerbTamper/releases" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">VerbTamper</a>, which is a tool I vibe-coded and has been extremely useful for CTFs.</p><p name="fbc1" id="fbc1" class="graf graf--p graf-after--p">I loaded up the lab and saw the following page:</p><figure name="c5ef" id="c5ef" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*9SwbK2iagA85n5Fw63hmsg.png" data-width="2002" data-height="964" src="https://cdn-images-1.medium.com/max/800/1*9SwbK2iagA85n5Fw63hmsg.png"></figure><p name="174b" id="174b" class="graf graf--p graf-after--figure">Browsing to /staff (which was mentioned in the lab description “A small craft brewery’s website has a staff-only portal at /staff”) was denied.</p><figure name="4815" id="4815" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*8pt7XLXm3VnM9GpdX6raQg.png" data-width="1268" data-height="1174" src="https://cdn-images-1.medium.com/max/800/1*8pt7XLXm3VnM9GpdX6raQg.png"></figure><p name="0fe7" id="0fe7" class="graf graf--p graf-after--figure">I sent the request over to VerbTamper, as it has a bunch of bypasses built in and might be able to help out:</p><figure name="cfb6" id="cfb6" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*tCKHz2EKX7d-Mak5XTNdCQ.png" data-width="1866" data-height="1320" src="https://cdn-images-1.medium.com/max/800/1*tCKHz2EKX7d-Mak5XTNdCQ.png"></figure><p name="dcd4" id="dcd4" class="graf graf--p graf-after--figure">I selected the X-Forwarded-For header from the drop-down menu:</p><figure name="381a" id="381a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Iq0BKtFF5GW-G8hyl-37VA.png" data-width="1240" data-height="830" src="https://cdn-images-1.medium.com/max/800/1*Iq0BKtFF5GW-G8hyl-37VA.png"></figure><p name="ef8f" id="ef8f" class="graf graf--p graf-after--figure">Next, I hit send:</p><figure name="4241" id="4241" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*01GGzW0ObVhk7CKrQXp7QQ.png" data-width="1114" data-height="380" src="https://cdn-images-1.medium.com/max/800/1*01GGzW0ObVhk7CKrQXp7QQ.png"></figure><p name="a439" id="a439" class="graf graf--p graf-after--figure">And then, searched for the flag in the response:</p><figure name="6075" id="6075" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ne2AR7MDZ10xlZycUW2Rgw.png" data-width="1304" data-height="1384" src="https://cdn-images-1.medium.com/max/800/1*ne2AR7MDZ10xlZycUW2Rgw.png"></figure><p name="59af" id="59af" class="graf graf--p graf-after--figure">And that’s the beauty of VerbTamper v1.8.1. And what’s more, is that you can simply copy the entire request and send to repeater DIRECTLY from VerbTamper (if any issues, remember to add a new line for the request to work):</p><figure name="d4b1" id="d4b1" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*2VtA7XqB21qDB-LBoe54Dw.png" data-width="904" data-height="488" src="https://cdn-images-1.medium.com/max/800/1*2VtA7XqB21qDB-LBoe54Dw.png"></figure><p name="20f4" id="20f4" class="graf graf--p graf-after--figure">And now we can send it from repeater:</p><figure name="fcb8" id="fcb8" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*nTbzS5L0FvhUOtgbJj4gKQ.png" data-width="2254" data-height="910" src="https://cdn-images-1.medium.com/max/800/1*nTbzS5L0FvhUOtgbJj4gKQ.png"></figure><p name="1d84" id="1d84" class="graf graf--p graf-after--figure">and now…this also means that we can now right click (from repeater) to request in the original session:</p><figure name="df62" id="df62" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*2tlMA0vAen4nsaOy3snB2A.png" data-width="1370" data-height="794" src="https://cdn-images-1.medium.com/max/800/1*2tlMA0vAen4nsaOy3snB2A.png"></figure><p name="f81f" id="f81f" class="graf graf--p graf-after--figure">and view the flag in the browser if we wish:</p><figure name="8e08" id="8e08" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*mGy-zfC0NpLxme6Nb9DqfA.png" data-width="1930" data-height="974" src="https://cdn-images-1.medium.com/max/800/1*mGy-zfC0NpLxme6Nb9DqfA.png"></figure><p name="a105" id="a105" class="graf graf--p graf-after--figure">Thanks for following along!</p><p name="7247" id="7247" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/330e033cdb08"><time class="dt-published" datetime="2026-05-22T19:53:56.469Z">May 22, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/brackish-brewing-co-with-verbtamper-v1-8-1-webverse-330e033cdb08" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

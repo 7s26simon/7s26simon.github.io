@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Galaxy Dash (IDOR) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/galaxy-dash-idor-bugforge-io-d712db97dc65 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Galaxy Dash (IDOR)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><p>Lab can be found at: <a href="https://bugforge.io">https://bugforge.io</a></p><figure><img src="images/galaxy-dash-idor/1*UJ8hc400D1Wl0qSQO-rVsA.png"/></figure><p>First, I registered an account:</p><blockquote>POST /api/register HTTP/1.1<br/>Host: lab-1778837617861-zq0qot.labs-app.bugforge.io<br/>Content-Type: application/json</blockquote><blockquote>{“username”:”7s26simon”,”email”:”7s26simon<a href="mailto:tester@pwn.io">@7s26simon.com</a>”,”password”:”Password1!”,”org_name”:”PwnCorp”}</blockquote><p>I set off my crawler and saw a hit to /api/network/status and it returned a 200 OK. This was interesting. Why? Because there was an “active delivery”. Huh? But I didn’t make a delivery?? I had literally just signed up to the app?</p><p>So now, I’m thinking there’s some kind of possible IDOR going on.</p><figure><img src="images/galaxy-dash-idor/1*pnDSOi8Gw-kCNRDsM2Ockw.png"/></figure><p>I took a note of the tracking_id: “b214ce1a-975b-4d8b-9497-e0dc485260ec” for later usage. For now, I set up my own delivery (via the “Deliveries” link at the top) and looked at the URL, /bookings/&lt;booking ID&gt;</p><figure><img src="images/galaxy-dash-idor/1*TtjmjZw7Aj6y6Ng7SccVWg.png"/></figure><p>I looked at the status of my delivery and saw it was pending. But interestingly enough, it seemed to perform a check in the background traffic.</p><figure><img src="images/galaxy-dash-idor/1*sEog4Z5pRqQ7RCzU6Y0e7w.png"/></figure><p>Could it be a case of replacing my delivery ID with the tracking ID I found earlier? I went back to /api/network/status and saw my delivery (ending in 6c5) had been added as delivery #2. Ok. Now I’m thinking that this endpoint is leaking all deliveries:</p><figure><img src="images/galaxy-dash-idor/1*kfF01AbFPIHlYFsto1vJQA.png"/></figure><p>I browsed to /bookings/&lt;tracking_id&gt; (the delivery I didn’t make) and got an error:</p><figure><img src="images/galaxy-dash-idor/1*DL9v4hw8PMGl9XYCgOyHOA.png"/></figure><p>In the background traffic had loaded the booking information and the flag was in the cargo_description parameter:</p><figure><img src="images/galaxy-dash-idor/1*lgdEEu4uyIrm6JMiQ2HwnA.png"/></figure><p>Thanks for following along!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

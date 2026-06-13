@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Sokudo writeup (Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Sokudo writeup (Bugforge)</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link here. This is not required…
+</section>
+<section data-field="body" class="e-content">
+<section name="e310" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="3fbd" id="3fbd" class="graf graf--h3 graf--leading graf--title">Sokudo writeup (Bugforge)</h3><p name="04d6" id="04d6" class="graf graf--p graf-after--h3">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p><figure name="7652" id="7652" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ePH0W9Kj780RyjhBDBp-ng.png" data-width="2848" data-height="1600" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*ePH0W9Kj780RyjhBDBp-ng.png"><figcaption class="imageCaption">Sokudo</figcaption></figure><p name="d424" id="d424" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 1:</strong> Register</p><p name="385c" id="385c" class="graf graf--p graf-after--p">Pay special attention as you register to the bearer token that gets generated. This is a lesson in look at what the app gives you before you begin hunting for other things.</p><p name="8f91" id="8f91" class="graf graf--p graf-after--p">After you register, you’ll quickly see that your token looks predictable. In fact, it looks just like a year + month + day + time. And that’s because, it is. To be specific, it’s generated at the time you register and log into Sokudo.</p><figure name="7a68" id="7a68" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*aE80dn2LB2Jl6UI1uWuvjw.png" data-width="653" data-height="266" src="https://cdn-images-1.medium.com/max/800/1*aE80dn2LB2Jl6UI1uWuvjw.png"></figure><p name="f9ec" id="f9ec" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 2:</strong> Locate admin’s token</p><p name="47d7" id="47d7" class="graf graf--p graf-after--p">And there we have it. When you view the leaderboard for Sokudo’s speed-typing challenge, the response shows the last_login. Look familiar? Note down the 20260129081007 (of course, yours will be different but the methodology is the same).</p><figure name="4694" id="4694" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*u3b0mInNN9hiG8TNn65XQA.png" data-width="655" data-height="259" src="https://cdn-images-1.medium.com/max/800/1*u3b0mInNN9hiG8TNn65XQA.png"></figure><p name="10e4" id="10e4" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Step 3:</strong> Replace the token</p><p name="9ab0" id="9ab0" class="graf graf--p graf-after--p">Replace your newly constructed token in the browser (or burp) and you’ll see the flag at the bottom of a GET req to: /api/admin/users or simply by refreshing the page and going to /admin</p><figure name="f01e" id="f01e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*WrQ2OXhLqT-cLtxmt9KgZw.png" data-width="945" data-height="451" src="https://cdn-images-1.medium.com/max/800/1*WrQ2OXhLqT-cLtxmt9KgZw.png"></figure><p name="be14" id="be14" class="graf graf--p graf-after--figure">There’s many lessons to be learned here. Don’t use predictable session tokens is probably the main lesson. With this misconfiguration, we were able to gain access to the admin panel which we should not have been able to do.</p><p name="8f4a" id="8f4a" class="graf graf--p graf-after--p graf--trailing">Thanks for reading!</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/c9413182ece8"><time class="dt-published" datetime="2026-01-29T08:58:15.120Z">January 29, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/sokudo-writeup-bugforge-c9413182ece8" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

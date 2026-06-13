@@ -1,0 +1,69 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Furhire writeup (MFA Bypass) (Medium)(Bugforge)</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Furhire writeup (MFA Bypass) (Medium)(Bugforge)</h1>
+</header>
+<section data-field="body" class="e-content">
+<section name="b09c" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="77dd" id="77dd" class="graf graf--h3 graf--leading graf--title">Furhire writeup (MFA Bypass) (Medium)(Bugforge)</h3><figure name="c764" id="c764" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*rndy1-Nnnj5Pp90CaJ7Qhw.png" data-width="570" data-height="320" src="https://cdn-images-1.medium.com/max/800/1*rndy1-Nnnj5Pp90CaJ7Qhw.png"></figure><p name="a91a" id="a91a" class="graf graf--p graf-after--figure">Step 1: Sign up… but wait!</p><p name="e1b7" id="e1b7" class="graf graf--p graf-after--p">When you sign up, be ready to capture traffic. Because the vulnerability (1 of 2 vulnerabilities) is right here, with a mass assignment.</p><figure name="4cbb" id="4cbb" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*OZKI8bIEpGBCUEczPxWYDQ.png" data-width="686" data-height="394" src="https://cdn-images-1.medium.com/max/800/1*OZKI8bIEpGBCUEczPxWYDQ.png"></figure><p name="6ae2" id="6ae2" class="graf graf--p graf-after--figure">Capture this and append “role”:”administrator” to the POST req so it looks like this:</p><figure name="eba0" id="eba0" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*HFLgeQOwBkibFslzgOAP-g.png" data-width="305" data-height="164" src="https://cdn-images-1.medium.com/max/800/1*HFLgeQOwBkibFslzgOAP-g.png"></figure><p name="4aeb" id="4aeb" class="graf graf--p graf-after--figure">Step 2: Log in</p><p name="7c8f" id="7c8f" class="graf graf--p graf-after--p">You’ll be presented with an MFA Verification page with 4 digits. At first, I was trying to use my burp collaborator as an email address so I could get the digits sent to me via exfil.</p><p name="28f6" id="28f6" class="graf graf--p graf-after--p">I soon discovered that if you hit the endpoint with multiple requests as fast as possible, it seems to bypass the lockout. Although, the lockout did still get me if the PIN was too high. Let’s work this out mathematically.</p><figure name="c934" id="c934" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*VleH8JdE5PA2CDp9_HFqwQ.png" data-width="490" data-height="390" src="https://cdn-images-1.medium.com/max/800/1*VleH8JdE5PA2CDp9_HFqwQ.png"></figure><p name="1fe2" id="1fe2" class="graf graf--p graf-after--figure">There’s a lot of possibilities here. 0000 through 9999. That’s 10,000 potential PINs. But if we have a low enough PIN and we can blast through them quickly, we can get verified. So. Type in 0000 on the page and click “Verify” (ensure you’re capturing traffic).</p><figure name="10dd" id="10dd" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*2lNNUyVIp9-X_RDw0CIfKg.png" data-width="691" data-height="534" src="https://cdn-images-1.medium.com/max/800/1*2lNNUyVIp9-X_RDw0CIfKg.png"></figure><p name="fe4c" id="fe4c" class="graf graf--p graf-after--figure">Step 3: Turbo Intruder</p><p name="a106" id="a106" class="graf graf--p graf-after--p">Right click &gt; Extensions &gt; Turbo Intruder &gt; Send to turbo intruder</p><figure name="c38d" id="c38d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*YbtejM4iUyzD2r0z34rN0g.png" data-width="577" data-height="260" src="https://cdn-images-1.medium.com/max/800/1*YbtejM4iUyzD2r0z34rN0g.png"></figure><p name="42b9" id="42b9" class="graf graf--p graf-after--figure">For 1 in the picture, change the PIN to “%s (this is our target we’re trying to hit)</p><p name="623d" id="623d" class="graf graf--p graf-after--p">For 2, use the script below. Before you do, <strong class="markup--strong markup--p-strong">full disclosure</strong>, I attempted to do this in intruder and messed around with the resource pool and couldn’t tweak it enough to get it working. Perhaps it’s possible, I’m not sure because I moved on. I knew that this <em class="markup--em markup--p-em">had </em>to be the way in. I toyed with the idea of trying other methods (and did try SQLi etc). But in the end, I figured that I would have to go for gold and bypass the MFA directly. I asked an LLM to build a script I could use in turbo intruder that would:</p><ul class="postList"><li name="8cf7" id="8cf7" class="graf graf--li graf-after--p">Allow concurrent connections</li><li name="55f0" id="55f0" class="graf graf--li graf-after--li">Allow 100 requests per connection</li><li name="38f7" id="38f7" class="graf graf--li graf-after--li">Run a for loop for 10000 pins</li><li name="d02b" id="d02b" class="graf graf--li graf-after--li">display only the success message</li></ul><p name="e601" id="e601" class="graf graf--p graf-after--li">And it came up with this. The beauty of it, is because I asked for specifics, it gave me specifics and it works. REALLY FAST. Within 5–10 seconds, I get the MFA PIN. Neat, huh?</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="python" name="336d" id="336d" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-comment"># Turbo Intruder script - MFA PIN brute force</span><br /><br /><span class="hljs-keyword">def</span> <span class="hljs-title function_">queueRequests</span>(<span class="hljs-params">target, wordlists</span>):<br /><br />    engine = RequestEngine(endpoint=target.endpoint,<br />                           concurrentConnections=<span class="hljs-number">50</span>,<br />                           requestsPerConnection=<span class="hljs-number">100</span>,<br />                           pipeline=<span class="hljs-literal">False</span>)<br /><br />    <span class="hljs-comment"># Generate all 4-digit PINs 0000-9999</span><br />    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">10000</span>):<br />        pin = <span class="hljs-built_in">str</span>(i).zfill(<span class="hljs-number">4</span>)<br />        engine.queue(target.req, pin)<br /><br /><span class="hljs-keyword">def</span> <span class="hljs-title function_">handleResponse</span>(<span class="hljs-params">req, interesting</span>):<br />    <span class="hljs-comment"># Flag anything that isn&#x27;t a 400 (i.e. not &quot;Invalid PIN&quot;)</span><br />    <span class="hljs-keyword">if</span> req.status != <span class="hljs-number">400</span>:<br />        table.add(req)<br /><br /><br /></span></pre><p name="ad6f" id="ad6f" class="graf graf--p graf-after--pre">3 (marked on the screenshot below) is the final step: attack!</p><figure name="e658" id="e658" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*q5-VcGvAiAqb4an90ej9VA.png" data-width="606" data-height="589" src="https://cdn-images-1.medium.com/max/800/1*q5-VcGvAiAqb4an90ej9VA.png"></figure><p name="93e2" id="93e2" class="graf graf--p graf-after--figure">Step 4: PINGO ! (bingo? get it? Ok, that was a bad one)</p><p name="bc06" id="bc06" class="graf graf--p graf-after--p">If you’re successful, you’ll see your payload at the top which (in my case) was 1580. You’ll see a success response in the bottom right pane:</p><figure name="6405" id="6405" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*4qdGPpFYqoT55sq0OrcaTA.png" data-width="856" data-height="618" src="https://cdn-images-1.medium.com/max/800/1*4qdGPpFYqoT55sq0OrcaTA.png"></figure><p name="a082" id="a082" class="graf graf--p graf-after--figure">From here, browse to /admin and you’ll get the flag.</p><p name="44af" id="44af" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Please note:</strong> if this doesn’t work for you first time, make a new account. There is a chance you’ll get locked out of your account because of the rate-limiting but simply register a new account, supply the new token to Turbo Intruder, attack again and you’ll get the PIN.</p><figure name="d1d9" id="d1d9" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*aaQ9_Ut9AEXGtgu_ybHahw.png" data-width="1088" data-height="643" src="https://cdn-images-1.medium.com/max/800/1*aaQ9_Ut9AEXGtgu_ybHahw.png"></figure><p name="1532" id="1532" class="graf graf--p graf-after--figure">Thanks for reading!</p><p name="65c7" id="65c7" class="graf graf--p graf-after--p graf--trailing">🍺 Quick message to readers: if my writeups help you, please consider a small donation to my buymeacoffee link <a href="http://buymeacoffee.com/7s26simon" data-href="http://buymeacoffee.com/7s26simon" class="markup--anchor markup--p-anchor" rel="noopener ugc nofollow noopener" target="_blank">here</a>. This is not required but is very much appreciated! 🍺</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@7s26simon" class="p-author h-card">7s26Simon</a> on <a href="https://medium.com/p/76c31e33bd13"><time class="dt-published" datetime="2026-02-23T21:00:52.237Z">February 23, 2026</time></a>.</p><p><a href="https://medium.com/@7s26simon/furhire-writeup-mfa-bypass-medium-bugforge-76c31e33bd13" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on June 13, 2026.</p></footer></article></body></html>

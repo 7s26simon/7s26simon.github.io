@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Cheesy Does It (Business Logic Vuln) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/cheesy-does-it-business-logic-vuln-bugforge-0008c34d12f5 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Cheesy Does It (Business Logic Vuln)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/cheesy-does-it-business-logic-vuln/1*mbHpxCa523HxmL0R_DuRxg.png"/></figure><p>Step 1: Register and log in</p><p>After you log in, you’ll notice a discount code: PIZZA-10. Note it down and get ready to use it whilst going through the flow. Purchase a pizza and intercept the traffic, stop when you see the POST req in step 2.</p><figure><img src="images/cheesy-does-it-business-logic-vuln/1*WKk6oIlcbhSfCeZowiwbDQ.png"/></figure><p>Step 2: POST Req</p><p>Go through the purchase flow and you’ll see there’s a discount parameter in the body, which shows the discount code we entered in the previous step:</p><figure><img alt="#" src="images/cheesy-does-it-business-logic-vuln/1*zdEnv_gDZt4AxxW9QbGlQQ.png"/><figcaption class="imageCaption">#</figcaption></figure><p>Step 3: What didn’t work</p><p>I tried several things, including repeating the code over and over..however, this didn’t work.</p><figure><img src="images/cheesy-does-it-business-logic-vuln/1*Vt3aU2h5Znl7ku0WeWu7-w.png"/></figure><p>I also tried adding the pizzas to an array, but it didn’t work (note: this was my fault and was a syntax error).</p><figure><img src="images/cheesy-does-it-business-logic-vuln/1*Cgdx2vlI1oQo9VoQ8iF5_g.png"/></figure><p>Step 4: toppings array</p><p>Looking at the toppings array in the POST request, we see the format is: [“item”,”item”] , so lets form our discount based on this. So we end up with: [“discount”:[“PIZZA-10”,”PIZZA-10"].</p><p>So we can post this data in the body:</p><figure><img src="images/cheesy-does-it-business-logic-vuln/1*H0LTkkLSAHEqI4QTTx7mPA.png"/></figure><p>The response comes back with the flag as the coupon has been used twice:</p><figure><img src="images/cheesy-does-it-business-logic-vuln/1*3wbZ4tHbWoQrik8PP7Qg7A.png"/></figure><p>Thanks for reading!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

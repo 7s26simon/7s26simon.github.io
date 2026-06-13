@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>Furhire writeup (MFA Bypass) (Medium) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/furhire-writeup-mfa-bypass-medium-bugforge-76c31e33bd13 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>Furhire writeup (MFA Bypass) (Medium)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/furhire-writeup-mfa-bypass-medium/1*rndy1-Nnnj5Pp90CaJ7Qhw.png"/></figure><p>Step 1: Sign up… but wait!</p><p>When you sign up, be ready to capture traffic. Because the vulnerability (1 of 2 vulnerabilities) is right here, with a mass assignment.</p><figure><img src="images/furhire-writeup-mfa-bypass-medium/1*OZKI8bIEpGBCUEczPxWYDQ.png"/></figure><p>Capture this and append “role”:”administrator” to the POST req so it looks like this:</p><figure><img src="images/furhire-writeup-mfa-bypass-medium/1*HFLgeQOwBkibFslzgOAP-g.png"/></figure><p>Step 2: Log in</p><p>You’ll be presented with an MFA Verification page with 4 digits. At first, I was trying to use my burp collaborator as an email address so I could get the digits sent to me via exfil.</p><p>I soon discovered that if you hit the endpoint with multiple requests as fast as possible, it seems to bypass the lockout. Although, the lockout did still get me if the PIN was too high. Let’s work this out mathematically.</p><figure><img src="images/furhire-writeup-mfa-bypass-medium/1*VleH8JdE5PA2CDp9_HFqwQ.png"/></figure><p>There’s a lot of possibilities here. 0000 through 9999. That’s 10,000 potential PINs. But if we have a low enough PIN and we can blast through them quickly, we can get verified. So. Type in 0000 on the page and click “Verify” (ensure you’re capturing traffic).</p><figure><img src="images/furhire-writeup-mfa-bypass-medium/1*2lNNUyVIp9-X_RDw0CIfKg.png"/></figure><p>Step 3: Turbo Intruder</p><p>Right click &gt; Extensions &gt; Turbo Intruder &gt; Send to turbo intruder</p><figure><img src="images/furhire-writeup-mfa-bypass-medium/1*YbtejM4iUyzD2r0z34rN0g.png"/></figure><p>For 1 in the picture, change the PIN to “%s (this is our target we’re trying to hit)</p><p>For 2, use the script below. Before you do, <strong>full disclosure</strong>, I attempted to do this in intruder and messed around with the resource pool and couldn’t tweak it enough to get it working. Perhaps it’s possible, I’m not sure because I moved on. I knew that this <em>had </em>to be the way in. I toyed with the idea of trying other methods (and did try SQLi etc). But in the end, I figured that I would have to go for gold and bypass the MFA directly. I asked an LLM to build a script I could use in turbo intruder that would:</p><ul><li>Allow concurrent connections</li><li>Allow 100 requests per connection</li><li>Run a for loop for 10000 pins</li><li>display only the success message</li></ul><p>And it came up with this. The beauty of it, is because I asked for specifics, it gave me specifics and it works. REALLY FAST. Within 5–10 seconds, I get the MFA PIN. Neat, huh?</p><pre class="code-view-two"># Turbo Intruder script - MFA PIN brute force
+
+def queueRequests(target, wordlists):
+
+    engine = RequestEngine(endpoint=target.endpoint,
+                           concurrentConnections=50,
+                           requestsPerConnection=100,
+                           pipeline=False)
+
+    # Generate all 4-digit PINs 0000-9999
+    for i in range(10000):
+        pin = str(i).zfill(4)
+        engine.queue(target.req, pin)
+
+def handleResponse(req, interesting):
+    # Flag anything that isn't a 400 (i.e. not "Invalid PIN")
+    if req.status != 400:
+        table.add(req)
+
+
+</pre><p>3 (marked on the screenshot below) is the final step: attack!</p><figure><img src="images/furhire-writeup-mfa-bypass-medium/1*q5-VcGvAiAqb4an90ej9VA.png"/></figure><p>Step 4: PINGO ! (bingo? get it? Ok, that was a bad one)</p><p>If you’re successful, you’ll see your payload at the top which (in my case) was 1580. You’ll see a success response in the bottom right pane:</p><figure><img src="images/furhire-writeup-mfa-bypass-medium/1*4qdGPpFYqoT55sq0OrcaTA.png"/></figure><p>From here, browse to /admin and you’ll get the flag.</p><p><strong>Please note:</strong> if this doesn’t work for you first time, make a new account. There is a chance you’ll get locked out of your account because of the rate-limiting but simply register a new account, supply the new token to Turbo Intruder, attack again and you’ll get the PIN.</p><figure><img src="images/furhire-writeup-mfa-bypass-medium/1*aaQ9_Ut9AEXGtgu_ybHahw.png"/></figure><p>Thanks for reading!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>MesaNet writeup (hard) (SQLi) // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!-- Imported from Medium: https://medium.com/@7s26simon/mesanet-writeup-hard-bugforge-sqli-b59bdb989213 -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a class="active" href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>MesaNet writeup (hard) (SQLi)</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+<hr/><figure><img src="images/mesanet-writeup-hard-sqli/1*hAXqFoXeqn43BeZHlvnQlw.png"/></figure><p><strong>Step 1:</strong> Enumeration</p><p>After logging in with the operator account, we had a few options: Dashboard, Nexus, Secure Mail and Dev Console:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*iApC4p_9PhVFdiitawQk0g.png"/></figure><p>My attention was drawn to the Dev Console and for a long while, I thought it might be some kind of OTP bypass that we needed.</p><figure><img src="images/mesanet-writeup-hard-sqli/1*Oe-fhZcL9R2CuWQXefFtig.png"/></figure><p>After some time, I realised there must be another way. I noted down what I had:</p><p>This was an Express app with a “gateway<strong>”</strong>. All API calls go through <code>POST /gateway</code> with an <code>{id, endpoint, data}</code> structure.</p><p>It was made up of App, APP_ID , 3x endpoints. They were:</p><p><strong>Nexus</strong> (notes)<code>a7f3c4e9-8b2d-4a6f-9c1e-5d8a3b7f2c4e/api/notes/list</code>, <code>/api/notes/get</code>, <code>/api/notes/create</code></p><p><strong>Secure Mail</strong><code>b3e8d1f6-4c9a-4b2e-8f7d-6a1c9b3e5f8d/api/mail/inbox</code>, <code>/api/mail/get</code>, <code>/api/mail/send</code></p><p>My user account was listed as: operator, ID 1, Clearance L3, which meant I could do the following on each app:</p><ul><li>Nexus: read <code>public</code> + <code>restricted</code>, write <code>public</code> only</li><li>Mail: can send mail, with a max classification of <code>restricted</code></li></ul><p>I sent an email via the mail app but sent the request to repeater, and changed the id to all 0’s (keeping the dashes).</p><figure><img src="images/mesanet-writeup-hard-sqli/1*9NeVGlzGgVXf0qDvuTJp-g.png"/></figure><p>This gave a “Rail” error. Was rail an app? Would it follow the same convention as the aformentioned apps? Let’s try it.</p><p><strong>Step 2:</strong> Digging Deeper</p><p>Playing around with the json request led me to an error which said that more fields were required:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*XmtcHus_gf_73E8nFhgCVw.png"/></figure><p>I added the required fields and this was ok:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*cCJTwk0_zd8Is7gy93jIFw.png"/></figure><p>So now I was wondering if any of these fields were likely to be vulnerable. I worked my way down each until I got to “message”. Is this a SQLi? Blind SQLi? I knew I was getting a 500 error. I knew converting to 0’s for the id had discovered a new app. But, at this point, I was stuck until a fellow Bugforger (shoutout John Matrix) confirmed this part WAS a second order SQLi and to stay at it since we’re not far from the end:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*q78iHUbKne1PNNXJJWfJRQ.png"/></figure><p>The following payload did the trick: <code>test'||(SELECT sqlite_version())||'</code> and confirmed that we have SQLi which is now generating a response we can use to further the attack.</p><figure><img src="images/mesanet-writeup-hard-sqli/1*HS-5BZQxj0e7gUtER9c1zA.png"/></figure><p>Next, I began looking online for similar situations to this where we need to dump out sqlite databases and ultimately found this payload:</p><blockquote>test’||(SELECT group_concat(name) FROM sqlite_master WHERE type=’table’)||’</blockquote><p>this would be the breakthrough.</p><figure><img src="images/mesanet-writeup-hard-sqli/1*g9StW-6zeHGBHEmubHImGw.png"/></figure><p>The sqlite_sequence stood out, as did the config. The SQLi was starting to get a bit more intimidating, so I consulted Claude to construct the next command which was to look at the tables that had been created. I could see there was a ‘config’ table with a ‘key’ and a ‘value’:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*lIq0E6xLXFWPqy0vQGPh6w.png"/></figure><p>So now I could use the following payload to obtain the key:value from the config table: test’||(SELECT group_concat(key||’:’||value) FROM config)||’</p><figure><img src="images/mesanet-writeup-hard-sqli/1*MI8rw9j-l7y9W_StJXbFrQ.png"/></figure><p>Now, I had a username + password. Great. But, where should I enter it?</p><p><strong>Step 3:</strong> /db</p><p>After fuzzing, I found /db, which I could log into with the credentials from the previous step.</p><p>This led me to a Database Administration Console. From here, it looked as though I needed to download a *Db file. So I typed in fileDb and hit enter.</p><figure><img src="images/mesanet-writeup-hard-sqli/1*08vgZBeSSBx6IL0V7SLC7Q.png"/></figure><p>It failed.</p><figure><img src="images/mesanet-writeup-hard-sqli/1*TvpqeudfPSnddr6jy6yADA.png"/></figure><p>The database name was invalid and must be in the format &lt;name&gt;Db. Ok. Now I need to find out what the database name is. Of course, I couldn’t seem to get this from SQLi, so I began fuzzing. I got a hit on /db/backup:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*JXNEj_YFgeU_QlzwzIxsDA.png"/></figure><p>Now I had a new problem. I didn’t know the database name. Could it be revealed in the backup directory? I’d have to fuzz further.</p><figure><img src="images/mesanet-writeup-hard-sqli/1*xX6Nh6k3NZMqx05-G-UBDQ.png"/></figure><p>Ok, so the error message suggested it just needed the database name. So this required fuzzing. After fuzzing, ‘portalDb’ got a hit. I ran it through repeater and it dumped the database:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*23xhwRGweHo0aH_JeQKRkA.png"/></figure><p>But what’s more, it dumped the OTP:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*52TnS3NJp4n9-X9wl_IlFg.png"/></figure><p>The OTP only works for 60 seconds, so I immediately got a new one, and headed to where this lab began:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*Oe-fhZcL9R2CuWQXefFtig.png"/></figure><p>Taking screenshots and trying to enter OTPs is more difficult than you may imagine:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*f6acR5uaVGbvRVzfvKu3Ug.png"/></figure><p>But the OTP was valid and got the flag:</p><figure><img src="images/mesanet-writeup-hard-sqli/1*1cLC5PXV9inmZyKWh4utrw.png"/></figure><p>Thanks for reading!</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>
