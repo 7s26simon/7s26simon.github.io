@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>MACHINE_NAME Writeup // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <!--
+    ============================================================
+    WRITEUP TEMPLATE - HOW TO USE
+    ------------------------------------------------------------
+    1. Copy this file into one of:
+         htb-writeups/         (HackTheBox)
+         thm-writeups/         (TryHackMe)
+         vulnhub-writeups/     (Vulnhub)
+         bugforge-writeups/    (BugForge - create this folder)
+         webverse-writeups/    (WebVerse - create this folder)
+         gensec/               (general security article)
+
+    2. Rename it to something descriptive: e.g. blunder.html
+
+    3. Find/replace these placeholders:
+         MACHINE_NAME    -> box / room / challenge name
+         PLATFORM        -> HackTheBox / TryHackMe / Vulnhub / BugForge / WebVerse
+         (also: update the <a class="active"> in the nav dropdown so
+          it points to the right category page)
+
+    4. Add the writeup to the platform's index page (e.g. hackthebox.html)
+       and to quicklinks.html.
+
+    5. Drop your screenshots into  images/<machine-name>/
+       (relative to this file, so e.g. htb-writeups/images/blunder/)
+
+    6. Delete this comment block when you're done.
+    ============================================================
+    -->
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <!-- EDIT: add class="active" to the platform this writeup belongs to -->
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">security blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>MACHINE_NAME Writeup</p>
+    </div>
+
+    <!-- ===== Hero / header image (optional) =====
+         Replace the src with a banner image for the box.
+         Aim for a wide image; the CSS will size it sensibly. -->
+    <div id="center-writeup-image">
+        <img src="images/MACHINE_NAME/header.jpg" alt="MACHINE_NAME">
+    </div>
+
+    <!-- ===== Main writeup body ===== -->
+    <div id="marg-asthetic">
+
+        <!-- Tip: each section starts with an <h2>. Number them or not -
+             both look fine with the theme. -->
+
+        <h2>1. Enumeration</h2>
+
+        <p>Brief intro paragraph - what you were given, first impressions, ports / services discovered, etc.</p>
+
+        <p>Example of an inline code reference: I ran <code>nmap -sV -sC -p- 10.10.10.10</code> and got the following.</p>
+
+        <!-- A multi-line code / terminal block. Anything inside renders
+             green-on-black with a left accent bar.  -->
+        <pre class="code-view-two">
+nmap -sV -sC -p- 10.10.10.10
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.2p1
+80/tcp open  http    Apache 2.4.41
+        </pre>
+
+        <!-- A screenshot. Path is relative to this file. -->
+        <img src="images/MACHINE_NAME/nmap.png" alt="nmap scan output">
+
+        <p>Some commentary on what you found. Use <strong>strong</strong> for emphasis (renders green) and <a href="https://example.com" target="_blank" rel="noopener">links</a> for external references.</p>
+
+
+        <h2>2. Foothold</h2>
+
+        <p>Describe how you got your initial foothold. CVE, misconfig, credential reuse, whatever it was.</p>
+
+        <img src="images/MACHINE_NAME/foothold.png" alt="initial shell">
+
+        <pre class="code-view-two">
+www-data@MACHINE_NAME:/$ id
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+        </pre>
+
+
+        <h2>3. User</h2>
+
+        <p>Lateral movement / privilege escalation to a regular user, if applicable.</p>
+
+        <!-- The .shellbyte class is a small pink badge - good for
+             highlighting passwords, flags, or short loot lines. -->
+        <p class="shellbyte">user.txt: 0123456789abcdef0123456789abcdef</p>
+
+
+        <h2>4. Root / Admin</h2>
+
+        <p>Final privesc. What was the trick? sudo misconfig? kernel exploit? cron job? Suid binary?</p>
+
+        <pre class="code-view-two">
+root@MACHINE_NAME:~# whoami
+root
+        </pre>
+
+        <p class="shellbyte">root.txt: fedcba9876543210fedcba9876543210</p>
+
+
+        <h2>5. Lessons / Notes</h2>
+
+        <p>Optional. What did this box teach you? Any tools or techniques worth remembering for next time?</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/linkedin.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>

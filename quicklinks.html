@@ -43,31 +43,92 @@
             <p>All Writeups</p>
         </div>
 
-        <table>
+        <div class="filter-bar">
+            <label for="cat-filter">filter by vulnerability</label>
+            <select id="cat-filter">
+                <option value="">All vulnerabilities</option>
+                <option value="access-control">Broken Access Control</option>
+                <option value="rce">Command Injection / RCE</option>
+                <option value="csrf">CSRF</option>
+                <option value="idor">IDOR</option>
+                <option value="deserialization">Insecure Deserialization</option>
+                <option value="jwt">JWT Vulnerability</option>
+                <option value="lfi">LFI / RFI</option>
+                <option value="nosql">NoSQL</option>
+                <option value="redirect">Open Redirect</option>
+                <option value="path-traversal">Path Traversal</option>
+                <option value="sqli">SQL Injection</option>
+                <option value="ssrf">SSRF</option>
+                <option value="stego">Steganography</option>
+                <option value="ssti">Template Injection (SSTI)</option>
+                <option value="upload">Unrestricted File Upload</option>
+                <option value="weak-auth">Weak / Default Creds</option>
+                <option value="crypto">Weak Cryptography</option>
+                <option value="xss">XSS</option>
+                <option value="xxe">XXE</option>
+            </select>
+            <span id="filter-count" class="filter-count"></span>
+        </div>
+
+        <table id="writeup-table">
             <thead>
                 <tr>
                     <th>Machine</th>
                     <th>Platform</th>
+                    <th>Vulnerabilities</th>
                     <th>Writeup</th>
                 </tr>
             </thead>
             <tbody>
-                <tr><td>Legacy</td><td>HackTheBox</td><td><a href="htb-writeups/legacy.html">read</a></td></tr>
-                <tr><td>Servmon</td><td>HackTheBox</td><td><a href="htb-writeups/servmon.html">read</a></td></tr>
-                <tr><td>Blunder</td><td>HackTheBox</td><td><a href="htb-writeups/blunder.html">read</a></td></tr>
-                <tr><td>Tabby</td><td>HackTheBox</td><td><a href="htb-writeups/tabby.html">read</a></td></tr>
-                <tr><td>Alfred</td><td>TryHackMe</td><td><a href="thm-writeups/alfred.html">read</a></td></tr>
-                <tr><td>Ghostcat</td><td>TryHackMe</td><td><a href="thm-writeups/ghostcat.html">read</a></td></tr>
-                <tr><td>Jack</td><td>TryHackMe</td><td><a href="thm-writeups/jack.html">read</a></td></tr>
-                <tr><td>Lian-Yu</td><td>TryHackMe</td><td><a href="thm-writeups/lianyu.html">read</a></td></tr>
-                <tr><td>Year of The Rabbit</td><td>TryHackMe</td><td><a href="thm-writeups/yotr.html">read</a></td></tr>
-                <tr><td>Dave's Blog</td><td>TryHackMe</td><td><a href="thm-writeups/davesblog.html">read</a></td></tr>
-                <tr><td>Escalate my Privileges</td><td>Vulnhub</td><td><a href="vulnhub-writeups/emp-writeup.html">read</a></td></tr>
-                <tr><td>Geisha</td><td>Vulnhub</td><td><a href="vulnhub-writeups/geisha.html">read</a></td></tr>
-                <tr><td>Sumo</td><td>Vulnhub</td><td><a href="vulnhub-writeups/sumo.html">read</a></td></tr>
-                <tr><td>Vegeta</td><td>Vulnhub</td><td><a href="vulnhub-writeups/vegeta.html">read</a></td></tr>
+                <!--
+                Each row's data-categories attribute lists vulnerability
+                classes only (no techniques, tools, or OS). Tokens must
+                match the <option value="..."> values above.
+                -->
+                <tr data-categories="rce"><td>Legacy</td><td>HackTheBox</td><td>RCE</td><td><a href="htb-writeups/legacy.html">read</a></td></tr>
+                <tr data-categories="lfi path-traversal weak-auth"><td>Servmon</td><td>HackTheBox</td><td>LFI / Path Traversal, Weak Creds</td><td><a href="htb-writeups/servmon.html">read</a></td></tr>
+                <tr data-categories="weak-auth upload rce"><td>Blunder</td><td>HackTheBox</td><td>Weak Creds, File Upload, RCE</td><td><a href="htb-writeups/blunder.html">read</a></td></tr>
+                <tr data-categories="lfi upload rce"><td>Tabby</td><td>HackTheBox</td><td>LFI, File Upload, RCE</td><td><a href="htb-writeups/tabby.html">read</a></td></tr>
+                <tr data-categories="rce"><td>Alfred</td><td>TryHackMe</td><td>RCE</td><td><a href="thm-writeups/alfred.html">read</a></td></tr>
+                <tr data-categories="lfi"><td>Ghostcat</td><td>TryHackMe</td><td>LFI</td><td><a href="thm-writeups/ghostcat.html">read</a></td></tr>
+                <tr data-categories="weak-auth access-control upload rce"><td>Jack</td><td>TryHackMe</td><td>Weak Creds, Broken Access Control, File Upload, RCE</td><td><a href="thm-writeups/jack.html">read</a></td></tr>
+                <tr data-categories="stego"><td>Lian-Yu</td><td>TryHackMe</td><td>Steganography</td><td><a href="thm-writeups/lianyu.html">read</a></td></tr>
+                <tr data-categories="weak-auth"><td>Year of The Rabbit</td><td>TryHackMe</td><td>Weak Creds</td><td><a href="thm-writeups/yotr.html">read</a></td></tr>
+                <tr data-categories="nosql jwt rce access-control"><td>Dave's Blog</td><td>TryHackMe</td><td>NoSQL, JWT, Auth Bypass, Command Injection</td><td><a href="thm-writeups/davesblog.html">read</a></td></tr>
+                <tr data-categories="rce access-control"><td>Escalate my Privileges</td><td>Vulnhub</td><td>RCE, Broken Access Control</td><td><a href="vulnhub-writeups/emp-writeup.html">read</a></td></tr>
+                <tr data-categories="weak-auth"><td>Geisha</td><td>Vulnhub</td><td>Weak Creds</td><td><a href="vulnhub-writeups/geisha.html">read</a></td></tr>
+                <tr data-categories="rce"><td>Sumo</td><td>Vulnhub</td><td>RCE</td><td><a href="vulnhub-writeups/sumo.html">read</a></td></tr>
+                <tr data-categories="weak-auth"><td>Vegeta</td><td>Vulnhub</td><td>Weak Creds</td><td><a href="vulnhub-writeups/vegeta.html">read</a></td></tr>
             </tbody>
+            <tfoot id="no-results-row" hidden>
+                <tr><td colspan="4" style="text-align:center; color: var(--text-muted); font-style: italic; padding: 28px;">No writeups in this category yet.</td></tr>
+            </tfoot>
         </table>
+
+        <script>
+            (function () {
+                const select = document.getElementById('cat-filter');
+                const rows = document.querySelectorAll('#writeup-table tbody tr');
+                const empty = document.getElementById('no-results-row');
+                const count = document.getElementById('filter-count');
+
+                function apply() {
+                    const v = select.value;
+                    let visible = 0;
+                    rows.forEach(function (r) {
+                        const cats = (r.dataset.categories || '').toLowerCase().split(/\s+/);
+                        const show = !v || cats.indexOf(v) !== -1;
+                        r.hidden = !show;
+                        if (show) visible++;
+                    });
+                    empty.hidden = visible !== 0;
+                    count.textContent = v ? visible + ' / ' + rows.length : '';
+                }
+
+                select.addEventListener('change', apply);
+                apply();
+            })();
+        </script>
 
     </main>
 
@@ -75,6 +136,7 @@
         <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="images/linkedin.PNG" alt="LinkedIn"></a>
         <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="images/twitter.PNG" alt="X"></a>
         <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="images/linkedin.PNG" alt="GitHub"></a>
     </section>
 
     <footer id="bottom-bar">
