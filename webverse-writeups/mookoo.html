@@ -46,7 +46,7 @@
 
         <p>
             <strong>Platform:</strong> WebverseLabs<br>
-            <strong>Target:</strong> <code>https://4828ab0c-3953-mookoo-2bbf6.events.webverselabs-pro.com</code><br>
+            <strong>Target:</strong> https://4828ab0c-3953-mookoo-2bbf6.events.webverselabs-pro.com<br>
             <strong>Vulnerability classes:</strong> Reflected XSS, Server-Side Template Injection (SSTI), RCE
         </p>
 
@@ -54,7 +54,7 @@
 
         <img src="./images/mookoo/main.png" alt="MooKoo Family Farm homepage">
 
-        <p>MooKoo Family Farm is a small "closing-down sale" storefront where each animal on the farm is listed as a product. The site is intentionally written like a quickly-thrown-together shop front (per the lab brief), and the <code>product</code> query parameter on the product detail page turns out to be the single point of entry for the whole chain: a reflected XSS that masks a server-side template injection sink, which in turn allows arbitrary OS command execution.</p>
+        <p>MooKoo Family Farm is a small "closing-down sale" storefront where each animal on the farm is listed as a product. The site is intentionally written like a quickly-thrown-together shop front (per the lab brief), and the product query parameter on the product detail page turns out to be the single point of entry for the whole chain: a reflected XSS that masks a server-side template injection sink, which in turn allows arbitrary OS command execution.</p>
 
 
         <h2>2. Application Map</h2>
@@ -69,50 +69,51 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><code>/</code></td>
+                    <td>/</td>
                     <td>GET</td>
-                    <td>Landing page, herd grid, links to <code>/product?product=&lt;slug&gt;</code></td>
+                    <td>Landing page, herd grid, links to /product?product=&lt;slug&gt;</td>
                 </tr>
                 <tr>
-                    <td><code>/about</code></td>
+                    <td>/about</td>
                     <td>GET</td>
                     <td>Static "Our story" page, no user input</td>
                 </tr>
                 <tr>
-                    <td><code>/product?product=&lt;slug&gt;</code></td>
+                    <td>/product?product=&lt;slug&gt;</td>
                     <td>GET</td>
-                    <td>Product detail page. Valid slugs: <code>bessie</code>, <code>dakota</code>, <code>clover</code>, <code>woolly</code>, <code>henrietta</code>, <code>hampton</code>, <code>gandalf</code>, <code>drake</code></td>
+                    <td>Product detail page. Valid slugs: bessie, dakota, clover, woolly, henrietta, hampton, gandalf, drake</td>
                 </tr>
                 <tr>
-                    <td><code>/style.css</code>, <code>/img/*</code>, fonts</td>
+                    <td>/style.css, /img/*, fonts</td>
                     <td>GET</td>
                     <td>Static assets</td>
                 </tr>
             </tbody>
         </table>
 
-        <p>After landing on the page, I could see that the "Make an offer" button on each product page is a disabled GET form pointing back at <code>/product?product=&lt;slug&gt;</code> - a dead end, not an additional input vector.</p>
+        <p>After landing on the page, I could see that the "Make an offer" button on each product page is a disabled GET form pointing back at /product?product=&lt;slug&gt; - a dead end, not an additional input vector.</p>
 
-        <p>The only attacker-controlled input anywhere on the site is the <code>product</code> query parameter.</p>
+        <p>The only attacker-controlled input anywhere on the site is the product query parameter.</p>
 
 
         <h2>3. Initial Recon - Ruling Out SQL Injection</h2>
 
         <img src="./images/mookoo/shop.png" alt="MooKoo shop page">
 
-        <p>The <code>/product</code> endpoint returns a friendly "not found" page for any slug it doesn't recognise, and that page echoed the requested value back.</p>
+        <p>The /product endpoint returns a friendly "not found" page for any slug it doesn't recognise, and that page echoed the requested value back.</p>
 
         <img src="./images/mookoo/bessie.png" alt="Bessie product page">
 
-        <p>The obvious thing to try was SQL injection. The following payloads were tried against the <code>product</code> parameter:</p>
+        <p>The obvious thing to try was SQL injection. The following payloads were tried against the product parameter:</p>
 
         <img src="./images/mookoo/sqli.png" alt="SQLi attempts in Burp">
+        <p>Note: I realise the screenshot above missed a space after the 'or'. I corrected that after the screenshot but the result was the same.</p>
 
         <ul>
-            <li><code>bessie'</code></li>
-            <li><code>bessie'-- -</code></li>
-            <li><code>' OR '1'='1</code></li>
-            <li><code>bessie' OR '1'='1'-- -</code></li>
+            <li>bessie'</li>
+            <li>bessie'-- -</li>
+            <li>' OR '1'='1</li>
+            <li>bessie' OR '1'='1'-- -</li>
         </ul>
 
         <p>In every case the response was a "not found" page with the raw payload reflected verbatim. There were no SQL errors.</p>
@@ -120,7 +121,7 @@
 
         <h2>4. Finding #1 - Reflected XSS</h2>
 
-        <p>While ruling out SQLi, it became clear that the "not found" message reflects <code>product</code> completely unescaped into the HTML body:</p>
+        <p>While ruling out SQLi, it became clear that the "not found" message reflects product completely unescaped into the HTML body:</p>
 
 <pre class="code-view-two">GET /product?product=&lt;h1&gt;test&lt;/h1&gt;&lt;h2&gt;html&lt;/h2&gt;&lt;h3&gt;injection&lt;/h3&gt;</pre>
 
@@ -136,12 +137,12 @@
 
         <img src="./images/mookoo/rxss.png" alt="Reflected XSS alert firing">
 
-        <p>The response carried no Content-Security-Policy (CSP) header (only the legacy, largely-ignored <code>X-XSS-Protection: 1; mode=block</code>), so this executes in any modern browser. On its own this is a reflected XSS - but the more interesting question was <em>why</em> the fallback path reflects raw input at all. That question led directly to the next finding.</p>
+        <p>The response carried no Content-Security-Policy (CSP) header (only the legacy, largely-ignored X-XSS-Protection: 1; mode=block), so this executes in any modern browser. On its own this is a reflected XSS - but the more interesting question was <em>why</em> the fallback path reflects raw input at all. That question led directly to the next finding.</p>
 
 
         <h2>5. Finding #2 - Server-Side Template Injection</h2>
 
-        <p>The "X not found" fallback behaviour suggested the application might be attempting to <em>render</em> the <code>product</code> value as a template fragment before falling back to raw reflection on error. Standard Jinja2/Twig-style syntax was tried first and failed:</p>
+        <p>The "X not found" fallback behaviour suggested the application might be attempting to <em>render</em> the product value as a template fragment before falling back to raw reflection on error. Standard Jinja2/Twig-style syntax was tried first and failed:</p>
 
 <pre class="code-view-two">GET /product?product={{7*7}}
 returned: {{7*7}} not found</pre>
@@ -153,7 +154,7 @@ returned: {{7*7}} not found</pre>
 <pre class="code-view-two">GET /product?product=&lt;%= 7*7 %&gt;
 returned: 49 not found</pre>
 
-        <p>This confirmed SSTI. The <code>product</code> value is being injected into the <em>source</em> of a template, not passed as data to a pre-compiled one.</p>
+        <p>This confirmed SSTI. The product value is being injected into the <em>source</em> of a template, not passed as data to a pre-compiled one.</p>
 
 
         <h2>6. Finding #3 - RCE via Backtick Command Execution</h2>
@@ -163,7 +164,7 @@ returned: 49 not found</pre>
 <pre class="code-view-two">GET /product?product=&lt;%= `id` %&gt;
 returned: uid=1100(farmhand) gid=999(farm) groups=999(farm)</pre>
 
-        <p>This is full, unauthenticated remote code execution as the <code>farmhand</code> user. Reading the flag was then trivial:</p>
+        <p>This is full, unauthenticated remote code execution as the farmhand user. Reading the flag was then trivial:</p>
 
 <pre class="code-view-two">GET /product?product=&lt;%= `cat /flag.txt` %&gt;</pre>
 
