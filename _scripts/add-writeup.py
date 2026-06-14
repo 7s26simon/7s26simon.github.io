@@ -45,6 +45,8 @@ VULN_TAGS_CSV = ROOT / "_scripts" / "vuln-tags.csv"
 INDEX_HTML    = ROOT / "index.html"
 BACKUP_DIR    = ROOT / "_scripts" / ".rollback"
 
+TEMPLATE_HTML = ROOT / "_template" / "writeup-template.html"
+
 DEST_TO_PLATFORM = {
     "htb-writeups":      ("HackTheBox", "platform-htb"),
     "thm-writeups":      ("TryHackMe",  "platform-thm"),
@@ -195,6 +197,46 @@ def update_latest_lab(slug: str, dest: str, name: str, entry_date: str):
     INDEX_HTML.write_text(content, encoding="utf-8")
 
 
+DEST_TO_NAV_FILE = {
+    "htb-writeups":      "hackthebox.html",
+    "thm-writeups":      "tryhackme.html",
+    "vulnhub-writeups":  "vulnhub.html",
+    "bugforge-writeups": "bugforge.html",
+    "webverse-writeups": "webverse.html",
+}
+
+
+def create_writeup_file(slug: str, dest: str, name: str) -> Path:
+    out_path = ROOT / dest / f"{slug}.html"
+    if out_path.exists():
+        print(f"  File already exists, skipping creation: {out_path.relative_to(ROOT)}")
+        return out_path
+
+    content = TEMPLATE_HTML.read_text(encoding="utf-8")
+
+    # Strip the "HOW TO USE" comment block
+    content = re.sub(r'\s*<!--\s*={4,}.*?WRITEUP TEMPLATE.*?={4,}\s*-->', '', content, flags=re.DOTALL)
+
+    # Replace MACHINE_NAME placeholder
+    content = content.replace("MACHINE_NAME", name)
+
+    # Mark the correct nav dropdown item as active
+    nav_file = DEST_TO_NAV_FILE.get(dest)
+    if nav_file:
+        content = content.replace(
+            f'href="../{nav_file}"',
+            f'href="../{nav_file}" class="active"',
+        )
+
+    out_path.write_text(content, encoding="utf-8")
+
+    # Run sync-nav to inline the nav properly for this new file
+    sync = ROOT / "_scripts" / "sync-nav.py"
+    subprocess.run([sys.executable, str(sync)], capture_output=True)
+
+    return out_path
+
+
 def rebuild_quicklinks():
     script = ROOT / "_scripts" / "update-quicklinks.py"
     result = subprocess.run([sys.executable, str(script)], capture_output=True, text=True)
@@ -231,11 +273,6 @@ def main():
     slug  = args.slug if args.slug else slugify(args.name)
     vulns = parse_vulns(args.vulns) if args.vulns else ""
 
-    html_path = ROOT / args.dest / f"{slug}.html"
-    if not html_path.exists():
-        print(f"Warning: {html_path.relative_to(ROOT)} does not exist.")
-        print("  The entry will still be added, but the link will be broken until you create the file.")
-
     existing = load_existing_slugs()
     if slug in existing:
         print(f"Error: slug '{slug}' already exists in vuln-tags.csv")
@@ -244,6 +281,10 @@ def main():
 
     # Save backup before making any changes
     save_backup()
+
+    print(f"Creating writeup file...")
+    out = create_writeup_file(slug, args.dest, args.name)
+    print(f"  {out.relative_to(ROOT)}")
 
     append_row(slug, args.dest, args.name, args.date, vulns)
     print(f"Added: [{args.date}] {args.name}  ({args.dest}/{slug}.html)")

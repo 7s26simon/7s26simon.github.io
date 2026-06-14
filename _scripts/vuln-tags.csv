@@ -109,3 +109,4 @@ bill-s-steak-house-rce,webverse-writeups,Bill’s Steak House (RCE),2026-05-29,r
 ottergram-priv-esc,bugforge-writeups,Ottergram (Priv-Esc),2026-05-30,access-control
 tamper-temple-official-writeup-hard,webverse-writeups,Tamper Temple (Official writeup) (hard),2026-06-01,access-control jwt info-disclosure
 expensiel,webverse-writeups,Expensiel,2026-06-13,nosql mass-assignment
+mookoo,webverse-writeups,MooKoo,2026-06-14,xss ssti

