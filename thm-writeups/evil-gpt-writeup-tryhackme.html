@@ -51,6 +51,9 @@
 
 <hr/><figure><img alt="Evil-GPT" src="images/evil-gpt-writeup-tryhackme/1*fOsSIdAG_uiz1Vl44znxmQ.png"/><figcaption class="imageCaption">Evil-GPT</figcaption></figure><blockquote><strong>Step 1: </strong>To connect to the “AI Command Executor”, you use: nc &lt;IP&gt; &lt;port&gt;</blockquote><p>My instinct here was to try and run a basic command to list all files, ‘ls’. The response I got was a modified version of what I’d typed in. From here, I knew that whatever I typed in was likely going to be modified, so it would be a case of sending the right commands in order to get the flag.</p><figure><img src="images/evil-gpt-writeup-tryhackme/1*7d8BQQt4uWokozGn76El-A.png"/></figure><p><strong>Step 2:</strong> Locating flag.txt</p><p>I will save you the pain, but for a long while, I thought this box might require priv-esc, so I went down a rabbit hole before running “ls /root”</p><p>My command was upgraded as expected to “ls -la /root” and this showed that the flag was inside the /root directory</p><figure><img src="images/evil-gpt-writeup-tryhackme/1*0iB5Cfe7JGV0itrxuHDS4A.png"/></figure><p><strong>Step 3:</strong> Reading the flag</p><p>A few attempts later, I was able to read the flag with “cat /root/ flag.txt” which upgraded the command to what I wanted: “cat /root/flag.txt”</p><figure><img src="images/evil-gpt-writeup-tryhackme/1*RqlmUvoVkl2wXKGiT-scEQ.png"/></figure>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

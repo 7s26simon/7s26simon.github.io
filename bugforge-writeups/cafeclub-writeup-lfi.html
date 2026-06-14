@@ -51,6 +51,9 @@
 
 <hr/><figure><img src="images/cafeclub-writeup-lfi/1*bf8EI4dhs34EdL4LTjOgzg.png"/></figure><p>We are back, yet again at the famous CafeClub! The vulnerability was similar to <a href="https://medium.com/@7s26simon/ottergram-writeup-lfi-bugforge-1e4fa8795e24">this</a>, but it’s always good to find and practice.</p><p>Step 1: Register and Identify the vulnerability</p><p>Register. Then get your traffic intercepted by burpsuite or whatever tool you use. Click onto one of the products.</p><figure><img src="images/cafeclub-writeup-lfi/1*C28IpDeo64OMJz12YXACcw.png"/></figure><p>Step 2: Ensure your burpsuite is displaying images</p><p>This one often catches people out, but ensure you can view images in burpsuite. If not, change your filters. You’ll see product png files are being fetched in such a way that might be useful for us, as a “bad guy”:</p><figure><img src="images/cafeclub-writeup-lfi/1*OxQfR3KD84aqbr6vyQAspA.png"/></figure><p>Step 3: Repeater</p><p>Send the request to repeater so we can tamper with it. ../flag.txt contains our flag:</p><figure><img src="images/cafeclub-writeup-lfi/1*aNLdd_Xgv-L25gWOHJcEsw.png"/></figure><p>Thanks for reading!</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

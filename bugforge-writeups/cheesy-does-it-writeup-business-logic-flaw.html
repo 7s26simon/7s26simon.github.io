@@ -51,6 +51,9 @@
 
 <hr/><figure><img src="images/cheesy-does-it-writeup-business-logic-flaw/1*I1OUjcr62vvzn566o25dgg.png"/></figure><p>We’re back at Cheesy Does It! The only pizza restaurant that somehow stays in business despite losing gargantuan amounts of cash!</p><p>Step 1: Register</p><figure><img src="images/cheesy-does-it-writeup-business-logic-flaw/1*k1QPoVs93UPWtVeyAYof3w.png"/></figure><p>Step 2: Support Cheesy Does It and buy a pizza!</p><p>Buy a pre-made pizza, though I’m sure this vulnerability is for every pizza (note: it is).</p><figure><img src="images/cheesy-does-it-writeup-business-logic-flaw/1*sWRh2iD3_NsB0acZGMnvaw.png"/></figure><p>Step 2: Check out</p><p>Browse to your cart, scroll down and hit checkout (whilst intercepting traffic):</p><figure><img src="images/cheesy-does-it-writeup-business-logic-flaw/1*8kmbf3MGb0RVgrYs_tz1Vw.png"/></figure><p>Step 3: Intercept and modify</p><p>When you hit the ‘api/orders’ POST req, you’ll want to change the price to 0.01, then hit “Forward”:</p><figure><img src="images/cheesy-does-it-writeup-business-logic-flaw/1*bUsiGxXnjDXG-Pdm6RPHvA.png"/></figure><p>Once the GET request hits, right-click &gt; Do Intercept &gt; Response to this request:</p><figure><img src="images/cheesy-does-it-writeup-business-logic-flaw/1*IFOh_DZCQnKFiB3fiK1AJg.png"/></figure><p>Step 4: Retrieve the flag</p><p>Scroll down and you’ll see your flag!</p><figure><img src="images/cheesy-does-it-writeup-business-logic-flaw/1*XlOrmKswZYyZTUNh_6lsXw.png"/></figure><p>Thanks for reading!</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

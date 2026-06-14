@@ -58,6 +58,9 @@
   -H "Content-Type: application/json" \
   -d '{"query":"{ users { id username email role full_name password } }"}' | jq .</pre><p>Results? Flag? You bet! all we did here, was look at the schema and realise the user object has valid fields of id, username, email, role etc and we added them as data to our curl command and piped the results to jq which is a json command line processor, which makes it look nice and pretty in our terminal!</p><figure><img src="images/sokudo-graphql/1*efkOyl3vVZp5wyrc2eX_ig.png"/></figure><p>Thanks for reading!</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

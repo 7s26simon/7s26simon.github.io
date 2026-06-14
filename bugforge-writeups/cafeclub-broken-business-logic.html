@@ -51,6 +51,9 @@
 
 <hr/><p>Lab can be found at: <a href="https://bugforge.io">https://bugforge.io</a></p><p>We’re back at the CafeClub and there’s a bug that we need to hunt down!</p><figure><img src="images/cafeclub-broken-business-logic/1*IGIbREcITMoepCLjC5vU5Q.png"/></figure><p>Order an item (this part probably isn’t necessary but we’ll do it anyway for completeness)</p><figure><img src="images/cafeclub-broken-business-logic/1*Jt9qdNwly_sYutfAgsG68A.png"/></figure><p>When you order items, you earn “points”:</p><figure><img src="images/cafeclub-broken-business-logic/1*yRRSI4G387XFe4FHHig1_Q.png"/></figure><p>If you go to your profile you’ll get a GET request to /api/profile and you’ll see in the response, your profile stores your points:</p><figure><img src="images/cafeclub-broken-business-logic/1*xR0u1Q7Wo_iKOT44aVfxOg.png"/></figure><p>So, now let’s edit our profile, intercept the request and add some points:</p><figure><img src="images/cafeclub-broken-business-logic/1*REtfpN6DtR0N0ET3x7Xwsg.png"/></figure><p>FYI, this is a PUT request to /api/profile:</p><figure><img src="images/cafeclub-broken-business-logic/1*MDeGHUvy-O6yRANgilEmFQ.png"/></figure><p>Thanks for following along!</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

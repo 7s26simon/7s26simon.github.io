@@ -51,6 +51,9 @@
 
 <hr/><p>Lab can be found at: <a href="https://webverselabs-pro.com/">https://webverselabs-pro.com/</a></p><figure><img src="images/loop-roam-git-exposure/1*ZA_Ilm4j7wdz4_zb56Ouuw.png"/></figure><p>We load the challenge and we’re greeted with a website that is promoting bands, tours, new music releases:</p><figure><img src="images/loop-roam-git-exposure/1*YqgJhiRdNfCdzi1QjBZe4A.png"/></figure><p>The lab says there was an accidental .git push and we can see .git is indeed exposing critical files, including all source code, deleted source code, secrets and more:</p><figure><img src="images/loop-roam-git-exposure/1*7Jfnq8wNwY_2bYXL-sck6w.png"/></figure><p>I downloaded and set up git-dumper to reconstruct the files so we can look at commit history:</p><p>(the .gitgot directory is where I was storing the data)</p><figure><img src="images/loop-roam-git-exposure/1*BcHMPNEmEShajjB1H7KcdA.png"/></figure><p>From here, I ran the following command to look for any flags, secrets and of course, WebVerse flags within the data:</p><pre class="code-view-two">git log -p --all | grep -iE "(flag|secret|WEBVERSE)" | head -50</pre><figure><img src="images/loop-roam-git-exposure/1*otRgxN_gr6CcTTmjE0CVwg.png"/></figure><p>Thanks for following along!</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

@@ -51,6 +51,9 @@
 
 <hr/><figure><img src="images/shady-oaks-financial-writeup-bfla/1*X9FNo5MHhDHUD-KdPIkp-g.png"/></figure><p>As of 03/04/2026 (or if you’re in the US, 04/03/2026, damn that’ll never stop confusing me) this lab came back into rotation. I was going to record a video, but 404yeti from the bugforge community kindly recorded and shared his solution, so I am adding this to my old writeup on this lab. Here goes:</p><figure><iframe src="https://www.youtube-nocookie.com/embed/acYylII7rEQ"></iframe></figure><p>If you wish to follow my writeup, continue below. Otherwise, thanks 404yeti for the video walkthrough!</p><p>Step 1: Register &amp; Upgrade</p><p>Immediately after registering, I was drawn the the “Upgrade” button on the top menu bar:</p><figure><img src="images/shady-oaks-financial-writeup-bfla/1*hM4UOoLd98qE_PNJhRLJvw.png"/></figure><p>If you follow the request you’ll see it leads to /api/upgrade and passes a json body with a role of “insider”:</p><figure><img src="images/shady-oaks-financial-writeup-bfla/1*MRUxKzK-yIZ_Kik8Wxv29Q.png"/></figure><p>Step 2: What if we try administrator?</p><p>If we send our request to repeater and send it on its way, we get a success message and we get provided a new token:</p><figure><img src="images/shady-oaks-financial-writeup-bfla/1*He8nRytRfSsJxGMclvWoNQ.png"/></figure><p>Take the token, send a GET req to /api/admin/flag and you’ll see the flag in the response:</p><figure><img src="images/shady-oaks-financial-writeup-bfla/1*7SXN4LC6VghjMhKGCJJBDg.png"/></figure><p>Thanks for reading!</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

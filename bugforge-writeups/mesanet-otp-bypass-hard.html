@@ -82,6 +82,9 @@ Content-Length: 291
 }
 }</pre><p>Essentially what we’ve done is added “confidential” to our nexus entitlements which means that now, we’re exploiting a weak access control check.</p><p>The actual access control check for releasing the flag isn’t just “can you see confidential notes” , it’s specifically checking whether your entitlements explicitly include <code>confidential</code> in the read array.</p><p>The operator session apparently lets you see confidential notes by default (maybe because they own them, or because L3 clearance grants it), but the flag is gated behind the entitlements object literally containing <code>"confidential"</code>. The backend probably has a check like "if entitlements.read includes all three levels, return the flag."</p><p>It’s a subtle distinction. The operator can <em>view</em> confidential content through normal access, but the flag only drops when the backend sees the full <code>["public","restricted","confidential"]</code> entitlement set being explicitly set.</p><p>You should end up with the flag in the response (at the bottom):</p><figure><img src="images/mesanet-otp-bypass-hard/1*Xj5_jkapDK_IBapC4k_qAg.png"/></figure><p>Thanks for reading!</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

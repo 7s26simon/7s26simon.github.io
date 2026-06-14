@@ -51,6 +51,9 @@
 
 <hr/><figure><img src="images/ottergram-writeup-bac/1*s1pDn0Dft0pDq17eq2clzQ.png"/></figure><p>Step 1: Register and comment</p><p>Once registered, ensure you’re capturing traffic and make a comment:</p><figure><img src="images/ottergram-writeup-bac/1*Nn0dZuEIU9bcVGe0IR_19g.png"/></figure><p>Step 2: The POST</p><p>The POST request will look fairly normal. But send it to repeater for some checks.</p><figure><img src="images/ottergram-writeup-bac/1*J9iAXm0SeJBdScwK91xGFg.png"/></figure><p>Next, I did a GET request and I could see other user’s comments:</p><figure><img src="images/ottergram-writeup-bac/1*2E9PAtqcV4-kntzs9tuX7g.png"/></figure><p>Step 3: PUTting a comment in</p><p>I changed my request type to a PUT and appended a /1 to the end of comments to see if I could directly update a comment. the /1 (as /1 is the admin user’s post.) To break it down:</p><blockquote>PUT /api/posts/1/comments/1<br/>The first “/1”” is the post id<br/>the second “/1” is the comment ID</blockquote><p>And it turns out that this comment is owned by admin. So effectively we’re overwriting an admin comment.</p><figure><img src="images/ottergram-writeup-bac/1*INmtZH9OpXfNzZsU79hh9Q.png"/></figure><p>Browsing back to the page shows that admin’s comment was updated to my malicious POST, and the flag is underneath!</p><figure><img src="images/ottergram-writeup-bac/1*omgiJBHWxViN-woyZI3sXw.png"/></figure><p>Thanks for reading!</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

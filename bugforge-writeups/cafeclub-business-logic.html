@@ -51,6 +51,9 @@
 
 <hr/><figure><img src="images/cafeclub-business-logic/1*PS_jl4D3dK3VR7bJnzugMA.png"/></figure><p>Video walkthrough:</p><figure><iframe src="https://www.youtube-nocookie.com/embed/-PP7eRKLfek"></iframe></figure><p><strong>Step 1:</strong> Register and checkout an item</p><p>After registering, check out any item (whilst proxying traffic)</p><figure><img src="images/cafeclub-business-logic/1*Imcs3WsYjU5UJay0obTzdQ.png"/></figure><p><strong>Step 2:</strong> look for /api/checkout</p><p>In your history, you’ll see a POST req being made to /api/checkout - send this to repeater as this is the request we’re interested in.</p><figure><img src="images/cafeclub-business-logic/1*6HXWj5P2pu6dswhDhfgoxg.png"/></figure><p>Scroll to the bottom of the request and remove the credit card number, card expiry and cvc number lines from the json body:</p><figure><img src="images/cafeclub-business-logic/1*j9T_O0xl4KvdvQlLccbPvw.png"/></figure><p><strong>Step 3:</strong> Change the “type” of checkout</p><p>We’re checking out online which requries a credit card. But an in person checkout would be at the till (which could use cash). So, change the word “online” to “till” and send the request.</p><p>You’ll see the flag appear in the response (ensure you’ve got an item in the cart before sending this request)</p><figure><img src="images/cafeclub-business-logic/1*le9mW4XGafRT-xgsfC5YEA.png"/></figure><p>Thanks for following along!</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

@@ -51,6 +51,9 @@
 
 <hr/><p>Lab can be found at: <a href="https://webverselabs-pro.com/">https://webverselabs-pro.com/</a></p><figure><img src="images/bill-s-steak-house-rce/1*xXCaZE5_s9eynu1DhEOxyw.png"/></figure><p>Land on Bill’s Steak House and you’ll see several options. Head over to the reviews:</p><figure><img src="images/bill-s-steak-house-rce/1*36FNChBnEfoEyEXEFugblA.png"/></figure><p>You’ll see, it’s RCE time!</p><figure><img src="images/bill-s-steak-house-rce/1*-6Xn0nUeUdBTOuPBX0uWrQ.png"/></figure><p>You can’t see it here but the page was filtering and only allowing jpeg etc. Simply capturing in burpsuite and bypassing the client-side checks were enough. phtml gets rendered a html, so find a webshell online and use it (I crafted my own using a basic cmd shell in a html wrapper):</p><figure><img src="images/bill-s-steak-house-rce/1*d-hav5Bgltj9n6ruypHcmw.png"/></figure><p>You’ll now be able to execute code by going to /uploads/terminal.phtml (in my case, your URL will differ depending on your filename) and I could grab the flag from /home/billy/flag.txt:</p><figure><img src="images/bill-s-steak-house-rce/1*7eBjeFRY6FL9a0xFZTOb1Q.png"/></figure><p>Thanks for following along!</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">

