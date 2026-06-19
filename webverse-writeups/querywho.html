@@ -4,9 +4,7 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- EDIT: page title shown in browser tab -->
-    <title>OutBox (SSTI) // 7s26simon</title>
+    <title>QueryWho Writeup // 7s26simon</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +15,6 @@
 </head>
 
 <body>
-
-    <!-- Imported from Medium: https://medium.com/@7s26simon/outbox-ssti-webverse-6d54ab79440b -->
 
     <header id="top-bar-blue">
         <h1 id="name-font">Simon McCabe</h1>
@@ -42,14 +38,62 @@
         <a href="../About.html">about</a>
     </nav>
 
-    <!-- ===== Title block ===== -->
     <div id="writeup-box-name">
-        <p>OutBox (SSTI)</p>
-    </div>
+        <p>QueryWho - IDOR</p>
+        <br><br>
+<img src="./images/querywho/querywho.png" alt="infogathering">
 
+    </div>
+    
     <div id="marg-asthetic">
 
-<hr/><p>Lab can be found at: <a href="https://webverselabs-pro.com/">https://webverselabs-pro.com/</a></p><figure><img src="images/outbox-ssti/1*3YJiu5utAZjKviC34FrliA.jpeg" style="max-width:450px !important; width:450px !important; height:auto !important;"/></figure><p>Landing on the homepage, we see a link to “Start Writing”:</p><figure><img src="images/outbox-ssti/1*qjOl3kQC7o_ufQmJ5DNDHw.png"/></figure><p>This led to an interesting page which said “Hello {{name}}. Instantly, I was thinking about SSTI (and even if I wasn’t, the lab description points you in that direction):</p><figure><img src="images/outbox-ssti/1*lWn9Oi0Zl4yWc_f5qaJ0Dg.png"/></figure><p>I changed {{name}} to {{8*8}} and sure enough, was able to display the result:</p><figure><img src="images/outbox-ssti/1*Q2yEO_ZQZrMP9Zg_vlaqPw.png"/></figure><p>Now, I had to try and weaponise it. Now, interestingly, every response was showing headers with:</p><pre class="code-view-two">X-Powered-By: PHP/8.2.30</pre><p>Which meant that we could attempt a php payload to see what happened. I used file_get_contents (see <a href="https://www.php.net/manual/en/function.file-get-contents.php">here</a> for more info). Essentially, this can read a file into a string. The problem, is that I didn’t know where the flag.txt file was on the filesystem, but I got a nice error:</p><figure><img src="images/outbox-ssti/1*v7omINeeTTq8FXJxidu1iA.png"/></figure><p>The error confirmed that the template engine was trying to eval what was between the {{ }} curly braces.</p><p>So now, I tested with a system function to see if I could find a file called flag on the disk:</p><figure><img src="images/outbox-ssti/1*z4HZpyjZPIAvnzIF65K7Rw.png"/></figure><p>This resulted in some very useful info, namely the /home/marisol/flag.txt location:</p><figure><img src="images/outbox-ssti/1*t4t7fyZJlOaz4COsLv4q7g.png"/></figure><p>Now, I could simply read the file with file_get_contents:</p><figure><img src="images/outbox-ssti/1*kt95_0Z-FoD6KLZM5Osczg.png"/></figure><p>or a system function to cat the txt file. Either works:</p><figure><img src="images/outbox-ssti/1*xs8_ENv_QjpSH3lgpnsY3A.png"/></figure><p>Thanks for following along!</p>
+        <p>
+            <strong>Platform:</strong> Webverse<br>
+            <strong>Target:</strong> https://98115216-3953-querywho-36dff.events.webverselabs-pro.com/<br>
+            <strong>Vulnerability class(es):</strong> IDOR
+        </p>
+
+        <h2>1. Information Gathering</h2>
+        
+        <p>Immedaitely upon loading the webapp, I saw an org id which stood out. I continued looking around the app but nothing whatsoever was standing out. Nothing was clickable. All I had was the org id and that it was the org I belonged to.</p>
+
+        <img src="./images/querywho/1.png" alt="infogathering">
+
+
+        <h2>2. Cookies</h2>
+
+
+        <p>Clicking around revealed a new cookie was assigned to me with the id of 55:</p>
+        
+        <img src="./images/querywho/2.png" alt="cookie">
+
+        
+
+        <h2>3. RePETER (intruder) </h2>
+
+        <img src="./images/querywho/3.png" alt="repeter">
+
+        <p>A short while ago, I made an intruder copy for burp community so I could fuzz without restrictions. I sent the request over there and wrapped the target:</p>
+        
+        <img src="./images/querywho/4.png" alt="orgid">
+
+        <p>I initially did many more requests than this, but it turned out that org id 1 was simply the one we needed.</p>
+
+        <img src="./images/querywho/5.png" alt="orgid">
+        
+        <p>My extension allows you to perform a real-time search for matching text, so I searched "WEBV" for the beginnings of a flag:</p>
+        
+        <img src="./images/querywho/6.png" alt="orgid">
+        
+        <h2>4. Flag </h2>
+        
+        <p>Now I had a hit.</p>
+        
+        <img src="./images/querywho/7.png" alt="orgid">
+
+        <h2>5. Summary</h2>
+
+        <p>This was a simple IDOR vulnerability and despite the app looking complex, there wasn't much functionality, so finding this was the most logical thing. Although admittedly, I still managed to go down rabbit holes.</p>
 
 
         <hr>

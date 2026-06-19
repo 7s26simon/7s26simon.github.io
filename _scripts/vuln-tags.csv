@@ -95,7 +95,7 @@ the-caretaker-official-writeup,webverse-writeups,The Caretaker (Official Writeup
 lazy-human-resources-official-writeup-bac,webverse-writeups,Lazy Human Resources (Official writeup) (BAC),2026-05-18,access-control
 snooker-logic-flaw,webverse-writeups,Snooker (Logic flaw),2026-05-19,business-logic
 mednode-sqli,bugforge-writeups,MedNode (SQLi),2026-05-20,sqli
-vibed-sqli,webverse-writeups,Vibed (SQLi),2026-05-21,sqli ssti
+vibed-sqli,webverse-writeups,Vibed (SQLi),2026-05-21,sqli
 brackish-brewing-co-with-verbtamper-v1-8-1,webverse-writeups,Brackish Brewing Co. (with VerbTamper v1.8.1),2026-05-22,
 furhire-broken-auth-weekly,bugforge-writeups,FurHire (Broken Auth) (Weekly),2026-05-22,auth-bypass jwt
 disgruntled-employee-official-writeup,webverse-writeups,Disgruntled Employee (Official Writeup),2026-05-25,
@@ -110,3 +110,4 @@ ottergram-priv-esc,bugforge-writeups,Ottergram (Priv-Esc),2026-05-30,access-cont
 tamper-temple-official-writeup-hard,webverse-writeups,Tamper Temple (Official writeup) (hard),2026-06-01,access-control jwt info-disclosure
 expensiel,webverse-writeups,Expensiel,2026-06-13,nosql mass-assignment
 mookoo,webverse-writeups,MooKoo,2026-06-14,xss ssti
+querywho,webverse-writeups,QueryWho,2026-06-19,idor
