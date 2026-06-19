@@ -183,8 +183,8 @@ def update_latest_lab(slug: str, dest: str, name: str, entry_date: str):
     content = INDEX_HTML.read_text(encoding="utf-8")
 
     content = re.sub(
-        r'// latest (?:lab|writeup) <span class="latest-date">\([^)]*\)</span>',
-        f'// latest writeup <span class="latest-date">({display_date})</span>',
+        r'latest (?:lab|writeup) <span class="latest-date">\([^)]*\)</span>',
+        f'latest writeup <span class="latest-date">({display_date})</span>',
         content,
     )
     content = re.sub(
@@ -219,14 +219,6 @@ def create_writeup_file(slug: str, dest: str, name: str) -> Path:
 
     # Replace MACHINE_NAME placeholder
     content = content.replace("MACHINE_NAME", name)
-
-    # Mark the correct nav dropdown item as active
-    nav_file = DEST_TO_NAV_FILE.get(dest)
-    if nav_file:
-        content = content.replace(
-            f'href="../{nav_file}"',
-            f'href="../{nav_file}" class="active"',
-        )
 
     out_path.write_text(content, encoding="utf-8")
 
