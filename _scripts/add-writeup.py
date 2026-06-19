@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-add-writeup.py - Add a new writeup entry and rebuild quicklinks.html.
+add-writeup.py - Add a new writeup entry and rebuild writeups.html.
 
 Usage:
   python3 _scripts/add-writeup.py \
@@ -19,7 +19,7 @@ Usage:
   --vulns  Space- or comma-separated vulnerability tags (see VALID_TAGS below)
   --date   Date in YYYY-MM-DD format (defaults to today)
 
-  --rollback  Undo the last add (restores vuln-tags.csv and index.html, rebuilds quicklinks)
+  --rollback  Undo the last add (restores vuln-tags.csv and index.html, rebuilds writeups)
 
 Valid vulnerability tags:
   sqli, xss, sxss, rxss, stored-xss, xxe, ssrf, ssti, lfi, rfi, path-traversal,
@@ -29,7 +29,7 @@ Valid vulnerability tags:
   steganography, git-exposure, logic-flaw, otp-bypass, mfa-bypass,
   priv-esc, api-abuse, mass-assignment
 
-After adding, this script rebuilds quicklinks.html automatically.
+After adding, this script rebuilds writeups.html automatically.
 """
 
 import argparse
@@ -103,8 +103,8 @@ def rollback():
         sys.exit(1)
 
     print(f"Restored: {', '.join(restored)}")
-    print("Rebuilding quicklinks.html...")
-    rebuild_quicklinks()
+    print("Rebuilding writeups.html...")
+    rebuild_writeups()
     # Remove backup so you can't roll back twice
     for f in BACKUP_DIR.iterdir():
         f.unlink()
@@ -237,11 +237,11 @@ def create_writeup_file(slug: str, dest: str, name: str) -> Path:
     return out_path
 
 
-def rebuild_quicklinks():
-    script = ROOT / "_scripts" / "update-quicklinks.py"
+def rebuild_writeups():
+    script = ROOT / "_scripts" / "update-writeups.py"
     result = subprocess.run([sys.executable, str(script)], capture_output=True, text=True)
     if result.returncode != 0:
-        print("Error rebuilding quicklinks.html:")
+        print("Error rebuilding writeups.html:")
         print(result.stderr)
         sys.exit(1)
 
@@ -252,7 +252,7 @@ def rebuild_quicklinks():
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Add a writeup to vuln-tags.csv and rebuild quicklinks.html"
+        description="Add a writeup to vuln-tags.csv and rebuild writeups.html"
     )
     parser.add_argument("--rollback", action="store_true", help="Undo the last add")
     parser.add_argument("--name",  help="Display name for the lab / machine")
@@ -291,8 +291,8 @@ def main():
     if vulns:
         print(f"  Tags: {vulns}")
 
-    print("Rebuilding quicklinks.html...")
-    rebuild_quicklinks()
+    print("Rebuilding writeups.html...")
+    rebuild_writeups()
 
     print("Updating latest writeup on homepage...")
     update_latest_lab(slug, args.dest, args.name, args.date)

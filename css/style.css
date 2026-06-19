@@ -557,6 +557,22 @@ main,
     transition: var(--transition);
 }
 
+.disclaimer {
+    max-width: 720px;
+    margin: 24px auto 0;
+    padding: 14px 18px;
+    border-left: 3px solid var(--border);
+    background: var(--bg-elev-1);
+    border-radius: var(--radius-md);
+}
+
+.disclaimer p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
 .latest-card:hover {
     border-color: var(--border-strong);
     transform: translateY(-2px);
