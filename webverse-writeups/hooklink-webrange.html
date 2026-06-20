@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>hooklink-webrange Writeup // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <a href="../writeups.html">writeups</a>
+        <a href="../general.html">blog</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>hooklink-webrange Writeup</p>
+    </div>
+    <div id="marg-asthetic">
+
+        <p>
+            <strong>Platform:</strong> WebVerse<br>
+            <strong>Target:</strong> app.hooklink.local<br>
+            <strong>Vulnerability classes:</strong> Broken Authentication, Mass Assignment, Broken Access Control, API Abuse, Broken Function Level Authorisation (BFLA)
+        </p>
+
+        <img src="images/hooklink-webrange/hooklink-webrange.png" alt="hooklink-webrange.png" height="350" width="350">
+
+        <h2>1. Loading the app</h2>
+
+        <br>
+        <p>Once I loaded the app and clicked around, several pages wouldn't load up. So I knew I would have to fuzz them. I used ffuf and a DNS subdomain list which I saw others had used for other WebVerse labs.</p>
+
+        <img src="images/hooklink-webrange/1.png" alt="1.png">
+
+        <br>
+        <p>The webapp itself looked like a generic online dating app. Nothing obviously suspicious to begin with.</p>
+
+        <img src="images/hooklink-webrange/2.png" alt="2.png">
+
+        <img src="images/hooklink-webrange/3.png" alt="3.png">
+
+        <br>
+        <p>Now I had some url's I could add to /etc/hosts and begin working with. app, premium and mod were all 302 redirects. But the important thing was that now I'd found them.</p>
+
+        <h2>2. Fuzzing for Flags</h2>
+
+        <br>
+        <p>Soon after opening the app, I spotted a page which looked like it could be interesting. TL;DR it was. GET /api/users/:id could be used to browse various users within the webapp. I set it to 1 and the user "Maya" came back:</p>
+
+        <img src="images/hooklink-webrange/4.png" alt="4.png">
+
+        <br>
+        <p>I now fuzzed approx 100 users using my RePETER burp extension. Number 42 jumped out as it had a flag beginning with HOOKLINK{</p>
+
+        <img src="images/hooklink-webrange/5.png" alt="5.png">
+
+        <h2>3. Private Photo Flag</h2>
+
+        <br>
+        <p>The next flag was something that had caught my eye soon after launching the app. There was a photo of each user on /api/profile/:id. I viewed the source code and saw:<pre class="code-view-two">const priv = (await api('/api/photos/' + id + '/private')).data</pre> which indicated there was a private photo location. There was. It was at /photos/1/private</p>
+
+        <img src="images/hooklink-webrange/6.png" alt="6.png">
+
+        <br>
+        <p>In order to view it, I had to do a GET request. The GET was to /photos/1/private/flag.txt</p>
+
+        <img src="images/hooklink-webrange/8.png" alt="8.png">
+
+        <h2>4. Export - Restricted Area</h2>
+
+        <br>
+        <p>After the previous flag, I selected 'export' from the top navigation bar and reached a 403 - Restricted Area page. It said that I was a user but needed to be a moderator in order to view it.</p>
+
+        <img src="images/hooklink-webrange/16.png" alt="16.png">
+
+        <br>
+        <p>I was messing around with 'admin' here before I realised I needed to use a PATCH request to become moderator. The subscription tier didn't seem to matter for the webrange. I used VerbTamper which is my vibe-coded burp extension for the PATCH req, as a POST did not work.</p>
+
+        <img src="images/hooklink-webrange/17.png" alt="17.png">
+
+        <br>
+        <p>After going over to the system page and getting the flag there, I could now see that the platform export function was taking commands and I had command execution. I ran whoami and saw I was running as root.</p>
+
+        <img src="images/hooklink-webrange/18.png" alt="18.png">
+
+        <br>
+        <p>It wasn't too difficult to see where this was going. Next stop, flag.txt:</p>
+
+        <img src="images/hooklink-webrange/19.png" alt="19.png">
+
+        <br>
+        <p>At the top of the page, there was a 'Users' link. I hadn't visited it yet so I decided to give it a look.</p>
+
+        <h2>5. Jordan flag(s)</h2>
+
+        <br>
+        <p>Jordan was an interesting account because a few flags were related to this account, and ironically, this was one of the first accounts I observed in the app and got my first flag from. Jordan was user 42. I browsed to user 42:</p>
+
+        <img src="images/hooklink-webrange/20.png" alt="20.png">
+
+        <br>
+        <p>Next, I took a note of maya's email address as she was listed as the admin of the webapp. I also took a note of Jordan's email address.</p>
+
+        <img src="images/hooklink-webrange/21.png" alt="21.png">
+
+        <br>
+        <p>I logged out of the application and attempted a forgotten password on Maya's account. The response contained a preview_URL which let me look at a reset password link. Perfect! Account takeover! Unfortunately, I didn't see much in Maya's account, so I tried again with Jordan. I struck gold.</p>
+
+        <img src="images/hooklink-webrange/22.png" alt="22.png">
+		
+		<br><p>Jordan's private messages contained the flag:</p>
+
+        <img src="images/hooklink-webrange/23.png" alt="23.png">
+
+        <br>
+        <p>The next flag for me was probably the most difficult and I'm not sure if I followed the intended path. When I had logged in as Maya, I could see her location (latitude and longitude). I noted her latitude was 25.7617 and her longitude was -80.1918. I logged in as Jordan and went to perform a GET request to /api/nearby and provided the lat & log. I think the concept here was to force the app to show Maya's location nearby so that you could "like" her within the app, despite her being a distance from your user.</p>
+
+        <img src="images/hooklink-webrange/24.png" alt="24.png">
+
+        <br>
+        <p>In case you're wondering where I got the lat & long from. When I was logged in as Maya after the password reset trick, I had browsed to /api/users/me and it had revealed her location:</p>
+
+        <img src="images/hooklink-webrange/25.png" alt="25.png">
+
+        <br>
+        <p>The flag was revealed after I used her lat & long as part of the nearby locations, which exposed several users nearby, but the flag was on Maya's profile:</p>
+
+        <img src="images/hooklink-webrange/26.png" alt="26.png">
+
+        <br>
+        <p>Thanks for following this writeup. It was a fun lab with a good level of realism. It was enjoyable to spend a while on the same webapp and find multiple vulnerabilities. I liked the certificate of completion it gives too, it was a nice touch! Until next time, 7s26simon is signing out!</p>
+
+<img src="images/hooklink-webrange/cert.png" alt="cert.png">
+        
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/github.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>
