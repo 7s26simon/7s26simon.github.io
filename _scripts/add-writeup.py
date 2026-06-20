@@ -2,9 +2,11 @@
 """
 add-writeup.py - Interactive writeup builder.
 
-Creates the HTML file from the template, creates an images folder, lets you
-build the writeup content interactively, then registers it in vuln-tags.csv,
-rebuilds writeups.html, updates the homepage latest writeup, and runs sync-nav.
+Creates the HTML file from the template, creates an images folder, starts a
+local preview server, opens the browser, lets you build content interactively
+(saving after every action so the browser auto-refreshes), then registers the
+writeup in vuln-tags.csv, rebuilds writeups.html, updates the homepage, and
+runs sync-nav.
 
 Usage:
   python3 _scripts/add-writeup.py
@@ -22,8 +24,11 @@ Valid vulnerability tags:
 import argparse
 import csv
 import re
+import shutil
 import subprocess
 import sys
+import time
+import webbrowser
 from datetime import date, datetime
 from pathlib import Path
 
@@ -32,6 +37,7 @@ TEMPLATE_HTML = ROOT / "_template" / "writeup-template.html"
 VULN_TAGS_CSV = ROOT / "_scripts" / "vuln-tags.csv"
 INDEX_HTML    = ROOT / "index.html"
 BACKUP_DIR    = ROOT / "_scripts" / ".rollback"
+PREVIEW_PORT  = 8080
 
 IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
 
@@ -103,6 +109,9 @@ VALID_TAGS = {
     "priv-esc", "api-abuse", "mass-assignment",
 }
 
+# Auto-refresh meta tag injected during preview, removed on final save
+_AUTO_REFRESH = '    <meta http-equiv="refresh" content="2">\n'
+
 
 # ---------------------------------------------------------------------------
 # Backup / rollback
@@ -113,7 +122,6 @@ def save_backup(slug: str, dest_name: str):
     for src in (VULN_TAGS_CSV, INDEX_HTML):
         if src.exists():
             (BACKUP_DIR / src.name).write_bytes(src.read_bytes())
-    # Record what was created so rollback can delete it
     (BACKUP_DIR / "created.txt").write_text(f"{dest_name}/{slug}", encoding="utf-8")
 
 
@@ -122,7 +130,6 @@ def rollback():
         print("No rollback data found — nothing to undo.")
         sys.exit(1)
 
-    # Restore CSV and index.html
     restored = []
     for name in ("vuln-tags.csv", "index.html"):
         bak = BACKUP_DIR / name
@@ -139,10 +146,9 @@ def rollback():
 
     print(f"Restored: {', '.join(restored)}")
 
-    # Delete the HTML file and images folder that were created
     created_txt = BACKUP_DIR / "created.txt"
     if created_txt.exists():
-        created = created_txt.read_text(encoding="utf-8").strip()  # e.g. webverse-writeups/netcheck
+        created  = created_txt.read_text(encoding="utf-8").strip()
         dest_name, slug = created.split("/", 1)
         html_file  = ROOT / dest_name / f"{slug}.html"
         images_dir = ROOT / dest_name / "images" / slug
@@ -152,14 +158,12 @@ def rollback():
             print(f"Deleted: {html_file.relative_to(ROOT)}")
 
         if images_dir.exists():
-            import shutil
             shutil.rmtree(images_dir)
             print(f"Deleted: {images_dir.relative_to(ROOT)}/")
 
     print("Rebuilding writeups.html...")
     rebuild_writeups()
 
-    # Clear backup dir
     for f in BACKUP_DIR.iterdir():
         f.unlink()
     BACKUP_DIR.rmdir()
@@ -257,6 +261,52 @@ def run_sync_nav():
 
 
 # ---------------------------------------------------------------------------
+# Preview server
+# ---------------------------------------------------------------------------
+
+def start_preview_server():
+    """Start python -m http.server in the background, serving from ROOT."""
+    proc = subprocess.Popen(
+        [sys.executable, "-m", "http.server", str(PREVIEW_PORT),
+         "--directory", str(ROOT)],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    return proc
+
+
+# ---------------------------------------------------------------------------
+# HTML file helpers
+# ---------------------------------------------------------------------------
+
+def prepare_shell(display_name: str) -> str:
+    """Read and prep the template — strip comments, replace MACHINE_NAME.
+    Returns html string with empty #marg-asthetic content ready for injection."""
+    html = TEMPLATE_HTML.read_text(encoding="utf-8")
+    html = re.sub(r"\s*<!--\s*={4,}.*?WRITEUP TEMPLATE.*?={4,}\s*-->", "", html, flags=re.DOTALL)
+    html = re.sub(r"\s*<!-- ===== Hero.*?</div>", "", html, flags=re.DOTALL)
+    html = re.sub(r"\s*<!-- ===== Main writeup body ===== -->", "", html)
+    html = html.replace("MACHINE_NAME", display_name)
+    return html
+
+
+def write_html(out_path: Path, shell: str, blocks: list, preview: bool):
+    """Inject blocks into shell and write to disk.
+    preview=True adds auto-refresh meta tag; preview=False strips it."""
+    body = "\n".join(blocks)
+    html = re.sub(
+        r'(<div id="marg-asthetic">).*?(\s+<hr>\s+<p>&#x1F37A;)',
+        rf"\1\n\n{body}\n\n        \2",
+        shell,
+        flags=re.DOTALL,
+    )
+    if preview:
+        html = html.replace("<meta charset=\"UTF-8\">",
+                            "<meta charset=\"UTF-8\">\n" + _AUTO_REFRESH.rstrip())
+    out_path.write_text(html, encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------
 # Interactive content builder
 # ---------------------------------------------------------------------------
 
@@ -274,10 +324,10 @@ def img_tag(slug: str, fname: str) -> str:
     return f'        <img src="images/{slug}/{fname}" alt="{fname}">'
 
 
-def build_content(slug: str, images_dir: Path, platform: str, target_url: str, vuln_classes: str) -> list:
-    """Interactive loop — returns a list of HTML lines for #marg-asthetic."""
+def build_content(slug: str, images_dir: Path, platform: str,
+                  target_url: str, vuln_classes: str,
+                  out_path: Path, shell: str) -> list:
 
-    # Metadata block (platform / target / vuln classes)
     blocks = [
         f'        <p>',
         f'            <strong>Platform:</strong> {platform}<br>',
@@ -288,6 +338,9 @@ def build_content(slug: str, images_dir: Path, platform: str, target_url: str, v
         img_tag(slug, f"{slug}.png"),
         "",
     ]
+
+    # Write initial preview file
+    write_html(out_path, shell, blocks, preview=True)
 
     shots = numbered_screenshots(images_dir)
     img_hint = (", ".join(f.name for f in shots)
@@ -308,9 +361,10 @@ def build_content(slug: str, images_dir: Path, platform: str, target_url: str, v
         if action == "1":
             text = input("  Paragraph: ").strip()
             if text:
-                blocks.append(f"        <br>")
+                blocks.append("        <br>")
                 blocks.append(f"        <p>{text}</p>")
                 blocks.append("")
+                write_html(out_path, shell, blocks, preview=True)
                 print("  ✓ Paragraph added.")
 
         elif action == "2":
@@ -321,15 +375,17 @@ def build_content(slug: str, images_dir: Path, platform: str, target_url: str, v
             if fname:
                 blocks.append(img_tag(slug, fname))
                 blocks.append("")
+                write_html(out_path, shell, blocks, preview=True)
                 print(f"  ✓ {fname} added.")
 
         elif action == "3":
-            heading = input(f"  Section heading (e.g. Overview): ").strip()
+            heading = input("  Section heading (e.g. Overview): ").strip()
             if heading:
                 n = section_counter[0]
                 blocks.append(f"        <h2>{n}. {heading}</h2>")
                 blocks.append("")
                 section_counter[0] += 1
+                write_html(out_path, shell, blocks, preview=True)
                 print(f"  ✓ <h2>{n}. {heading}</h2> added.")
 
         elif action == "s":
@@ -345,38 +401,6 @@ def build_content(slug: str, images_dir: Path, platform: str, target_url: str, v
 
 
 # ---------------------------------------------------------------------------
-# HTML file creation
-# ---------------------------------------------------------------------------
-
-def create_writeup_file(slug: str, dest: str, display_name: str, blocks: list) -> Path:
-    out_path = ROOT / dest / f"{slug}.html"
-
-    html = TEMPLATE_HTML.read_text(encoding="utf-8")
-
-    # Strip HOW TO USE comment block
-    html = re.sub(r"\s*<!--\s*={4,}.*?WRITEUP TEMPLATE.*?={4,}\s*-->", "", html, flags=re.DOTALL)
-
-    # Remove the hero image div and its comment (image goes inside #marg-asthetic)
-    html = re.sub(r"\s*<!-- ===== Hero.*?</div>", "", html, flags=re.DOTALL)
-    html = re.sub(r"\s*<!-- ===== Main writeup body ===== -->", "", html)
-
-    # Replace MACHINE_NAME placeholder
-    html = html.replace("MACHINE_NAME", display_name)
-
-    # Inject built content, keeping the coffee note
-    body = "\n".join(blocks)
-    html = re.sub(
-        r'(<div id="marg-asthetic">).*?(\s+<hr>\s+<p>&#x1F37A;)',
-        rf"\1\n\n{body}\n\n        \2",
-        html,
-        flags=re.DOTALL,
-    )
-
-    out_path.write_text(html, encoding="utf-8")
-    return out_path
-
-
-# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -389,7 +413,7 @@ def main():
         rollback()
         return
 
-    # ── Lab name ─────────────────────────────────────────────────────────────
+    # ── Lab name ──────────────────────────────────────────────────────────────
     raw_name = input("Lab name (e.g. Milk and Honey): ").strip()
     if not raw_name:
         print("Error: name cannot be empty.")
@@ -403,7 +427,7 @@ def main():
         print(f"Error: '{slug}' already exists in vuln-tags.csv.")
         sys.exit(1)
 
-    # ── Destination ──────────────────────────────────────────────────────────
+    # ── Destination ───────────────────────────────────────────────────────────
     print("\nWhere should the writeup go?")
     for key, folder in DESTINATIONS.items():
         print(f"  {key}) {folder}")
@@ -416,16 +440,17 @@ def main():
     dest_name   = DESTINATIONS[choice]
     dest_folder = ROOT / dest_name
     images_dir  = dest_folder / "images" / slug
+    out_path    = dest_folder / f"{slug}.html"
 
-    if (dest_folder / f"{slug}.html").exists():
+    if out_path.exists():
         print(f"Error: {dest_name}/{slug}.html already exists.")
         sys.exit(1)
 
-    # ── Create images folder ─────────────────────────────────────────────────
+    # ── Create images folder ──────────────────────────────────────────────────
     images_dir.mkdir(parents=True, exist_ok=True)
     print(f"\nCreated: {images_dir.relative_to(ROOT)}/")
 
-    # ── Target URL ───────────────────────────────────────────────────────────
+    # ── Target URL ────────────────────────────────────────────────────────────
     target_url = input("\nTarget URL (e.g. https://lab.example.com): ").strip()
 
     # ── Vulnerability tags ────────────────────────────────────────────────────
@@ -438,26 +463,37 @@ def main():
             break
         print("  Please re-enter tags.")
 
-    # Derive human-readable platform and vuln class strings for the metadata block
     platform_display = DEST_TO_PLATFORM.get(dest_name, ("Unknown", ""))[0]
     vuln_classes = ", ".join(
         TAG_DISPLAY.get(t, t.upper()) for t in vulns.split()
     ) if vulns else ""
 
-    # ── Build writeup content ─────────────────────────────────────────────────
-    print(f"\nBuilding content for {slug}.html")
-    blocks = build_content(slug, images_dir, platform_display, target_url, vuln_classes)
+    # ── Start preview server and open browser ─────────────────────────────────
+    shell = prepare_shell(raw_name)
+    server = start_preview_server()
+    time.sleep(0.8)  # give the server a moment to bind
+    preview_url = f"http://localhost:{PREVIEW_PORT}/{dest_name}/{slug}.html"
+    webbrowser.open(preview_url)
+    print(f"\nPreview: {preview_url}  (auto-refreshes every 2s)")
 
-    # ── Save backup and write everything ─────────────────────────────────────
+    # ── Build content interactively ───────────────────────────────────────────
+    print(f"Building content for {slug}.html")
+    blocks = build_content(slug, images_dir, platform_display, target_url,
+                           vuln_classes, out_path, shell)
+
+    # ── Stop preview server ───────────────────────────────────────────────────
+    server.terminate()
+
+    # ── Final save (no auto-refresh tag) ─────────────────────────────────────
+    write_html(out_path, shell, blocks, preview=False)
+    print(f"\nSaved: {out_path.relative_to(ROOT)}")
+
+    # ── Register and rebuild ──────────────────────────────────────────────────
     save_backup(slug, dest_name)
 
     entry_date = str(date.today())
-
-    out = create_writeup_file(slug, dest_name, raw_name, blocks)
-    print(f"\nSaved: {out.relative_to(ROOT)}")
-
     append_csv_row(slug, dest_name, raw_name, entry_date, vulns)
-    print(f"Registered in vuln-tags.csv")
+    print("Registered in vuln-tags.csv")
 
     print("Rebuilding writeups.html...")
     rebuild_writeups()
