@@ -111,3 +111,4 @@ tamper-temple-official-writeup-hard,webverse-writeups,Tamper Temple (Official wr
 expensiel,webverse-writeups,Expensiel,2026-06-13,nosql mass-assignment
 mookoo,webverse-writeups,MooKoo,2026-06-14,xss ssti
 querywho,webverse-writeups,QueryWho,2026-06-19,idor
+hooklink-webrange,webverse-writeups,hooklink-webrange,2026-06-20,broken-auth mass-assignment access-control api-abuse bfla
