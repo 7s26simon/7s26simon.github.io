@@ -2,11 +2,12 @@
 """
 add-writeup.py - Interactive writeup builder.
 
-Creates the HTML file from the template, creates an images folder, starts a
-local preview server, opens the browser, lets you build content interactively
-(saving after every action so the browser auto-refreshes), then registers the
-writeup in vuln-tags.csv, rebuilds writeups.html, updates the homepage, and
-runs sync-nav.
+Creates the HTML file from the template, creates an images folder, offers to
+rename the screenshots you drop in it to 1.png, 2.png, ... (oldest to newest),
+starts a local preview server, opens the browser, lets you build content
+interactively (saving after every action so the browser auto-refreshes), then
+registers the writeup in vuln-tags.csv, rebuilds writeups.html, updates the
+homepage, and runs sync-nav.
 
 Usage:
   python3 _scripts/add-writeup.py
@@ -308,6 +309,65 @@ def write_html(out_path: Path, shell: str, blocks: list, preview: bool):
 
 
 # ---------------------------------------------------------------------------
+# Screenshot numbering
+# ---------------------------------------------------------------------------
+
+def rename_screenshots(images_dir: Path, by: str = "mtime") -> bool:
+    """Rename images in images_dir to 1.png, 2.png, ... oldest to newest.
+    A file named after the folder (the hero image, e.g. snobble.png) is left
+    alone. Returns True if anything was processed."""
+    files = [
+        f for f in images_dir.iterdir()
+        if f.is_file() and f.suffix.lower() in IMAGE_EXTS
+        and f.stem != images_dir.name
+    ]
+    if not files:
+        print("  No images found in the folder yet.")
+        return False
+
+    key = (lambda f: f.stat().st_mtime) if by == "mtime" else (lambda f: f.name.lower())
+    files.sort(key=key)
+
+    plan = [(f, images_dir / f"{i}{f.suffix.lower()}") for i, f in enumerate(files, start=1)]
+
+    # Two-phase rename so existing 1.png/2.png names can't collide mid-way
+    temps = []
+    for src, dst in plan:
+        if src == dst:
+            print(f"  {src.name}  (no change)")
+            continue
+        print(f"  {src.name}  ->  {dst.name}")
+        tmp = src.with_name(f".renum-{dst.name}")
+        src.rename(tmp)
+        temps.append((tmp, dst))
+
+    for tmp, dst in temps:
+        tmp.rename(dst)
+
+    print(f"  ✓ {len(plan)} screenshot(s) numbered.")
+    return True
+
+
+def prompt_rename_screenshots(images_dir: Path):
+    """Ask whether to number the screenshots now; on 'no', double-check
+    before moving on without renaming."""
+    print(f"\nDrop your screenshots into {images_dir.relative_to(ROOT)}/ now.")
+    while True:
+        ans = input("Ready to rename them to 1.png, 2.png, ...? (y/n): ").strip().lower()
+        if ans == "y":
+            if rename_screenshots(images_dir):
+                return
+            # Folder is still empty — give them another chance to drop files in.
+        elif ans == "n":
+            sure = input("  Are you sure you want to skip renaming? (y/n): ").strip().lower()
+            if sure == "y":
+                return
+            print("  OK, back to renaming.")
+        else:
+            print("  Please enter y or n.")
+
+
+# ---------------------------------------------------------------------------
 # Interactive content builder
 # ---------------------------------------------------------------------------
 
@@ -450,6 +510,9 @@ def main():
     # ── Create images folder ──────────────────────────────────────────────────
     images_dir.mkdir(parents=True, exist_ok=True)
     print(f"\nCreated: {images_dir.relative_to(ROOT)}/")
+
+    # ── Number the screenshots ────────────────────────────────────────────────
+    prompt_rename_screenshots(images_dir)
 
     # ── Target URL ────────────────────────────────────────────────────────────
     target_url = input("\nTarget URL (e.g. https://lab.example.com): ").strip()
