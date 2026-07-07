@@ -18,7 +18,7 @@ Valid vulnerability tags:
   weak-auth, jwt, csrf, graphql, websockets, business-logic, race-condition,
   nosql, upload, deserialization, prototype-pollution, open-redirect,
   steganography, git-exposure, logic-flaw, otp-bypass, mfa-bypass,
-  priv-esc, api-abuse, mass-assignment
+  priv-esc, api-abuse, mass-assignment, ai
 """
 
 import argparse
@@ -80,6 +80,7 @@ TAG_DISPLAY = {
     "priv-esc":             "Privilege Escalation",
     "api-abuse":            "API Abuse",
     "mass-assignment":      "Mass Assignment",
+    "ai":                   "AI",
 }
 
 DESTINATIONS = {
@@ -106,7 +107,7 @@ VALID_TAGS = {
     "jwt", "csrf", "graphql", "websockets", "business-logic", "race-condition",
     "nosql", "upload", "deserialization", "prototype-pollution", "open-redirect",
     "steganography", "git-exposure", "logic-flaw", "otp-bypass", "mfa-bypass",
-    "priv-esc", "api-abuse", "mass-assignment",
+    "priv-esc", "api-abuse", "mass-assignment", "ai",
 }
 
 # Auto-refresh meta tag injected during preview, removed on final save

@@ -82,6 +82,7 @@ TOKEN_LABEL = {
     "crlf":                "CRLF Injection",
     "ldap":                "LDAP Injection",
     "prototype-pollution": "Prototype Pollution",
+    "ai":                  "AI",
 }
 
 # Token -> display-text (for the row's vulnerability column) when rendering
@@ -112,6 +113,7 @@ TOKEN_DISPLAY = {
     "deserialization":     "Deserialization",
     "csrf":                "CSRF",
     "crypto":              "Weak Crypto",
+    "ai":                  "AI",
 }
 
 # Platform display names

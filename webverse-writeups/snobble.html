@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27><rect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%2306080f%27/><path d=%27M16 18L30 32L16 46%27 stroke=%27%2300d9ff%27 stroke-width=%276%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/><rect x=%2734%27 y=%2742%27 width=%2716%27 height=%276%27 rx=%272%27 fill=%27%2300ff9d%27/></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- EDIT: page title shown in browser tab -->
+    <title>snobble Writeup // 7s26simon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style-writeup.css">
+</head>
+
+<body>
+
+    <header id="top-bar-blue">
+        <h1 id="name-font">Simon McCabe</h1>
+        <p class="certs">OSCP &middot; OSWP &middot; PWPP &middot; PWPA &middot; PAPA &middot; EnCE &middot; Linux+ &middot; LPIC-1 &middot; Network+ &middot; Security+ &middot; Pentest+ &middot; eJPT &middot; eWPT &middot; BSc &middot; PGCert</p>
+    </header>
+
+    <nav class="topnav">
+        <a href="../index.html">home</a>
+        <a href="../writeups.html">writeups</a>
+        <a href="../general.html">blog</a>
+        <a href="../About.html">about</a>
+    </nav>
+
+    <!-- ===== Title block ===== -->
+    <div id="writeup-box-name">
+        <p>snobble Writeup</p>
+    </div>
+    <div id="marg-asthetic">
+
+        <p>
+            <strong>Platform:</strong> WebVerse<br>
+            <strong>Target:</strong> https://424a8cd6-3953-snobble-75433.mystery-challenges.webverselabs-pro.com<br>
+            <strong>Vulnerability classes:</strong> AI
+        </p>
+
+        <img src="images/snobble/snobble.png" alt="snobble.png">
+
+        <h2>1. Finding The Chatbot</h2>
+
+        <br>
+        <p>The lab was related to an AI chatbot, so I began looking around trying to understand what the app was all  about before I began.</p>
+
+        <img src="images/snobble/1.png" alt="1.png">
+
+        <br>
+        <p>I clicked "Sign in" in the top right corner and was signed into the web app.</p>
+
+        <img src="images/snobble/2.png" alt="2.png">
+
+        <br>
+        <p>From here, I was instantly signed in as "Alex" and on the left-hand side menu, I could see the "Assistant" with what looked like the Google Gemini logo. I figured this was the assistant and clicked on it.</p>
+
+        <img src="images/snobble/3.png" alt="3.png">
+
+        <h2>2. Attacking The Chatbot</h2>
+
+        <br>
+        <p>From here, it was a simple case of trying to convince the chatbot to give some information that I wasn't supposed to have.</p>
+
+        <img src="images/snobble/4.png" alt="4.png">
+
+        <br>
+        <p>The chatbot was somewhat persistent in the message but a little later, with some low-level effort, the chatbot spilled what I was looking for:</p>
+
+        <img src="images/snobble/5.png" alt="5.png">
+
+
+        
+
+        <hr>
+        <p>&#x1F37A; Quick message to readers: if my writeups help you, please consider a small donation to my <a href="http://buymeacoffee.com/7s26simon" target="_blank" rel="noopener">buymeacoffee</a> link here. This is not required but is very much appreciated! &#x1F37A;</p>
+
+    </div>
+
+    <section id="social-media">
+        <a class="logoWidth" href="https://www.linkedin.com/in/simonmccabe1/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="../images/linkedin.PNG" alt="LinkedIn"></a>
+        <a class="logoWidth" href="https://x.com/7s26simon" target="_blank" rel="noopener" aria-label="X / Twitter"><img src="../images/twitter.PNG" alt="X"></a>
+        <a class="logoWidth" href="https://www.youtube.com/@7s26simon" target="_blank" rel="noopener" aria-label="YouTube"><img src="../images/youtube.PNG" alt="YouTube"></a>
+        <a class="logoWidth" href="https://github.com/7s26simon" target="_blank" rel="noopener" aria-label="GitHub"><img src="../images/github.PNG" alt="GitHub"></a>
+    </section>
+
+    <footer id="bottom-bar">
+        <div id="validator">
+            <p id="footerTag">© 2026 Simon McCabe &middot; 7s26simon.github.io</p>
+        </div>
+    </footer>
+
+</body>
+</html>
